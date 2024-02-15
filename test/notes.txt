@@ -1,0 +1,13 @@
+// TODO: outside circle diameter should be calculated based on the number of nodes so it never gets crowded
+// both national teams nodes so there is enought space between them 
+// and clubs clusters so it is never too small
+// place so there is space between nodes, and resize if needed to be able to draw it in the window defined 
+//     - see if changes in size might compormize the consitency and understanding of the visualization
+
+// TODO: we may use some sort of heuristic that determines the best nodes teams order so the number of edges intersections are minimized
+// as this placements must be fixed between different timeslices
+// NOTE: use could maybe remove the ones with zero connecteions or make this ones look like disable but still be there 
+//     - see better this based on the expertise opinions 
+
+// process: create this nodes and only the other (the inner ones) will be created by the force simulation
+// to find the best placement based on the wieght of the edges they connected to

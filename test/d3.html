@@ -4,37 +4,114 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
 <script type="module">
-  // Specify the dimensions of the chart.
-  const width = 928;
-  const height = 680;
 
-  // Specify the color scale.
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
+  // --- FUNCTIONS 
+  
+  // Reheat the simulation when drag starts, and fix the subject position.
+  function dragstarted(event) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    event.subject.fx = event.subject.x;
+    event.subject.fy = event.subject.y;
+  }
+  
+  // Update the subject (dragged node) position during drag.
+  function dragged(event) {
+    event.subject.fx = event.x;
+    event.subject.fy = event.y;
+  }
+  
+  // Restore the target alpha so the simulation cools after dragging ends.
+  // Unfix the subject position now that it’s no longer being dragged.
+  function dragended(event) {
+    if (!event.active) simulation.alphaTarget(0);
+    event.subject.fx = null;
+    event.subject.fy = null;
+  }
+  
+  // Calculate point position in a circle
+  function circlePosition(circle, node, index, count) {
+    const circunference = circle.node().getTotalLength();
+    const sectionLenght = circunference / count;
+    console.log(circunference / 4);
+    const pointPosition = sectionLenght * (count - index);
+    return circle.node().getPointAtLength(pointPosition);
+  }
 
+  // --- END FUNCTIONS
+
+  
   // Get data from json file using fetch.
   // const data = await fetch("miserables.json").then(response => response.json());
   const data = {
     "nodes": [
-      {"id": "A", "group": "national teams", "radius": 2, "clubs_count": 2},
+      {"id": "M", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "N", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "O", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "P", "group": "national teams", "radius": 2, "clubs_count": 0},
+      {"id": "A", "group": "national teams", "radius": 2, "clubs_count": 1},
       {"id": "B", "group": "national teams", "radius": 2, "clubs_count": 1},
-      {"id": "C", "group": "national teams", "radius": 2, "clubs_count": 0},
-      {"id": "D", "group": "national teams", "radius": 2, "clubs_count": 0},
-      {"id": "E", "group": "national teams", "radius": 2, "clubs_count": 0},
-      {"id": "F", "group": "national teams", "radius": 2, "clubs_count": 0},
+      {"id": "C", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "D", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "E", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "F", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "G", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "H", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "I", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "J", "group": "national teams", "radius": 2, "clubs_count": 0},
+      {"id": "K", "group": "national teams", "radius": 2, "clubs_count": 1},
+      {"id": "L", "group": "national teams", "radius": 2, "clubs_count": 0},
       {"id": "C1", "group": "clubs"},
-      {"id": "C2", "group": "clubs"}
+      {"id": "C2", "group": "clubs"},
+      {"id": "C3", "group": "clubs"},
     ],
     "links": [
-      {"source": "A", "target": "C1", "value": 3},
-      {"source": "A", "target": "C2", "value": 1},
-      {"source": "B", "target": "C1", "value": 2}
-    ]
+      {"source": "C1", "target": "B", "value": 6},
+      {"source": "C1", "target": "D", "value": 2},
+      {"source": "C1", "target": "F", "value": 2},
+      {"source": "C1", "target": "N", "value": 1},
+      
+      {"source": "C2", "target": "A", "value": 1},
+      {"source": "C2", "target": "C", "value": 1},
+      {"source": "C2", "target": "G", "value": 3},
+      {"source": "C2", "target": "H", "value": 3},
+      {"source": "C2", "target": "I", "value": 3},
+      
+      {"source": "C3", "target": "E", "value": 5},
+      {"source": "C3", "target": "K", "value": 2},
+      {"source": "C3", "target": "M", "value": 7},
+      {"source": "C3", "target": "O", "value": 2},
+    ],
   };
+  
+  // Specify the dimensions of the chart.
+  const width = 1000;
+  const height = 800;
 
+  // Specify the color scale.
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
+  
   // The force simulation mutates links and nodes, so create a copy
   // so that re-evaluating this cell produces the same result.
   const links = data.links.map(d => ({...d}));
   const nodes = data.nodes.map(d => ({...d}));
+  
+  // Separate nodes by category (see if there is a more D3.js V4 way to do this).
+  const nodes_teams = nodes.filter(d => d.group === "national teams");
+  const nodes_clubs = nodes.filter(d => d.group === "clubs");
+  
+  // Evenly place the nodes of group "national teams" along a circunference
+  const nodes_radius = 8;
+  const nodes_between = 15; 
+  const nodes_teams_count = nodes_teams.length;
+  const nodes_clubs_count = nodes_clubs.length;
+  
+  // Calculate the diameter of the circunference based on a heuristic distance between nodes.
+  const circle_diameter = Math.max(
+    (nodes_teams_count * (2.0 * nodes_radius + nodes_between)) / Math.PI, 
+    (nodes_clubs_count * (3.0 * nodes_radius)) / Math.PI, 
+    200
+  );
+  const circle_radius = circle_diameter / 2;
 
   // Create a simulation with several forces.
   const simulation = d3.forceSimulation(nodes)
@@ -49,67 +126,77 @@
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .attr("style", "max-width: 100%; height: auto;");
+  
+  // Create invisible circle to place the nodes of group "national teams" along a circunference
+  const xMargin = (-width/2) + ((width-circle_diameter)/2);
+  const yMargin = (-height/2) + ((height-circle_diameter)/2);
+  const circle = svg.append("path")
+      .attr("d", "M "+xMargin+", "+(circle_radius+yMargin)+" a "+circle_radius+","+circle_radius+" 0 1,0 "+circle_diameter+",0 a "+circle_radius+","+circle_radius+" 0 1,0 "+(-1)*circle_diameter+",0")
+      .style("fill", "none");
 
+  nodes_teams.forEach((node, index) => {
+    const position = circlePosition(circle, node, index, nodes_teams_count);
+    node.x = position.x;
+    node.y = position.y;
+  });
+
+  
+  const scale = Math.min(width, height) / (circle_diameter + 2*nodes_radius);   
+  
+  /// (TODO): clubs position based on the force of the links to the ouside nodes of the circle considering the link value.
+  
   // Add a line for each link, and a circle for each node.
-  const link = svg.append("g")
-      .attr("stroke", "#999")
-      .attr("stroke-opacity", 0.6)
-    .selectAll("line")
-    .data(links)
-    .join("line")
-      .attr("stroke-width", d => Math.sqrt(d.value));
+  // const link = svg.append("g")
+  //     .attr("stroke", "#999")
+  //     .attr("stroke-opacity", 0.8)
+  //     .attr("transform", "scale(" + scale + ")")
+  //   .selectAll("line")
+  //   .data(links)
+  //   .join("line")
+  //     .attr("stroke-width", d => Math.sqrt(d.value))
+  //     .attr("x1", d => d.source.x)
+  //     .attr("y1", d => d.source.y)
+  //     .attr("x2", d => d.target.x)
+  //     .attr("y2", d => d.target.y);
 
+  // (TODO) (THINK) some sort heuristics to the national teams nodes.    
   const node = svg.append("g")
       .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 0)
+      .attr("transform", "scale(" + scale + ")")
     .selectAll("circle")
-    .data(nodes)
+    .data(nodes_teams.concat(nodes_clubs))
     .join("circle")
-      .attr("r", 5)
-      .attr("fill", d => color(d.group));
+      .attr("r", nodes_radius)
+      .attr("fill", d => color(d.group))
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y);
 
   node.append("title")
       .text(d => d.id);
 
-  // Add a drag behavior.
+  // Add a drag behavior. (really needed??) -- keept it simple for now!!
   node.call(d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended));
   
   // Set the position attributes of links and nodes each time the simulation ticks.
+  // (TODO) (FIX) on adding this, if node is fixed it should return to its position to not do overwrite with the simulation force on the outside nodes.
   simulation.on("tick", () => {
-    link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
+    // link
+    //     .attr("x1", d => d.source.x)
+    //     .attr("y1", d => d.source.y)
+    //     .attr("x2", d => d.target.x)
+    //     .attr("y2", d => d.target.y);
 
     node
         .attr("cx", d => d.x)
         .attr("cy", d => d.y);
   });
 
-  // Reheat the simulation when drag starts, and fix the subject position.
-  function dragstarted(event) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    event.subject.fx = event.subject.x;
-    event.subject.fy = event.subject.y;
-  }
-
-  // Update the subject (dragged node) position during drag.
-  function dragged(event) {
-    event.subject.fx = event.x;
-    event.subject.fy = event.y;
-  }
-
-  // Restore the target alpha so the simulation cools after dragging ends.
-  // Unfix the subject position now that it’s no longer being dragged.
-  function dragended(event) {
-    if (!event.active) simulation.alphaTarget(0);
-    event.subject.fx = null;
-    event.subject.fy = null;
-  }
+  // (TODO) simulation force is the one that should be changed to make the nodes to be placed in the right position.
+  // to this so hardcoded might dificult the work later, but it it still a good start on the experimentations
 
   // When this cell is re-run, stop the previous simulation. (This doesn’t
   // really matter since the target alpha is zero and the simulation will

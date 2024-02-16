@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 
-<div id="container"></div>
+<body style="display: inline-flex;">
+
+  <div id="container"></div>
+  <div id="details"></div>
+</body>
+
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
 <script type="module">
@@ -92,6 +97,17 @@
       {"id": "C1", "group": "clubs"},
       {"id": "C2", "group": "clubs"},
       {"id": "C3", "group": "clubs"},
+      {"id": "P1", "group": "players"},
+      {"id": "P2", "group": "players"},
+      {"id": "P3", "group": "players"},
+      {"id": "P4", "group": "players"},
+      {"id": "P5", "group": "players"},
+      {"id": "P6", "group": "players"},
+      {"id": "P7", "group": "players"},
+      {"id": "P8", "group": "players"},
+      {"id": "P9", "group": "players"},
+      {"id": "P10", "group": "players"},
+      {"id": "P11", "group": "players"},
     ],
     "links": [
       {"source": "C1", "target": "B", "value": 6},
@@ -109,6 +125,18 @@
       {"source": "C3", "target": "K", "value": 2},
       {"source": "C3", "target": "M", "value": 7},
       {"source": "C3", "target": "O", "value": 2},
+
+      {"source": "P1", "target": "A", "club": "C2", "value": 1, "detail": true},
+      {"source": "P2", "target": "C", "club": "C2", "value": 1, "detail": true},
+      {"source": "P3", "target": "G", "club": "C2", "value": 1, "detail": true},
+      {"source": "P4", "target": "G", "club": "C2", "value": 1, "detail": true},
+      {"source": "P5", "target": "G", "club": "C2", "value": 1, "detail": true},
+      {"source": "P6", "target": "H", "club": "C2", "value": 1, "detail": true},
+      {"source": "P7", "target": "H", "club": "C2", "value": 1, "detail": true},
+      {"source": "P8", "target": "H", "club": "C2", "value": 1, "detail": true},
+      {"source": "P9", "target": "I", "club": "C2", "value": 1, "detail": true},
+      {"source": "P10", "target": "I", "club": "C2", "value": 1, "detail": true},
+      {"source": "P11", "target": "I", "club": "C2", "value": 1, "detail": true},
     ],
   };
   
@@ -128,7 +156,7 @@
   const nodes_radius = 8;
   const nodes_between = 15; 
   const nodes_teams_count = nodes.filter(d => d.group === "national teams").length;
-  const nodes_clubs_count = nodes.length - nodes_teams_count;
+  const nodes_clubs_count = nodes.filter(d => d.group === "clubs").length;
   
   // Calculate the diameter of the circunference based on a heuristic distance between nodes.
   const circle_diameter = Math.max(
@@ -149,9 +177,9 @@
   // Define the simulation forces.
   let simulations = {};
   
-  simulations.both = d3.forceSimulation(nodes)
+  simulations.both = d3.forceSimulation(nodes.filter(d => d.group !== "players"))
     .force("collide", d3.forceCollide(nodes_radius + 2))
-    .force("link", d3.forceLink(links).id(d => d.id).strength(d => d.value / 100));
+    .force("link", d3.forceLink(links.filter(l => l.detail !== true)).id(d => d.id).strength(d => d.value / 100));
   
   // (NOTE): radial would be agood choice alone if not needed to space evently the nodes and not needed consistency through timelines
   simulations.outer = d3.forceSimulation(nodes.filter(d => d.group === "national teams"))
@@ -175,7 +203,7 @@
       .attr("stroke", "#999")
       .attr("stroke-opacity", 0.8)
     .selectAll("line")
-    .data(links)
+    .data(links.filter(d => d.detail !== true))
     .join("line")
       .attr("stroke-width", d => Math.sqrt(d.value));
 
@@ -185,7 +213,7 @@
       .attr("stroke", "#fff")
       .attr("stroke-width", 0)
     .selectAll("circle")
-    .data(nodes)
+    .data(nodes.filter(d => d.group !== "players"))
     .join("circle")
       .attr("r", nodes_radius)
       .attr("fill", d => color(d.group))
@@ -211,6 +239,7 @@
           .attr("x2", d => d.target.x)
           .attr("y2", d => d.target.y);
       node
+          .filter(d => d.group !== "players")
           .attr("cx", d => d.x)
           .attr("cy", d => d.y);
     });
@@ -223,6 +252,73 @@
   // invalidation.then(() => simulation.stop());
 
   // Append the SVG element.
-  container.append(svg.node());
+  document.getElementById("container").append(svg.node());
+
+
+
+
+  /// --- CONSTRUCT DETAILS GRAPH: (TODO) change to display the details of the selected node if group is "clubs"
+  // (THINK) should we alloe to select a antional team and show all the diferent especific palyer? or not if we allow to rotate between the inner and outer variables?
+
+  const cx = 31.952751965130687; // cluster center x
+  const cy = 61.359949569236534; // cluster center y
+  const cluster = "C2"; // cluster id
+
+  let simulationsDetails = {};
+
+  // Define the simulation forces.
+  simulationsDetails.both = d3.forceSimulation(nodes.filter(d => d.group !== "clubs"))
+    .force("collide", d3.forceCollide(nodes_radius + 2))
+    .force("link", d3.forceLink(links.filter(l => l.detail === true && l.club === cluster)).id(d => d.id).strength(0.35));
+
+  simulationsDetails.outer = d3.forceSimulation(nodes.filter(d => d.group === "national teams"))
+    .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1)) // (THINK) needed?
+    .force("x", d3.forceX().x(d => d.circleX).strength(0.7))
+    .force("y", d3.forceY().y(d => d.circleY).strength(0.7));
+
+  simulationsDetails.inner = d3.forceSimulation(nodes.filter(d => d.group === "players"))
+    .force("x", d3.forceX().x(cx).strength(1.0))
+    .force("y", d3.forceY().y(cy).strength(1.0));
+
+  const detailsSVG = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [-width / 2, -height / 2, width, height])
+    .attr("style", "max-width: 100%; height: auto;");
+
+  const deatailsLink = detailsSVG.append("g")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.8)
+    .selectAll("line")
+    .data(links.filter(d => d.detail === true && d.club === cluster))
+    .join("line")
+      .attr("stroke-width", 1.0);
+
+  const detailsNode = detailsSVG.append("g")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 0)
+    .selectAll("circle")
+    .data(nodes.filter(d => d.group !== "clubs"))
+    .join("circle")
+      .attr("r", nodes_radius)
+      .attr("fill", d => color(d.group));
+
+  detailsNode.append("title").text(d => d.id);
+
+  for (let key in simulations) {
+    simulationsDetails[key].on("tick", () => {
+      deatailsLink
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+      detailsNode
+          .filter(d => d.group !== "clubs")
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+    });
+  }
+
+  document.getElementById("details").append(detailsSVG.node());
 
 </script>

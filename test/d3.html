@@ -65,7 +65,7 @@
   
   function resetNetworkStyle(svgNode, svgLink, isolated = () => false) {
     if (dragging === true) return;
-    svgNode.attr("fill", d => color(d.group)).attr("opacity", d => isolated(d) ? 0.3 : 1);
+    svgNode.attr("fill", d => color(d.subgroup ? d.subgroup : d.group)).attr("opacity", d => isolated(d) ? 0.3 : 1);
     svgLink.attr("stroke-opacity", 0.8);
   }
   
@@ -367,7 +367,7 @@
       .data(detailsNodes)
       .join("circle")
         .attr("r", d => d.group === "players" ? nodes_radius * 0.75 : nodes_radius)
-        .attr("fill", d => color(d.group))
+        .attr("fill", d => color(d.subgroup ? d.subgroup : d.group))
         .attr("opacity", d => d.group === "national teams" && !linksNodes.includes(d.id) ? 0.3 : 1)
         .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, detailsLinks, detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)))
         .on("mouseleave", () => resetNetworkStyle(detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)));
@@ -402,12 +402,22 @@
   const allLinks = links.filter(l => l.detail === true).map(d => ({...d}));
   const allNodes = nodes.filter(d => d.group !== "clubs").map(d => ({...d}));
 
+  let clusterLinks = [];
+  allNodes.forEach((node, index) => {
+    if (node.group !== "players") return;
+
+    allNodes.filter(d => d.subgroup === node.subgroup &&  d.id !== node.id).forEach((d, i) => {
+      clusterLinks.push({source: node.id, target: d.id, value: 1});
+    });
+  });
+
+
   let simulationsAll = {};
 
   // Define the simulation forces.
   simulationsAll.both = d3.forceSimulation(allNodes)
     .force("collide", d3.forceCollide(nodes_radius))
-    .force("link", d3.forceLink(allLinks).id(d => d.id).strength(0.15));
+    .force("link", d3.forceLink(allLinks).id(d => d.id).strength(0.4));
 
   simulationsAll.outer = d3.forceSimulation(allNodes.filter(d => d.group === "national teams"))
     .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1.0)) 
@@ -415,8 +425,7 @@
     .force("y", d3.forceY().y(d => d.circleY).strength(1.0));
 
   simulationsAll.inner = d3.forceSimulation(allNodes.filter(d => d.group === "players"))
-    .force("x", d3.forceX().x(0).strength(0.01))
-    .force("y", d3.forceY().y(0).strength(0.01)); // TODO: force to be together within the same club
+    .force("clusterLinks", d3.forceLink(clusterLinks).id(d => d.id).strength(0.1));
   
   const allSVG = d3.create("svg")
     .attr("width", width)
@@ -439,7 +448,7 @@
       .data(allNodes)
       .join("circle")
         .attr("r", d => d.group === "players" ? nodes_radius * 0.75 : nodes_radius)
-        .attr("fill", d => color(d.group))
+        .attr("fill", d => color(d.subgroup ? d.subgroup : d.group))
         .attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1)
         .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, allLinks, allNode, allLink, (d) => d.clubs_count === 0))
         .on("mouseleave", () => resetNetworkStyle(allNode, allLink, (d) => d.clubs_count === 0));

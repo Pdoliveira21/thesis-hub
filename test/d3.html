@@ -31,6 +31,31 @@
       event.subject.fy = null;
     }
   }
+
+  function clicked(event, d) {
+    // Reset visualization to original style
+    node.attr("fill", d => color(d.group)).attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1);
+    link.attr("stroke-opacity", 0.8);
+    
+    // If the node clicked is the one selected, unselect it and return
+    if (d.isSelected === true) {
+      d.isSelected = false;
+      return;
+    }
+    // Unmark all nodes selection before proceeding
+    node.each(n => n.isSelected = false);
+
+    if (d.clubs_count === 0) return;
+    
+    // Mark the node as selected and unhighlight the elements not its neighboors
+    d.isSelected = true;
+
+    let neighboors = links.filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]);
+    neighboors = [...new Set(neighboors)];
+
+    node.filter(n => !neighboors.includes(n)).attr("opacity", 0.3);
+    link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", 0.1);
+  }
   
   // Calculate point position in a circle
   function circlePosition(circle, node, index, count) {
@@ -96,7 +121,7 @@
   // The force simulation mutates links and nodes, so create a copy
   // so that re-evaluating this cell produces the same result.
   const links = data.links.map(d => ({...d}));
-  const nodes = data.nodes.map(d => ({...d}));
+  const nodes = data.nodes.map(d => ({...d, idSelected: false}));
   
   // Evenly place the nodes of group "national teams" along a circunference
   const nodes_radius = 8;
@@ -173,12 +198,15 @@
     .data(nodes)
     .join("circle")
       .attr("r", nodes_radius)
-      .attr("fill", d => color(d.group));
+      .attr("fill", d => color(d.group))
+      .attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1)
+      .on("click", clicked);
 
   node.append("title").text(d => d.id);
 
   // Add a drag behavior. 
-  node.call(d3.drag()
+  node.filter(d => d.group === "clubs")
+    .call(d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended));

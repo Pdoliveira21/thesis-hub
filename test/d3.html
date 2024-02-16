@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 
-<body style="display: inline-flex;">
+<body>
 
-  <div id="container"></div>
-  <div id="details"></div>
+  <div style="display: inline-flex;">
+    <div id="container"></div>
+    <div id="details"></div>
+  </div>
+
+  <div id="all"></div>
+
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
@@ -99,41 +104,41 @@
       {"id": "C1", "group": "clubs"},
       {"id": "C2", "group": "clubs"},
       {"id": "C3", "group": "clubs"},
-      {"id": "P1", "group": "players"},
-      {"id": "P2", "group": "players"},
-      {"id": "P3", "group": "players"},
-      {"id": "P4", "group": "players"},
-      {"id": "P5", "group": "players"},
-      {"id": "P6", "group": "players"},
-      {"id": "P7", "group": "players"},
-      {"id": "P8", "group": "players"},
-      {"id": "P9", "group": "players"},
-      {"id": "P10", "group": "players"},
-      {"id": "P11", "group": "players"},
-      {"id": "P12", "group": "players"},
-      {"id": "P13", "group": "players"},
-      {"id": "P14", "group": "players"},
-      {"id": "P15", "group": "players"},
-      {"id": "P16", "group": "players"},
-      {"id": "P17", "group": "players"},
-      {"id": "P18", "group": "players"},
-      {"id": "P19", "group": "players"},
-      {"id": "P20", "group": "players"},
-      {"id": "P21", "group": "players"},
-      {"id": "P22", "group": "players"},
-      {"id": "P23", "group": "players"},
-      {"id": "P24", "group": "players"},
-      {"id": "P25", "group": "players"},
-      {"id": "P26", "group": "players"},
-      {"id": "P27", "group": "players"},
-      {"id": "P28", "group": "players"},
-      {"id": "P29", "group": "players"},
-      {"id": "P30", "group": "players"},
-      {"id": "P31", "group": "players"},
-      {"id": "P32", "group": "players"},
-      {"id": "P33", "group": "players"},
-      {"id": "P34", "group": "players"},
-      {"id": "P35", "group": "players"},
+      {"id": "P1", "group": "players", "subgroup": "C2"},
+      {"id": "P2", "group": "players", "subgroup": "C2"},
+      {"id": "P3", "group": "players", "subgroup": "C2"},
+      {"id": "P4", "group": "players", "subgroup": "C2"},
+      {"id": "P5", "group": "players", "subgroup": "C2"},
+      {"id": "P6", "group": "players", "subgroup": "C2"},
+      {"id": "P7", "group": "players", "subgroup": "C2"},
+      {"id": "P8", "group": "players", "subgroup": "C2"},
+      {"id": "P9", "group": "players", "subgroup": "C2"},
+      {"id": "P10", "group": "players", "subgroup": "C2"},
+      {"id": "P11", "group": "players", "subgroup": "C2"},
+      {"id": "P12", "group": "players", "subgroup": "C1"},
+      {"id": "P13", "group": "players", "subgroup": "C1"},
+      {"id": "P14", "group": "players", "subgroup": "C1"},
+      {"id": "P15", "group": "players", "subgroup": "C1"},
+      {"id": "P16", "group": "players", "subgroup": "C1"},
+      {"id": "P17", "group": "players", "subgroup": "C1"},
+      {"id": "P18", "group": "players", "subgroup": "C1"},
+      {"id": "P19", "group": "players", "subgroup": "C1"},
+      {"id": "P20", "group": "players", "subgroup": "C1"},
+      {"id": "P21", "group": "players", "subgroup": "C1"},
+      {"id": "P22", "group": "players", "subgroup": "C1"},
+      {"id": "P23", "group": "players", "subgroup": "C3"},
+      {"id": "P24", "group": "players", "subgroup": "C3"},
+      {"id": "P25", "group": "players", "subgroup": "C3"},
+      {"id": "P26", "group": "players", "subgroup": "C3"},
+      {"id": "P27", "group": "players", "subgroup": "C3"},
+      {"id": "P28", "group": "players", "subgroup": "C3"},
+      {"id": "P29", "group": "players", "subgroup": "C3"},
+      {"id": "P30", "group": "players", "subgroup": "C3"},
+      {"id": "P31", "group": "players", "subgroup": "C3"},
+      {"id": "P32", "group": "players", "subgroup": "C3"},
+      {"id": "P33", "group": "players", "subgroup": "C3"},
+      {"id": "P34", "group": "players", "subgroup": "C3"},
+      {"id": "P35", "group": "players", "subgroup": "C3"},
     ],
     "links": [
       {"source": "C1", "target": "B", "value": 6},
@@ -375,7 +380,7 @@
   
     detailsNode.append("title").text(d => d.id);
   
-    for (let key in simulations) {
+    for (let key in simulationsDetails) {
       simulationsDetails[key].on("tick", () => {
         deatailsLink
             .attr("x1", d => d.source.x)
@@ -390,5 +395,78 @@
     
     document.getElementById("details").replaceChildren(detailsSVG.node());
   }
+
+
+
+  // --- Details in the main node, grouped by the club
+  const allLinks = links.filter(l => l.detail === true).map(d => ({...d}));
+  const allNodes = nodes.filter(d => d.group !== "clubs").map(d => ({...d}));
+
+  let simulationsAll = {};
+
+  // Define the simulation forces.
+  simulationsAll.both = d3.forceSimulation(allNodes)
+    .force("collide", d3.forceCollide(nodes_radius))
+    .force("link", d3.forceLink(allLinks).id(d => d.id).strength(0.15));
+
+  simulationsAll.outer = d3.forceSimulation(allNodes.filter(d => d.group === "national teams"))
+    .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1.0)) 
+    .force("x", d3.forceX().x(d => d.circleX).strength(1.0))
+    .force("y", d3.forceY().y(d => d.circleY).strength(1.0));
+
+  simulationsAll.inner = d3.forceSimulation(allNodes.filter(d => d.group === "players"))
+    .force("x", d3.forceX().x(0).strength(0.01))
+    .force("y", d3.forceY().y(0).strength(0.01)); // TODO: force to be together within the same club
+  
+  const allSVG = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [-width / 2, -height / 2, width, height])
+    .attr("style", "max-width: 100%; height: auto;");
+  
+    const allLink = allSVG.append("g")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.8)
+      .selectAll("line")
+      .data(allLinks)
+      .join("line")
+        .attr("stroke-width", 1.0 * 0.75);
+  
+    const allNode = allSVG.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0)
+      .selectAll("circle")
+      .data(allNodes)
+      .join("circle")
+        .attr("r", d => d.group === "players" ? nodes_radius * 0.75 : nodes_radius)
+        .attr("fill", d => color(d.group))
+        .attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1)
+        .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, allLinks, allNode, allLink, (d) => d.clubs_count === 0))
+        .on("mouseleave", () => resetNetworkStyle(allNode, allLink, (d) => d.clubs_count === 0));
+    
+    allNode.filter(d => d.group === "players")
+      .call(d3.drag()
+        .on("start", (event) => dragstarted(event, simulationsAll))
+        .on("drag", (event) => dragged(event))
+        .on("end", (event) => dragended(event, simulationsAll)));
+  
+    allNode.append("title").text(d => d.id);
+  
+    for (let key in simulationsAll) {
+      simulationsAll[key].on("tick", () => {
+        allLink
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        allNode
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+      });
+    }
+    
+    document.getElementById("all").replaceChildren(allSVG.node());
+
+
 
 </script>

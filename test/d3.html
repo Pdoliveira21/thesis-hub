@@ -55,7 +55,7 @@
     // Mark the node as selected and unhighlight the elements not its neighboors
     d.isSelected = true;
 
-    let neighboors = links.filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]);
+    let neighboors = overwiewLinks.filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]);
     neighboors = [...new Set(neighboors)];
 
     node.filter(n => !neighboors.includes(n)).attr("opacity", 0.3);
@@ -174,20 +174,24 @@
     }
   });
 
+
+  const overwiewNodes = nodes.filter(d => d.group !== "players").map(d => ({...d}));
+  const overwiewLinks = links.filter(l => l.detail !== true).map(d => ({...d}));
+
   // Define the simulation forces.
   let simulations = {};
   
-  simulations.both = d3.forceSimulation(nodes.filter(d => d.group !== "players"))
+  simulations.both = d3.forceSimulation(overwiewNodes)
     .force("collide", d3.forceCollide(nodes_radius + 2))
-    .force("link", d3.forceLink(links.filter(l => l.detail !== true)).id(d => d.id).strength(d => d.value / 100));
+    .force("link", d3.forceLink(overwiewLinks).id(d => d.id).strength(d => d.value / 100));
   
   // (NOTE): radial would be agood choice alone if not needed to space evently the nodes and not needed consistency through timelines
-  simulations.outer = d3.forceSimulation(nodes.filter(d => d.group === "national teams"))
+  simulations.outer = d3.forceSimulation(overwiewNodes.filter(d => d.group === "national teams"))
     .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1)) // (THINK) needed?
     .force("x", d3.forceX().x(d => d.circleX).strength(0.7))
     .force("y", d3.forceY().y(d => d.circleY).strength(0.7));
   
-  simulations.inner = d3.forceSimulation(nodes.filter(d => d.group === "clubs"))
+  simulations.inner = d3.forceSimulation(overwiewNodes.filter(d => d.group === "clubs"))
     .force("x", d3.forceX().x(0).strength(0.01))
     .force("y", d3.forceY().y(0).strength(0.01));
   
@@ -203,7 +207,7 @@
       .attr("stroke", "#999")
       .attr("stroke-opacity", 0.8)
     .selectAll("line")
-    .data(links.filter(d => d.detail !== true))
+    .data(overwiewLinks)
     .join("line")
       .attr("stroke-width", d => Math.sqrt(d.value));
 
@@ -213,7 +217,7 @@
       .attr("stroke", "#fff")
       .attr("stroke-width", 0)
     .selectAll("circle")
-    .data(nodes.filter(d => d.group !== "players"))
+    .data(overwiewNodes)
     .join("circle")
       .attr("r", nodes_radius)
       .attr("fill", d => color(d.group))
@@ -239,7 +243,6 @@
           .attr("x2", d => d.target.x)
           .attr("y2", d => d.target.y);
       node
-          .filter(d => d.group !== "players")
           .attr("cx", d => d.x)
           .attr("cy", d => d.y);
     });
@@ -264,21 +267,24 @@
   const cy = 61.359949569236534; // cluster center y
   const cluster = "C2"; // cluster id
 
+  const detailsNodes = nodes.filter(d => d.group !== "clubs").map(d => ({...d}));
+  const detailsLinks = links.filter(l => l.detail === true && l.club === cluster).map(d => ({...d}));
+
   let simulationsDetails = {};
 
   // Define the simulation forces.
-  simulationsDetails.both = d3.forceSimulation(nodes.filter(d => d.group !== "clubs"))
+  simulationsDetails.both = d3.forceSimulation(detailsNodes)
     .force("collide", d3.forceCollide(nodes_radius + 2))
-    .force("link", d3.forceLink(links.filter(l => l.detail === true && l.club === cluster)).id(d => d.id).strength(0.35));
+    .force("link", d3.forceLink(detailsLinks).id(d => d.id).strength(0.2));
 
-  simulationsDetails.outer = d3.forceSimulation(nodes.filter(d => d.group === "national teams"))
-    .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1)) // (THINK) needed?
-    .force("x", d3.forceX().x(d => d.circleX).strength(0.7))
-    .force("y", d3.forceY().y(d => d.circleY).strength(0.7));
+  simulationsDetails.outer = d3.forceSimulation(detailsNodes.filter(d => d.group === "national teams"))
+    .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1.0)) 
+    .force("x", d3.forceX().x(d => d.circleX).strength(1.0))
+    .force("y", d3.forceY().y(d => d.circleY).strength(1.0));
 
-  simulationsDetails.inner = d3.forceSimulation(nodes.filter(d => d.group === "players"))
-    .force("x", d3.forceX().x(cx).strength(1.0))
-    .force("y", d3.forceY().y(cy).strength(1.0));
+  simulationsDetails.inner = d3.forceSimulation(detailsNodes.filter(d => d.group === "players"))
+    .force("x", d3.forceX().x(cx).strength(0.5))
+    .force("y", d3.forceY().y(cy).strength(0.5));
 
   const detailsSVG = d3.create("svg")
     .attr("width", width)
@@ -290,7 +296,7 @@
       .attr("stroke", "#999")
       .attr("stroke-opacity", 0.8)
     .selectAll("line")
-    .data(links.filter(d => d.detail === true && d.club === cluster))
+    .data(detailsLinks)
     .join("line")
       .attr("stroke-width", 1.0);
 
@@ -298,9 +304,9 @@
       .attr("stroke", "#fff")
       .attr("stroke-width", 0)
     .selectAll("circle")
-    .data(nodes.filter(d => d.group !== "clubs"))
+    .data(detailsNodes)
     .join("circle")
-      .attr("r", nodes_radius)
+      .attr("r", d => d.group === "players" ? nodes_radius * 0.75 : nodes_radius)
       .attr("fill", d => color(d.group));
 
   detailsNode.append("title").text(d => d.id);
@@ -313,7 +319,6 @@
           .attr("x2", d => d.target.x)
           .attr("y2", d => d.target.y);
       detailsNode
-          .filter(d => d.group !== "clubs")
           .attr("cx", d => d.x)
           .attr("cy", d => d.y);
     });

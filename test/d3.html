@@ -10,10 +10,15 @@
 
 <script type="module">
 
+  /// (NOTE) when organizing the code be carefull with variables in the code using in the functions without being passed as arguments - avoid this!!
+  /// const in the left side of the condition -- code best practices
+
   // --- FUNCTIONS 
+  var dragging = false;
   
   // Reheat the simulation when drag starts, and fix the subject position.
-  function dragstarted(event) {
+  function dragstarted(event, simulations) {
+    dragging = true;
     for (let key in simulations) {
       if (!event.active) simulations[key].alphaTarget(0.3).restart();
       event.subject.fx = event.subject.x;
@@ -29,47 +34,40 @@
   
   // Restore the target alpha so the simulation cools after dragging ends.
   // Unfix the subject position now that it’s no longer being dragged.
-  function dragended(event) {
+  function dragended(event, simulations) {
+    dragging = false;
     for (let key in simulations) {
       if (!event.active) simulations[key].alphaTarget(0);
       event.subject.fx = null;
       event.subject.fy = null;
     }
   }
-
+  
   function clicked(event, d) {
-    // Reset visualization to original style
-    node.attr("fill", d => color(d.group)).attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1);
-    link.attr("stroke-opacity", 0.8);
+    if (d.group !== "clubs") return;
+    showClusterDetails(d);
+  }
+  
+  function highlightNodeNeighbors(event, d, links, svgNode, svgLink, isolated = () => false) {
+    if (isolated(d) || dragging === true) return;
+        
+    let neighbors = links.filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]);
+    neighbors = [...new Set(neighbors)];
     
-    // If the node clicked is the one selected, unselect it and return
-    if (d.isSelected === true) {
-      d.isSelected = false;
-      return;
-    }
-    // Unmark all nodes selection before proceeding
-    node.each(n => n.isSelected = false);
-
-    if (d.clubs_count === 0) return;
-    
-    // Mark the node as selected and unhighlight the elements not its neighboors
-    d.isSelected = true;
-
-    let neighboors = overwiewLinks.filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]);
-    neighboors = [...new Set(neighboors)];
-
-    node.filter(n => !neighboors.includes(n)).attr("opacity", 0.3);
-    link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", 0.1);
-
-    if (d.group === "clubs") {
-      showClusterDetails(d);
-    }
+    svgNode.filter(n => !neighbors.includes(n)).attr("opacity", 0.3);
+    svgLink.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", 0.1);
+  }
+  
+  function resetNetworkStyle(svgNode, svgLink, isolated = () => false) {
+    if (dragging === true) return;
+    svgNode.attr("fill", d => color(d.group)).attr("opacity", d => isolated(d) ? 0.3 : 1);
+    svgLink.attr("stroke-opacity", 0.8);
   }
   
   // Calculate point position in a circle
   function circlePosition(diameter, index, count) {
     let angle = (2 * Math.PI * index) / count - (Math.PI / 2);
-
+    
     return {
       x: (diameter / 2) * Math.cos(angle),
       y: (diameter / 2) * Math.sin(angle),
@@ -220,6 +218,7 @@
   );
   const scale = Math.min(width, height) / (circle_diameter + 2 * nodes_radius);
 
+  // (TODO) (THINK) some sort heuristics to the national teams nodes. 
   nodes.forEach((node, index) => {
     if (node.group === "national teams") {
       const position = circlePosition(circle_diameter * scale, index, nodes_teams_count);
@@ -263,10 +262,8 @@
     .selectAll("line")
     .data(overwiewLinks)
     .join("line")
-      .attr("stroke-width", d => Math.sqrt(d.value));
+      .attr("stroke-width", d => d.value * 0.75);
 
-  // (TODO) (THINK) some sort heuristics to the national teams nodes. 
-  // (TODO) Fix the position of the teams nodes, even with simulation forces (or make forces to their position be stronger).   
   const node = svg.append("g")
       .attr("stroke", "#fff")
       .attr("stroke-width", 0)
@@ -276,6 +273,8 @@
       .attr("r", nodes_radius)
       .attr("fill", d => color(d.group))
       .attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1)
+      .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, overwiewLinks, node, link, (d) => d.clubs_count === 0))
+      .on("mouseleave", () => resetNetworkStyle(node, link, (d) => d.clubs_count === 0))
       .on("click", clicked);
 
   node.append("title").text(d => d.id);
@@ -284,9 +283,9 @@
   // DOUBT: drag or not drag the national teams nodes?
   node.filter(d => d.group === "clubs")
     .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
+        .on("start", (event) => dragstarted(event, simulations))
+        .on("drag", (event) => dragged(event))
+        .on("end", (event) => dragended(event, simulations)));
   
   // Set the position attributes of links and nodes each time the simulation ticks.
   for (let key in simulations) {
@@ -354,7 +353,7 @@
       .selectAll("line")
       .data(detailsLinks)
       .join("line")
-        .attr("stroke-width", 1.0);
+        .attr("stroke-width", 1.0 * 0.75);
   
     const detailsNode = detailsSVG.append("g")
         .attr("stroke", "#fff")
@@ -364,7 +363,15 @@
       .join("circle")
         .attr("r", d => d.group === "players" ? nodes_radius * 0.75 : nodes_radius)
         .attr("fill", d => color(d.group))
-        .attr("opacity", d => d.group === "national teams" && !linksNodes.includes(d.id) ? 0.3 : 1);
+        .attr("opacity", d => d.group === "national teams" && !linksNodes.includes(d.id) ? 0.3 : 1)
+        .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, detailsLinks, detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)))
+        .on("mouseleave", () => resetNetworkStyle(detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)));
+    
+    detailsNode.filter(d => d.group === "players")
+    .call(d3.drag()
+        .on("start", (event) => dragstarted(event, simulationsDetails))
+        .on("drag", (event) => dragged(event))
+        .on("end", (event) => dragended(event, simulationsDetails)));
   
     detailsNode.append("title").text(d => d.id);
   

@@ -59,9 +59,8 @@
   
   // Calculate point position in a circle
   function circlePosition(diameter, index, count) {
-    const circunference = Math.PI * diameter;
-    const sectionLenght = circunference / count;
-    const angle = ((2 * Math.PI * index) / count) - (Math.PI / 2);
+    let angle = (2 * Math.PI * index) / count - (Math.PI / 2);
+
     return {
       x: (diameter / 2) * Math.cos(angle),
       y: (diameter / 2) * Math.sin(angle),
@@ -114,8 +113,8 @@
   };
   
   // Specify the dimensions of the chart.
-  const width = 1000;
-  const height = 800;
+  const width = 500;
+  const height = 500;
 
   // Specify the color scale.
   const color = d3.scaleOrdinal(d3.schemeCategory10);

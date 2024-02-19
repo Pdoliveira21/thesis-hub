@@ -8,7 +8,7 @@
   </div>
 
   <div id="all"></div>
-
+  <div id="nyt"></div>
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
@@ -63,9 +63,9 @@
     svgLink.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", 0.1);
   }
   
-  function resetNetworkStyle(svgNode, svgLink, isolated = () => false) {
+  function resetNetworkStyle(svgNode, svgLink, isolated = () => false, group = (d) => d.group) {
     if (dragging === true) return;
-    svgNode.attr("fill", d => color(d.subgroup ? d.subgroup : d.group)).attr("opacity", d => isolated(d) ? 0.3 : 1);
+    svgNode.attr("fill", d => color(group(d))).attr("opacity", d => isolated(d) ? 0.3 : 1);
     svgLink.attr("stroke-opacity", 0.8);
   }
   
@@ -241,13 +241,13 @@
   
   simulations.both = d3.forceSimulation(overwiewNodes)
     .force("collide", d3.forceCollide(nodes_radius + 2))
-    .force("link", d3.forceLink(overwiewLinks).id(d => d.id).strength(d => d.value / 100));
+    .force("link", d3.forceLink(overwiewLinks).id(d => d.id).strength(d => d.value * 0.01));
   
   // (NOTE): radial would be agood choice alone if not needed to space evently the nodes and not needed consistency through timelines
   simulations.outer = d3.forceSimulation(overwiewNodes.filter(d => d.group === "national teams"))
-    .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1)) // (THINK) needed?
-    .force("x", d3.forceX().x(d => d.circleX).strength(0.7))
-    .force("y", d3.forceY().y(d => d.circleY).strength(0.7));
+    // .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1)) // (THINK) needed?
+    .force("x", d3.forceX().x(d => d.circleX).strength(1.0))
+    .force("y", d3.forceY().y(d => d.circleY).strength(1.0));
   
   simulations.inner = d3.forceSimulation(overwiewNodes.filter(d => d.group === "clubs"))
     .force("x", d3.forceX().x(0).strength(0.01))
@@ -267,7 +267,7 @@
     .selectAll("line")
     .data(overwiewLinks)
     .join("line")
-      .attr("stroke-width", d => d.value * 0.75);
+      .attr("stroke-width", d => Math.min(d.value * 0.75, nodes_radius * 2));
 
   const node = svg.append("g")
       .attr("stroke", "#fff")
@@ -338,13 +338,13 @@
       .force("link", d3.forceLink(detailsLinks).id(d => d.id).strength(0.15));
   
     simulationsDetails.outer = d3.forceSimulation(detailsNodes.filter(d => d.group === "national teams"))
-      .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1.0)) 
+      // .force("radial", d3.forceRadial((circle_diameter * scale)/2, 0, 0).strength(1.0)) 
       .force("x", d3.forceX().x(d => d.circleX).strength(1.0))
       .force("y", d3.forceY().y(d => d.circleY).strength(1.0));
   
     simulationsDetails.inner = d3.forceSimulation(detailsNodes.filter(d => d.group === "players"))
-      .force("x", d3.forceX().x(cx).strength(0.45))
-      .force("y", d3.forceY().y(cy).strength(0.45));
+      .force("x", d3.forceX().x(cx).strength(0.35))
+      .force("y", d3.forceY().y(cy).strength(0.35));
 
     const detailsSVG = d3.create("svg")
       .attr("width", width)
@@ -370,7 +370,7 @@
         .attr("fill", d => color(d.subgroup ? d.subgroup : d.group))
         .attr("opacity", d => d.group === "national teams" && !linksNodes.includes(d.id) ? 0.3 : 1)
         .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, detailsLinks, detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)))
-        .on("mouseleave", () => resetNetworkStyle(detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)));
+        .on("mouseleave", () => resetNetworkStyle(detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id), (d) => d.subgroup ? d.subgroup : d.group));
     
     detailsNode.filter(d => d.group === "players")
     .call(d3.drag()
@@ -451,7 +451,7 @@
         .attr("fill", d => color(d.subgroup ? d.subgroup : d.group))
         .attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1)
         .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, allLinks, allNode, allLink, (d) => d.clubs_count === 0))
-        .on("mouseleave", () => resetNetworkStyle(allNode, allLink, (d) => d.clubs_count === 0));
+        .on("mouseleave", () => resetNetworkStyle(allNode, allLink, (d) => d.clubs_count === 0, (d) => d.subgroup ? d.subgroup : d.group));
     
     allNode.filter(d => d.group === "players")
       .call(d3.drag()
@@ -478,4 +478,85 @@
 
 
 
+    /// TRY TO REPLICATE NYT LAYOUT
+
+    const NYTNodes = nodes.map(d => ({...d}));
+    const NYTLinks = links.filter(d => d.detail === true).map(d => ({...d}));
+
+    NYTNodes.filter(d => d.group === "players").forEach((node, index) => {
+      NYTLinks.push({source: node.id, target: node.subgroup, value: 1, detail: false});
+    });
+
+    let simulationsNYT = {};
+
+    // Define the simulation forces.
+    simulationsNYT.both = d3.forceSimulation(NYTNodes)
+      .force("collide", d3.forceCollide(nodes_radius));
+
+    simulationsNYT.outer = d3.forceSimulation(NYTNodes.filter(d => d.group === "national teams"))
+      .force("x", d3.forceX().x(d => d.circleX).strength(1.0))
+      .force("y", d3.forceY().y(d => d.circleY).strength(1.0));
+    
+    simulationsNYT.medium = d3.forceSimulation(NYTNodes.filter(d => d.group === "players"))
+      .force("radial", d3.forceRadial((circle_diameter * scale)/2 - 40, 0, 0).strength(1.0));
+
+    simulationsNYT.inner = d3.forceSimulation(NYTNodes.filter(d => d.group === "clubs"))
+      .force("x", d3.forceX().x(0).strength(0.001))
+      .force("y", d3.forceY().y(0).strength(0.001));
+
+    simulationsNYT.players = d3.forceSimulation(NYTNodes.filter(d => d.group !== "clubs"))
+      .force("link", d3.forceLink(NYTLinks.filter(d => d.detail === true)).id(d => d.id).strength(1.0));
+
+    simulationsNYT.clubs = d3.forceSimulation(NYTNodes.filter(d => d.group !== "national teams"))
+      .force("link", d3.forceLink(NYTLinks.filter(d => d.detail === false)).id(d => d.id).strength(0.05));
+
+    const nytSVG = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [-width / 2, -height / 2, width, height])
+    .attr("style", "max-width: 100%; height: auto;");
+
+    const nytLink = nytSVG.append("g")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.8)
+      .selectAll("line")
+      .data(NYTLinks)
+      .join("line")
+        .attr("stroke-width", 1.0 * 0.75);
+  
+    const nytNode = nytSVG.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0)
+      .selectAll("circle")
+      .data(NYTNodes)
+      .join("circle")
+        .attr("r", d => d.group === "players" ? nodes_radius * 0.75 : nodes_radius)
+        .attr("fill", d => color(d.group))
+        .attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1)
+      .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, NYTLinks, nytNode, nytLink, (d) => d.clubs_count === 0))
+      .on("mouseleave", () => resetNetworkStyle(nytNode, nytLink, (d) => d.clubs_count === 0));
+    
+    nytNode.filter(d => d.group !== "national teams")
+      .call(d3.drag()
+        .on("start", (event) => dragstarted(event, simulationsNYT))
+        .on("drag", (event) => dragged(event))
+        .on("end", (event) => dragended(event, simulationsNYT)));
+  
+    nytNode.append("title").text(d => d.id);
+  
+    for (let key in simulationsNYT) {
+      simulationsNYT[key].on("tick", () => {
+        nytLink
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        nytNode
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+      });
+    }
+
+
+    document.getElementById("nyt").replaceChildren(nytSVG.node());
 </script>

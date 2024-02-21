@@ -23,10 +23,15 @@
       };
     }
 
+    function opacityToHex(opacity) {
+      return Math.floor(opacity * 255).toString(16).padStart(2, 0);
+    }
+
     // allow layout costumization with forces?
     // best for zoom and panning
     // se der para fazer o que ja tinhamos conseguido com o d3 + timeline parece ser a melhor opcao, 
     // pois tem o essencial + flexiblidade + easier to customize
+    // using html5 canva em vez de svg elements pode prejudicar a performance??
     
     const data = {
       "nodes": [
@@ -79,9 +84,9 @@
     const nodes = data.nodes.map(d => ({...d}));
     const links = data.links.map(d => ({...d}));
     
-    const width = 500;
-    const height = 500;
-    const nodes_radius = 8;
+    const width = 1000;
+    const height = 1000;
+    const nodes_radius = 16;
     const nodes_between = 15; 
     const nodes_teams_count = nodes.filter(d => d.group === "national teams").length;
     const nodes_clubs_count = nodes.filter(d => d.group === "clubs").length;
@@ -98,13 +103,15 @@
     nodes.forEach((node, index) => {
       if (node.group === "national teams") {
         const position = circlePosition(circle_diameter * scale, index, nodes_teams_count);
+        node.fx = position.x;
+        node.fy = position.y;
         node.circleX = position.x;
         node.circleY = position.y;
       }
     });
 
     /// Overview Graph
-    const D3Color = d3.scaleOrdinal(d3.schemeCategory10);
+    const getColor = d3.scaleOrdinal(d3.schemeCategory10);
     const OverviewGraph = ForceGraph()(document.getElementById('container'));
     
     const overwiewNodes = nodes.filter(d => d.group !== "players").map(d => ({...d}));
@@ -113,24 +120,34 @@
     // Data Input
     OverviewGraph
       .graphData({nodes: overwiewNodes, links: overwiewLinks})
-      .nodeAutoColorBy('group');
+      //.nodeAutoColorBy('group');
 
     // Container Layout
     OverviewGraph
       .width(width)
       .height(height);
 
-    // Node and Link Styling ((TODO) missing node and link opacity) <--- HERE
+    // Node and Link Styling
     OverviewGraph
       .nodeRelSize(nodes_radius)
-      .nodeVal((n) => {
-        if (n.group === 'national teams') return 2;
-        else if (n.group === 'players') return 0.5;
+      .nodeVal((node) => {
+        if (node.group === 'national teams') return 2;
+        else if (node.group === 'players') return 0.5;
         else return 1;
       })
-      .nodeColor((n) => D3Color(n.group))
-      .linkColor('#999')
-      .linkWidth('value'); // d => Math.min(d.value * 0.75, nodes_radius * 2)
+      .nodeColor((node) => {
+        const opacity = hoverNode !== null 
+          ? (highlighNodes.has(node) ? 1.0 : 0.3)
+          : (overwiewLinks.some(link => link.source.id === node.id || link.target.id === node.id) ? 1.0 : 0.3); // this info can be precalculated as an attribute
+        return `${getColor(node.group)}${opacityToHex(opacity)}`;
+      })
+      .linkColor((link) => {
+        const opacity = hoverNode !== null 
+          ? (hoverNode.id === link.source.id || hoverNode.id === link.target.id ? 0.8 : 0.1)
+          : 0.8;
+        return `#999999${opacityToHex(opacity)}`;
+      })
+      .linkWidth((link) => Math.min(link.value * 0.75, nodes_radius * 2));
 
     // Force Engine Configuration 
     // Looks promising! Different logic but possible to implement everything, ease interaction and still compatible
@@ -138,8 +155,47 @@
       .d3Force("collide", d3.forceCollide(nodes_radius + 2))
       .d3Force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.01))
       .d3Force("x", d3.forceX().x((d) => d.group === "national teams" ? d.circleX : 0).strength((d) => d.group === "national teams" ? 1.0 : 0.01))
-      .d3Force("y", d3.forceY().y((d) => d.group === "national teams" ? d.circleY : 0).strength((d) => d.group === "national teams" ? 1.0 : 0.01));
+      .d3Force("y", d3.forceY().y((d) => d.group === "national teams" ? d.circleY : 0).strength((d) => d.group === "national teams" ? 1.0 : 0.01))
+      .d3Force("charge", null)
+      .d3Force("center", null);
+    
+    // Interactions
+    const highlighNodes = new Set();
+    let hoverNode = null;
+    let fitted = false;
 
+    OverviewGraph
+      .autoPauseRedraw(false)
+      .warmupTicks(100)
+      .onEngineTick(() => {
+        if (!fitted) {
+          fitted = true;
+          OverviewGraph.zoomToFit(0, nodes_radius)
+        }
+      })
+      .onNodeHover(node => {
+        highlighNodes.clear();
+        hoverNode = null;
+
+        // (TODO) node hover not working while dragging...
+        if (node) {
+          if (!overwiewLinks.some(link => link.source.id === node.id || link.target.id === node.id)) return;
+          overwiewLinks.filter(link => link.source.id === node.id || link.target.id === node.id).forEach(link => {
+            highlighNodes.add(link.source);
+            highlighNodes.add(link.target);
+          });
+          hoverNode = node;
+        }
+      })
+      .onNodeDrag((node, translate) => {
+        if (node.group === "national teams") {
+          // (TODO) Prevent dragging of national teams nodes
+        }
+      });
+
+      // NOTES:
+      // on node click open detailed view
+      // nodeCanvasObject to define custom node shapes
     
   </script>
 </body>

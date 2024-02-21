@@ -205,7 +205,6 @@
 
     OverviewGraph
       .autoPauseRedraw(false)
-      // .warmupTicks(100)
       .onEngineTick(() => {
         if (!fitted) {
           fitted = true;
@@ -224,11 +223,6 @@
             highlighNodes.add(link.target);
           });
           hoverNode = node;
-        }
-      })
-      .onNodeDrag((node, translate) => {
-        if (node.group === "national teams") {
-          // (TODO) Prevent dragging of national teams nodes
         }
       })
       .onNodeDrag((node, _) => {

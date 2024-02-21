@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<head>
+  <style> body { margin: 0; } </style>
+
+  <!-- (TODO): fix reference to module -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="./../node_modules/force-graph/dist/force-graph.js"></script>
+</head>
+
+<body>
+  <div id="container"></div>
+
+  <script type="module">
+
+    // Calculate point position in a circle
+    function circlePosition(diameter, index, count) {
+      let angle = (2 * Math.PI * index) / count - (Math.PI / 2);
+      
+      return {
+        x: (diameter / 2) * Math.cos(angle),
+        y: (diameter / 2) * Math.sin(angle),
+      };
+    }
+
+    // allow layout costumization with forces?
+    // best for zoom and panning
+    // se der para fazer o que ja tinhamos conseguido com o d3 + timeline parece ser a melhor opcao, 
+    // pois tem o essencial + flexiblidade + easier to customize
+    
+    const data = {
+      "nodes": [
+        {"id": "A", "name": "A", "group": "national teams"},
+        {"id": "B", "name": "B", "group": "national teams"},
+        {"id": "C", "name": "C", "group": "national teams"},
+        {"id": "D", "name": "D", "group": "national teams"},
+        {"id": "E", "name": "E", "group": "national teams"},
+        {"id": "F", "name": "F", "group": "national teams"},
+        {"id": "G", "name": "G", "group": "national teams"},
+        {"id": "H", "name": "H", "group": "national teams"},
+        {"id": "I", "name": "I", "group": "national teams"},
+        {"id": "J", "name": "J", "group": "national teams"},
+        {"id": "K", "name": "K", "group": "national teams"},
+        {"id": "L", "name": "L", "group": "national teams"},
+        {"id": "M", "name": "M", "group": "national teams"},
+        {"id": "N", "name": "N", "group": "national teams"},
+        {"id": "O", "name": "O", "group": "national teams"},
+        {"id": "P", "name": "P", "group": "national teams"},
+        {"id": "C1", "name": "C1", "group": "clubs"},
+        {"id": "C2", "name": "C2", "group": "clubs"},
+        {"id": "C3", "name": "C3", "group": "clubs"},
+        {"id": "P1", "name": "P1", "group": "players"},
+        {"id": "P2", "name": "P2", "group": "players"},
+        {"id": "P3", "name": "P3", "group": "players"},
+        {"id": "P4", "name": "P4", "group": "players"},
+        {"id": "P5", "name": "P5", "group": "players"},
+        {"id": "P6", "name": "P6", "group": "players"},
+        {"id": "P7", "name": "P7", "group": "players"},
+        {"id": "P8", "name": "P8", "group": "players"},
+        {"id": "P9", "name": "P9", "group": "players"},
+      ],
+      "links": [
+        {"source": "C1", "target": "B", "value": 6},
+        {"source": "C1", "target": "D", "value": 2},
+        {"source": "C1", "target": "F", "value": 2},
+        {"source": "C1", "target": "N", "value": 1},
+        {"source": "C2", "target": "A", "value": 1},
+        {"source": "C2", "target": "C", "value": 1},
+        {"source": "C2", "target": "G", "value": 3},
+        {"source": "C2", "target": "H", "value": 3},
+        {"source": "C2", "target": "I", "value": 3},
+        {"source": "C3", "target": "E", "value": 5},
+        {"source": "C3", "target": "K", "value": 2},
+        {"source": "C3", "target": "M", "value": 7},
+        {"source": "C3", "target": "O", "value": 2},
+      ],
+    };
+    
+    const nodes = data.nodes.map(d => ({...d}));
+    const links = data.links.map(d => ({...d}));
+    
+    const width = 500;
+    const height = 500;
+    const nodes_radius = 8;
+    const nodes_between = 15; 
+    const nodes_teams_count = nodes.filter(d => d.group === "national teams").length;
+    const nodes_clubs_count = nodes.filter(d => d.group === "clubs").length;
+  
+    // Calculate the diameter of the circunference based on a heuristic distance between nodes.
+    const circle_diameter = Math.max(
+      (nodes_teams_count * (2.0 * nodes_radius + nodes_between)) / Math.PI, 
+      (nodes_clubs_count * (3.0 * nodes_radius)) / Math.PI, 
+      200
+    );
+    const scale = Math.min(width, height) / (circle_diameter + 2 * nodes_radius);
+
+    // (TODO) (THINK) some sort heuristics to the national teams nodes. 
+    nodes.forEach((node, index) => {
+      if (node.group === "national teams") {
+        const position = circlePosition(circle_diameter * scale, index, nodes_teams_count);
+        node.circleX = position.x;
+        node.circleY = position.y;
+      }
+    });
+
+    /// Overview Graph
+    const D3Color = d3.scaleOrdinal(d3.schemeCategory10);
+    const OverviewGraph = ForceGraph()(document.getElementById('container'));
+    
+    const overwiewNodes = nodes.filter(d => d.group !== "players").map(d => ({...d}));
+    const overwiewLinks = links.map(d => ({...d}));
+
+    // Data Input
+    OverviewGraph
+      .graphData({nodes: overwiewNodes, links: overwiewLinks})
+      .nodeAutoColorBy('group');
+
+    // Container Layout
+    OverviewGraph
+      .width(width)
+      .height(height);
+
+    // Node and Link Styling ((TODO) missing node and link opacity) <--- HERE
+    OverviewGraph
+      .nodeRelSize(nodes_radius)
+      .nodeVal((n) => {
+        if (n.group === 'national teams') return 2;
+        else if (n.group === 'players') return 0.5;
+        else return 1;
+      })
+      .nodeColor((n) => D3Color(n.group))
+      .linkColor('#999')
+      .linkWidth('value'); // d => Math.min(d.value * 0.75, nodes_radius * 2)
+
+    // Force Engine Configuration 
+    // Looks promising! Different logic but possible to implement everything, ease interaction and still compatible
+    OverviewGraph
+      .d3Force("collide", d3.forceCollide(nodes_radius + 2))
+      .d3Force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.01))
+      .d3Force("x", d3.forceX().x((d) => d.group === "national teams" ? d.circleX : 0).strength((d) => d.group === "national teams" ? 1.0 : 0.01))
+      .d3Force("y", d3.forceY().y((d) => d.group === "national teams" ? d.circleY : 0).strength((d) => d.group === "national teams" ? 1.0 : 0.01));
+
+    
+  </script>
+</body>

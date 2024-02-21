@@ -367,10 +367,10 @@
       .data(detailsNodes)
       .join("circle")
         .attr("r", d => d.group === "players" ? nodes_radius * 0.75 : nodes_radius)
-        .attr("fill", d => color(d.subgroup ? d.subgroup : d.group))
+        .attr("fill", d => color(d.group))
         .attr("opacity", d => d.group === "national teams" && !linksNodes.includes(d.id) ? 0.3 : 1)
         .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, detailsLinks, detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)))
-        .on("mouseleave", () => resetNetworkStyle(detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id), (d) => d.subgroup ? d.subgroup : d.group));
+        .on("mouseleave", () => resetNetworkStyle(detailsNode, deatailsLink, (d) => d.group === "national teams" && !linksNodes.includes(d.id)));
     
     detailsNode.filter(d => d.group === "players")
     .call(d3.drag()

@@ -6,9 +6,19 @@
   <!-- (TODO): fix reference to module -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="./../node_modules/force-graph/dist/force-graph.js"></script>
+  <script src="./Scrubber.js"></script>
 </head>
 
 <body>
+  <form id="form-animation" style="font: 12px var(--sans-serif); font-variant-numeric: tabular-nums; display: flex; height: 33px; align-items: center;">
+    <button id="btn-control" type="button" style="margin-right: 0.4em; width: 5em;"></button>
+    <label style="display: flex; align-items: center;">
+      <!-- GET min and max from the data from the db - PHP like -->
+      <input id="form-range" type="range" min=0 max=3 value=0 step=1 style="width: 180px;">
+      <output id="form-output" style="margin-left: 0.4em;"></output>
+    </label>
+  </form>
+
   <div id="container"></div>
 
   <script type="module">
@@ -33,53 +43,83 @@
     // pois tem o essencial + flexiblidade + easier to customize
     // using html5 canva em vez de svg elements pode prejudicar a performance??
     
+    // (TODO): dependendo dos dados ver se compensa intervalo ou replicar por timeslice 
     const data = {
       "nodes": [
-        {"id": "A", "name": "A", "group": "national teams"},
-        {"id": "B", "name": "B", "group": "national teams"},
-        {"id": "C", "name": "C", "group": "national teams"},
-        {"id": "D", "name": "D", "group": "national teams"},
-        {"id": "E", "name": "E", "group": "national teams"},
-        {"id": "F", "name": "F", "group": "national teams"},
-        {"id": "G", "name": "G", "group": "national teams"},
-        {"id": "H", "name": "H", "group": "national teams"},
-        {"id": "I", "name": "I", "group": "national teams"},
-        {"id": "J", "name": "J", "group": "national teams"},
-        {"id": "K", "name": "K", "group": "national teams"},
-        {"id": "L", "name": "L", "group": "national teams"},
-        {"id": "M", "name": "M", "group": "national teams"},
-        {"id": "N", "name": "N", "group": "national teams"},
-        {"id": "O", "name": "O", "group": "national teams"},
-        {"id": "P", "name": "P", "group": "national teams"},
-        {"id": "C1", "name": "C1", "group": "clubs"},
-        {"id": "C2", "name": "C2", "group": "clubs"},
-        {"id": "C3", "name": "C3", "group": "clubs"},
-        {"id": "P1", "name": "P1", "group": "players"},
-        {"id": "P2", "name": "P2", "group": "players"},
-        {"id": "P3", "name": "P3", "group": "players"},
-        {"id": "P4", "name": "P4", "group": "players"},
-        {"id": "P5", "name": "P5", "group": "players"},
-        {"id": "P6", "name": "P6", "group": "players"},
-        {"id": "P7", "name": "P7", "group": "players"},
-        {"id": "P8", "name": "P8", "group": "players"},
-        {"id": "P9", "name": "P9", "group": "players"},
+        {"id": "A", "name": "A", "group": "national teams", "start": 0, "end": 3},
+        {"id": "B", "name": "B", "group": "national teams", "start": 0, "end": 3},
+        {"id": "C", "name": "C", "group": "national teams", "start": 0, "end": 3},
+        {"id": "D", "name": "D", "group": "national teams", "start": 0, "end": 3},
+        {"id": "E", "name": "E", "group": "national teams", "start": 0, "end": 3},
+        {"id": "F", "name": "F", "group": "national teams", "start": 0, "end": 3},
+        {"id": "G", "name": "G", "group": "national teams", "start": 0, "end": 3},
+        {"id": "H", "name": "H", "group": "national teams", "start": 0, "end": 3},
+        {"id": "I", "name": "I", "group": "national teams", "start": 0, "end": 3},
+        {"id": "J", "name": "J", "group": "national teams", "start": 0, "end": 3},
+        {"id": "K", "name": "K", "group": "national teams", "start": 0, "end": 3},
+        {"id": "L", "name": "L", "group": "national teams", "start": 0, "end": 3},
+        {"id": "M", "name": "M", "group": "national teams", "start": 0, "end": 3},
+        {"id": "N", "name": "N", "group": "national teams", "start": 0, "end": 3},
+        {"id": "O", "name": "O", "group": "national teams", "start": 0, "end": 3},
+        {"id": "P", "name": "P", "group": "national teams", "start": 0, "end": 3},
+        {"id": "C1", "name": "C1", "group": "clubs", "start": 2, "end": 3},
+        {"id": "C2", "name": "C2", "group": "clubs", "start": 0, "end": 3},
+        {"id": "C3", "name": "C3", "group": "clubs", "start": 0, "end": 3},
       ],
       "links": [
-        {"source": "C1", "target": "B", "value": 6},
-        {"source": "C1", "target": "D", "value": 2},
-        {"source": "C1", "target": "F", "value": 2},
-        {"source": "C1", "target": "N", "value": 1},
-        {"source": "C2", "target": "A", "value": 1},
-        {"source": "C2", "target": "C", "value": 1},
-        {"source": "C2", "target": "G", "value": 3},
-        {"source": "C2", "target": "H", "value": 3},
-        {"source": "C2", "target": "I", "value": 3},
-        {"source": "C3", "target": "E", "value": 5},
-        {"source": "C3", "target": "K", "value": 2},
-        {"source": "C3", "target": "M", "value": 7},
-        {"source": "C3", "target": "O", "value": 2},
+        {"source": "C1", "target": "B", "value": 6, "start": 2, "end": 3},
+        {"source": "C1", "target": "D", "value": 2, "start": 2, "end": 3},
+        {"source": "C1", "target": "F", "value": 2, "start": 2, "end": 3},
+        {"source": "C1", "target": "N", "value": 1, "start": 2, "end": 3},
+        {"source": "C2", "target": "A", "value": 1, "start": 0, "end": 3},
+        {"source": "C2", "target": "C", "value": 1, "start": 0, "end": 3},
+        {"source": "C2", "target": "G", "value": 3, "start": 0, "end": 3},
+        {"source": "C2", "target": "H", "value": 3, "start": 0, "end": 3},
+        {"source": "C2", "target": "I", "value": 3, "start": 0, "end": 3},
+        {"source": "C3", "target": "E", "value": 5, "start": 0, "end": 3},
+        {"source": "C3", "target": "K", "value": 2, "start": 0, "end": 3},
+        {"source": "C3", "target": "M", "value": 7, "start": 1, "end": 1},
+        {"source": "C3", "target": "M", "value": 1, "start": 2, "end": 3},
+        {"source": "C3", "target": "O", "value": 2, "start": 0, "end": 3},
       ],
     };
+
+    function _inTimeslice(time, start, end) {
+      return start <= time && time <= end;
+    }
+
+    function _update(time) {
+      highlighNodes.clear();
+      hoverNode = null;
+
+      
+      overwiewNodes = nodes.filter(({start, end}) => _inTimeslice(time, start, end)).map(d => ({...d}));
+      overwiewLinks = links.filter(({start, end}) => _inTimeslice(time, start, end)).map(d => ({...d}));
+      
+      // reuse nodes and links already displayed as old ones to preserve the graph layout between updates
+      // (TODO): a naive implementation, can be improved?
+      const oldData = OverviewGraph.graphData();
+      const oldPositions = new Map(oldData.nodes.map(node => [node.id, {x: node.x, y: node.y}]));
+
+      overwiewNodes.forEach(node => {
+        const oldPos = oldPositions.get(node.id);
+        if (oldPos) {
+          node.x = oldPos.x;
+          node.y = oldPos.y;
+        }
+      });
+
+
+      OverviewGraph.graphData({nodes: overwiewNodes, links: overwiewLinks});
+    }
+
+    const rangeTime = [0, 1, 2, 3];
+    const rangeHTML = document.getElementById('form-range');
+    rangeHTML.addEventListener('input', (event) => {
+      const time = rangeTime[rangeHTML.valueAsNumber]; // Improve code!! and interdependencies
+      _update(time);
+    });
+    Scrubber(rangeTime, {});
     
     const nodes = data.nodes.map(d => ({...d}));
     const links = data.links.map(d => ({...d}));
@@ -114,13 +154,12 @@
     const getColor = d3.scaleOrdinal(d3.schemeCategory10);
     const OverviewGraph = ForceGraph()(document.getElementById('container'));
     
-    const overwiewNodes = nodes.filter(d => d.group !== "players").map(d => ({...d}));
-    const overwiewLinks = links.map(d => ({...d}));
+    let overwiewNodes = nodes.filter(({start, end}) => _inTimeslice(0, start, end)).map(d => ({...d}));
+    let overwiewLinks = links.filter(({start, end}) => _inTimeslice(0, start, end)).map(d => ({...d}));
 
     // Data Input
     OverviewGraph
       .graphData({nodes: overwiewNodes, links: overwiewLinks})
-      //.nodeAutoColorBy('group');
 
     // Container Layout
     OverviewGraph
@@ -166,7 +205,7 @@
 
     OverviewGraph
       .autoPauseRedraw(false)
-      .warmupTicks(100)
+      // .warmupTicks(100)
       .onEngineTick(() => {
         if (!fitted) {
           fitted = true;
@@ -191,11 +230,21 @@
         if (node.group === "national teams") {
           // (TODO) Prevent dragging of national teams nodes
         }
+      })
+      .onNodeDrag((node, _) => {
+        if (node.group === "national teams") {
+          node.fx = node.circleX;
+          node.fy = node.circleY;
+          node.x = node.circleX;
+          node.y = node.circleY;
+        }
       });
 
       // NOTES:
       // on node click open detailed view
       // nodeCanvasObject to define custom node shapes
+      // change graphData to update the graph on new renders (dynamically changes based on this info)
+      // (TODO): improve animations of entering and exiting nodes, inclusive opacity changes and edges weight changes!!
     
   </script>
 </body>

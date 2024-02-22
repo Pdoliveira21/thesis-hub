@@ -3,12 +3,16 @@
 <head>
   <style> body { margin: 0; } </style>
 
+  <link rel="stylesheet" href="./style.css" ></style>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="./temporal-graph.js"></script>
 </head>
 
 <body>
-  <div id="graph-container"></div>
+  <div id="temporal-graph">
+    <div id="graph-container"></div>
+    <div id="timeline-container" style="width: 800px;"></div>
+  </div>
 
   <script type="module">
     
@@ -51,6 +55,6 @@
       ],
     };
 
-    TemporalGraph(data, "graph-container", {});
+    TemporalGraph(data, "graph-container", "timeline-container", {});
   </script>
 </body>

@@ -41,7 +41,7 @@ function drag(simulation) {
 // ---- Construct the visualization based on the data and configuration
 
 
-function _timeslices(data, timestep) {
+function timeslices(data, timestep) {
   const min = d3.min(data.nodes, node => node.lifetime?.start) || 0;
   const max = d3.max(data.nodes, node => node.lifetime?.end) || 0;
 
@@ -147,9 +147,8 @@ function TemporalGraph(data, graphContainer, timelineContainer, {
   const graph = overviewSVG(overviewNodes, overviewLinks, { width, height, nodeSize, outerGroup, innerGroup, color });
   document.getElementById(graphContainer).append(graph);
 
-  const timeslices = _timeslices(data, timestep);
-  console.log(timeslices)
-  const timeline = Scrubber(timeslices, timestep, { delay: 1000 });
+  const times = timeslices(data, timestep);
+  const timeline = Scrubber(times, timestep, { delay: 1000 });
   document.getElementById(timelineContainer).append(timeline);
 }
 
@@ -158,7 +157,7 @@ function TemporalGraph(data, graphContainer, timelineContainer, {
 // ---- Timeline Scrubber (TODO): move to a separate file
 
 
-function Scrubber(values, step, {
+function Scrubber(values, rangeStep, {
   format = value => value,
   initial = 0,
   direction = 1,
@@ -170,8 +169,8 @@ function Scrubber(values, step, {
 }) {
 
   function createTimeline(min = 0, max = 10, step = 1) {
-    const timeline = document.createElement("form");
-    timeline.id = "form-timeline";
+    const form = document.createElement("form");
+    form.id = "form-timeline";
 
     const btnPlay = document.createElement("button");
     btnPlay.id = "timeline-control";
@@ -206,16 +205,16 @@ function Scrubber(values, step, {
 
     const player = document.createElement("div");
     player.append(btnPlay, btnPrev, range, btnNext);
-    timeline.append(output, player);
+    form.append(output, player);
 
-    return timeline;
+    return form;
   }
 
   values = Array.from(values);
-  const timeline = createTimeline(autoplay, 0, values.length - 1, step);
-  const control = timeline.querySelector("#timeline-control");
-  const range = timeline.querySelector("#timeline-range");
-  const output = timeline.querySelector("#timeline-output");
+  const form = createTimeline(0, values.length - 1, rangeStep);
+  const control = form.querySelector("#timeline-control");
+  const range = form.querySelector("#timeline-range");
+  const output = form.querySelector("#timeline-output");
 
   let frame = null;
   let timer = null;
@@ -263,8 +262,8 @@ function Scrubber(values, step, {
 
   range.oninput = event => {
     if (event && event.isTrusted && running()) stop();
-    timeline.value = values[range.valueAsNumber];
-    output.value = `Current Timeslice: ${format(timeline.value, range.valueAsNumber, values)}`;
+    form.value = values[range.valueAsNumber];
+    output.value = `Current Timeslice: ${format(form.value, range.valueAsNumber, values)}`;
   };
 
   control.onclick = () => {
@@ -281,5 +280,5 @@ function Scrubber(values, step, {
   // (TODO): mke first layout on time 0 if not autoplay
 
   // Inputs.disposal(form).then(stop); // (TODO): search more about invalidation and disposal
-  return timeline;
+  return form;
 }

@@ -37,11 +37,11 @@
       return Math.floor(opacity * 255).toString(16).padStart(2, 0);
     }
 
-    // allow layout costumization with forces?
+    // allow layout costumization with forces? YES with a different logic to implement them
     // best for zoom and panning
     // se der para fazer o que ja tinhamos conseguido com o d3 + timeline parece ser a melhor opcao, 
     // pois tem o essencial + flexiblidade + easier to customize
-    // using html5 canva em vez de svg elements pode prejudicar a performance??
+    // using html5 canva em vez de svg elements pode prejudicar a performance?? ASK :: affect acessibility
     
     // (TODO): dependendo dos dados ver se compensa intervalo ou replicar por timeslice 
     const data = {
@@ -80,6 +80,7 @@
         {"source": "C3", "target": "K", "value": 2, "start": 0, "end": 3},
         {"source": "C3", "target": "M", "value": 7, "start": 1, "end": 1},
         {"source": "C3", "target": "M", "value": 1, "start": 2, "end": 3},
+        {"source": "C2", "target": "M", "value": 3, "start": 2, "end": 3},
         {"source": "C3", "target": "O", "value": 2, "start": 0, "end": 3},
       ],
     };
@@ -211,11 +212,10 @@
           OverviewGraph.zoomToFit(0, nodes_radius)
         }
       })
-      .onNodeHover(node => {
+      .onNodeHover((node, _) => {
         highlighNodes.clear();
         hoverNode = null;
 
-        // (TODO) node hover not working while dragging...
         if (node) {
           if (!overwiewLinks.some(link => link.source.id === node.id || link.target.id === node.id)) return;
           overwiewLinks.filter(link => link.source.id === node.id || link.target.id === node.id).forEach(link => {
@@ -234,7 +234,12 @@
         }
       });
 
-      // NOTES:
+      // (PROBLEMA): default das interacoes nao corresponde ao pretendido...
+      // dont click events after pointer drag
+      // dont hover during drag are the lib defaults...
+      // cannot disable the drag of only some nodes...
+
+      // (NOTES):
       // on node click open detailed view
       // nodeCanvasObject to define custom node shapes
       // change graphData to update the graph on new renders (dynamically changes based on this info)

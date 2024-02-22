@@ -3,7 +3,7 @@
   * @param {number} alpha - Alpha value in the range [0, 1].
   * @return {string} Hexadecimal representation of the alpha value.
   */
-export function alphaToHex(alpha) {
+function alphaToHex(alpha) {
   return Math.floor(alpha * 255).toString(16).padStart(2, 0);
 }
 
@@ -15,7 +15,7 @@ export function alphaToHex(alpha) {
   * @param {number} count - Total number of points.
   * @return {Object} Position x and y of the point on the circunference.
   */
-export function circunferencePosition(diameter, index, count) {
+function circunferencePosition(diameter, index, count) {
   let angle = (2 * Math.PI * index) / count - (Math.PI / 2);
   
   return {

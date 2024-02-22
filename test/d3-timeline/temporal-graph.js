@@ -1,14 +1,7 @@
+// (NOTE): opting by using only d3, por causa das limitaçoes de interacoes
+// da lib que nao correspondem ao pretendido, e workaround seria mais complicado do que o manual coding do d3 nas outras coisas
 
-// ---- Utils functions (TODO): move to a separate file
 
-function circunferencePosition(diameter, index, count) {
-  let angle = (2 * Math.PI * index) / count - (Math.PI / 2);
-  
-  return {
-    x: (diameter / 2) * Math.cos(angle),
-    y: (diameter / 2) * Math.sin(angle),
-  };
-}
 
 
 // ---- Graphs Interaction's functions (TODO): move to a separate file
@@ -37,9 +30,7 @@ function drag(simulation) {
       .on("end", dragended);
 }
 
-
 // ---- Construct the visualization based on the data and configuration
-
 
 function timeslices(data, timestep) {
   const min = d3.min(data.nodes, node => node.lifetime?.start) || 0;
@@ -65,68 +56,99 @@ function TemporalGraph(data, graphContainer, timelineContainer, {
   color = d3.scaleOrdinal(d3.schemeCategory10),
 }) {
 
-  function overviewSVG(nodes, links) {
-
+  function overviewSVG() {
+    
     const simulation = d3.forceSimulation()
           .force("collide", d3.forceCollide(nodeSize + 2))
           .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.01))
           .force("x", d3.forceX().x(d => d.group === outerGroup ? d.fx : 0).strength(d => d.group === outerGroup ? 1.0 : 0.01))
           .force("y", d3.forceY().y(d => d.group === outerGroup ? d.fy : 0).strength(d => d.group === outerGroup ? 1.0 : 0.01));
   
-      const svg = d3.create("svg")
-          .attr("width", width)
-          .attr("height", height)
-          .attr("viewBox", [-width / 2, -height / 2, width, height])
-          .attr("style", "max-width: 100%; height: auto;");
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [-width / 2, -height / 2, width, height])
+        .attr("style", "max-width: 100%; height: auto;");
+
+    let link = svg.append("g")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.8)
+      .selectAll("line");
+
+    let node = svg.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0)
+      .selectAll("circle");
+          
+
+    function ticked() {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+      node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+    }
+
+    function hovered(node) {
+
+      // follow d3.js example
+    }
+
+    // if (invalidation) invalidation.then(() => simulation.stop());
   
-      let link = svg.append("g")
-          .attr("stroke", "#999")
-          .attr("stroke-opacity", 0.8)
-        .selectAll("line")
-        .data(links)
-        .join("line")
-          .attr("stroke-width", d => Math.min(d.value * 0.75, nodeSize * 2));
-  
-      let node = svg.append("g")
-          .attr("stroke", "#fff")
-          .attr("stroke-width", 0)
-        .selectAll("circle")
-        .data(nodes)
-        .join("circle")
-          .attr("r", nodeSize)
-          .attr("fill", d => color(d.group))
-          // .attr("opacity", d => d.clubs_count === 0 ? 0.3 : 1)
-          // .on("mouseenter", (event, d) => highlightNodeNeighbors(event, d, overwiewLinks, node, link, (d) => d.clubs_count === 0))
-          // .on("mouseleave", () => resetNetworkStyle(node, link, (d) => d.clubs_count === 0))
-          // .on("click", clicked);
-          .call(node => node.append("title").text(d => d.id));
-  
-        node.filter(d => d.group === innerGroup)
-          .call(drag(simulation));
-      
+    return Object.assign(svg.node(), {
+      update({nodes, links}) {
+
+        const old = new Map(node.data().map(d => [d.id, {x: d.x, y: d.y}]));
+        nodes = nodes.map(d => ({...old.get(d.id) || {x:0, y:0}, ...d}));
+        links = links.map(d => ({...d}));
+
+        node = node
+          .data(nodes, d => d.id)
+          .join(enter => enter.append("circle"))
+            .attr("r", nodeSize)
+            .attr("fill", d => color(d.group))
+            .attr("opacity", d => links.some(l => l.source === d.id || l.target === d.id) ? 1.0 : 0.3)
+            .call(node => node.append("title").text(d => d.id))
+            .call(node => node.filter(d => d.group === innerGroup).call(drag(simulation)))
+            .call(node => node.on("mouseenter", (_, d) => hovered(d)))
+            .call(node => node.on("mouseleave", () => hovered(null)));
+            // .on("click", clicked);
+
+        link = link
+          .data(links, d => [d.source, d.target])
+          .join("line")
+            .attr("stroke-width", d => Math.min(d.value * 0.75, nodeSize * 2));
+
         simulation.nodes(nodes);
         simulation.force("link").links(links);
-        simulation.on("tick", () => {
-          link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
-          node
-              .attr("cx", d => d.x)
-              .attr("cy", d => d.y);
-        });
-  
-        return svg.node();
+        simulation.alpha(1).restart();
+        simulation.on("tick", ticked);
+      }
+    });
   }
 
+  function updateOverview(graph, nodes, links, timeslice) {
+    const displayedNodes = nodes.filter(d => d.group === outerGroup || inTimeslice(d.lifetime, timeslice));
+    const displayedLinks = links.filter(d => inTimeslice(d.lifetime, timeslice));
+
+    graph.update({nodes: displayedNodes, links: displayedLinks});
+    document.getElementById(graphContainer).replaceChildren(graph);
+  }
 
   const times = timeslices(data, timestep);
   const timeline = Scrubber(times, timestep, { delay: 1000 });
   document.getElementById(timelineContainer).append(timeline);
 
 
-
+  // for now we supposed that is just the overview graph... think about data and best format next week
+  // first filter by all overview nodes and links according to the variables then
+  // filter data to only include nodes and links that are active in the current timeslice
+  // (if displayouter always dont consider timeslice in the nodes) then calcule outer circle pos
+  // if displayouter always, only needed to do it once, otherwise, needed for each timeslice
 
   // prepare and filter the correct data to be displayed in each graph based also on the timeslice
   const overviewNodes = data.nodes.map(d => ({...d}));
@@ -153,149 +175,11 @@ function TemporalGraph(data, graphContainer, timelineContainer, {
   });
 
 
-  const displayedNodes = overviewNodes.filter(d => d.group === outerGroup || inTimeslice(d.lifetime, times[0]));
-  const displayedLinks = overviewLinks.filter(d => inTimeslice(d.lifetime, times[0]));
-
-  const graph = overviewSVG(displayedNodes, displayedLinks, { width, height, nodeSize, outerGroup, innerGroup, color });
-  document.getElementById(graphContainer).append(graph);
+  const graph = overviewSVG();
+  updateOverview(graph, overviewNodes, overviewLinks, times[0]);
 
   timeline.querySelector("#timeline-range").addEventListener("input", (_) => {
     const timeslice = timeline.value;
-    const displayedNodes = overviewNodes.filter(d => d.group === outerGroup || inTimeslice(d.lifetime, timeslice));
-    const displayedLinks = overviewLinks.filter(d => inTimeslice(d.lifetime, timeslice));
-
-    const graph = overviewSVG(displayedNodes, displayedLinks, { width, height, nodeSize, outerGroup, innerGroup, color });
-    document.getElementById(graphContainer).replaceChildren(graph);
+    updateOverview(graph, overviewNodes, overviewLinks, timeslice);
   });
-}
-
-
-
-// ---- Timeline Scrubber (TODO): move to a separate file
-
-
-function Scrubber(values, rangeStep, {
-  format = value => value,
-  initial = 0,
-  direction = 1,
-  delay = 1000,
-  autoplay = false,
-  loop = false,
-  loopDelay = null,
-  alternate = false
-}) {
-
-  function createTimeline(min = 0, max = 10, step = 1) {
-    const form = document.createElement("form");
-    form.id = "form-timeline";
-
-    const btnPlay = document.createElement("button");
-    btnPlay.id = "timeline-control";
-    btnPlay.type = "button";
-    btnPlay.textContent = autoplay ? "Pause" : "Play";
-    btnPlay.classList.add("btn-timeline");
-
-    const btnPrev = document.createElement("button");
-    btnPrev.id = "timeline-prev";
-    btnPrev.type = "button";
-    btnPrev.textContent = "Prev";
-    btnPrev.classList.add("btn-timeline");
-
-    const btnNext = document.createElement("button");
-    btnNext.id = "timeline-next";
-    btnNext.type = "button";
-    btnNext.textContent = "Next";
-    btnNext.classList.add("btn-timeline");
-    
-    const range = document.createElement("input");
-    range.id = "timeline-range";
-    range.type = "range";
-    range.min = min;
-    range.max = max;
-    range.step = step;
-    range.value = min;
-    range.classList.add("input-timeline");
-
-    const output = document.createElement("output");
-    output.id = "timeline-output";
-    output.classList.add("output-timeline");
-
-    const player = document.createElement("div");
-    player.append(btnPlay, btnPrev, range, btnNext);
-    form.append(output, player);
-
-    return form;
-  }
-
-  values = Array.from(values);
-  const form = createTimeline(0, values.length - 1, rangeStep);
-  const control = form.querySelector("#timeline-control");
-  const range = form.querySelector("#timeline-range");
-  const output = form.querySelector("#timeline-output");
-
-  let frame = null;
-  let timer = null;
-  let interval = null;
-  
-  function start() {
-    control.textContent = "Pause";
-    if (delay === null) frame = requestAnimationFrame(tick);
-    else interval = setInterval(tick, delay);
-  }
-
-  function stop() {
-    control.textContent = "Play";
-    if (frame !== null) cancelAnimationFrame(frame), frame = null;
-    if (timer !== null) clearTimeout(timer), timer = null;
-    if (interval !== null) clearInterval(interval), interval = null;
-  }
-
-  function running() {
-    return frame !== null || timer !== null || interval !== null;
-  }
-
-  function tick() {
-    if (range.valueAsNumber === (direction > 0 ? values.length - 1 : direction < 0 ? 0 : NaN)) {
-      if (!loop) return stop();
-      if (alternate) direction = -direction;
-      if (loopDelay !== null) {
-        if (frame !== null) cancelAnimationFrame(frame), frame = null;
-        if (interval !== null) clearInterval(interval), interval = null;
-        timer = setTimeout(() => (step(), start()), loopDelay);
-        return;
-      }
-    }
-
-    if (delay === null) frame = requestAnimationFrame(tick);
-    step();
-  }
-
-  // TODO: on running if no loop - when getting to the end stop animation
-  // :: simplify the logic to our requirements
-  function step() {
-    range.valueAsNumber = (range.valueAsNumber + direction + values.length) % values.length;
-    range.dispatchEvent(new CustomEvent("input"));
-  }
-
-  range.oninput = event => {
-    if (event && event.isTrusted && running()) stop();
-    form.value = values[range.valueAsNumber];
-    output.value = `Current Timeslice: ${format(form.value, range.valueAsNumber, values)}`;
-  };
-
-  control.onclick = () => {
-    if (running()) return stop();
-    direction = alternate && range.valueAsNumber === values.length - 1 ? -1 : 1;
-    range.valueAsNumber = (range.valueAsNumber + direction) % values.length;
-    range.dispatchEvent(new CustomEvent("input"));
-    start();
-  };
-
-  range.oninput();
-  if (autoplay) start();
-  else stop();
-  // (TODO): mke first layout on time 0 if not autoplay
-
-  // Inputs.disposal(form).then(stop); // (TODO): search more about invalidation and disposal
-  return form;
 }

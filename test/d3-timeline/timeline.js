@@ -1,54 +1,11 @@
-// ----- Scrubber -----
-
 /*
   COPYRIGHT 2020-2023 - D3 by observable (https://observablehq.com/@d3/temporal-force-directed-graph)
   Used as a reference for the scrubber component
 */
 
-// TODO: add .css to style the form and disable and enable according to min and max values
-function _form(autoplay = false, min = 0, max = 10, step = 1) {
-  const form = document.createElement("form");
-  form.id = "form-timeline";
+// (TODO) Functions to classes...
 
-  const btnPlay = document.createElement("button");
-  btnPlay.id = "timeline-control";
-  btnPlay.type = "button";
-  btnPlay.textContent = autoplay ? "Pause" : "Play";
-  btnPlay.classList.add("btn-timeline");
-
-  const btnPrev = document.createElement("button");
-  btnPrev.id = "timeline-prev";
-  btnPrev.type = "button";
-  btnPrev.textContent = "Prev";
-  btnPrev.classList.add("btn-timeline");
-
-  const btnNext = document.createElement("button");
-  btnNext.id = "timeline-next";
-  btnNext.type = "button";
-  btnNext.textContent = "Next";
-  btnNext.classList.add("btn-timeline");
-  
-  const range = document.createElement("input");
-  range.id = "timeline-range";
-  range.type = "range";
-  range.min = min;
-  range.max = max;
-  range.step = step;
-  range.value = min;
-  range.classList.add("input-timeline");
-
-  const output = document.createElement("output");
-  output.id = "timeline-output";
-  output.classList.add("output-timeline");
-
-  const player = document.createElement("div");
-  player.append(btnPlay, btnPrev, range, btnNext);
-  form.append(player, output);
-
-  return form;
-}
-
-function Scrubber(values, step, {
+function Scrubber(values, rangeStep, {
   format = value => value,
   initial = 0,
   direction = 1,
@@ -58,8 +15,51 @@ function Scrubber(values, step, {
   loopDelay = null,
   alternate = false
 }) {
+
+  function createTimeline(min = 0, max = 10, step = 1) {
+    const form = document.createElement("form");
+    form.id = "form-timeline";
+
+    const btnPlay = document.createElement("button");
+    btnPlay.id = "timeline-control";
+    btnPlay.type = "button";
+    btnPlay.textContent = autoplay ? "Pause" : "Play";
+    btnPlay.classList.add("btn-timeline");
+
+    const btnPrev = document.createElement("button");
+    btnPrev.id = "timeline-prev";
+    btnPrev.type = "button";
+    btnPrev.textContent = "Prev";
+    btnPrev.classList.add("btn-timeline");
+
+    const btnNext = document.createElement("button");
+    btnNext.id = "timeline-next";
+    btnNext.type = "button";
+    btnNext.textContent = "Next";
+    btnNext.classList.add("btn-timeline");
+    
+    const range = document.createElement("input");
+    range.id = "timeline-range";
+    range.type = "range";
+    range.min = min;
+    range.max = max;
+    range.step = step;
+    range.value = min;
+    range.classList.add("input-timeline");
+
+    const output = document.createElement("output");
+    output.id = "timeline-output";
+    output.classList.add("output-timeline");
+
+    const player = document.createElement("div");
+    player.append(btnPlay, btnPrev, range, btnNext);
+    form.append(output, player);
+
+    return form;
+  }
+
   values = Array.from(values);
-  const form = _form(autoplay, 0, values.length - 1, step);
+  const form = createTimeline(0, values.length - 1, rangeStep);
   const control = form.querySelector("#timeline-control");
   const range = form.querySelector("#timeline-range");
   const output = form.querySelector("#timeline-output");
@@ -111,7 +111,7 @@ function Scrubber(values, step, {
   range.oninput = event => {
     if (event && event.isTrusted && running()) stop();
     form.value = values[range.valueAsNumber];
-    output.value = format(form.value, range.valueAsNumber, values);
+    output.value = `Current Timeslice: ${format(form.value, range.valueAsNumber, values)}`;
   };
 
   control.onclick = () => {

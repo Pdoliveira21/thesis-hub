@@ -120,6 +120,14 @@ function TemporalGraph(data, graphContainer, timelineContainer, {
         return svg.node();
   }
 
+
+  const times = timeslices(data, timestep);
+  const timeline = Scrubber(times, timestep, { delay: 1000 });
+  document.getElementById(timelineContainer).append(timeline);
+
+
+
+
   // prepare and filter the correct data to be displayed in each graph based also on the timeslice
   const overviewNodes = data.nodes.map(d => ({...d}));
   const overviewLinks = data.links.map(d => ({...d}));
@@ -144,12 +152,21 @@ function TemporalGraph(data, graphContainer, timelineContainer, {
     }
   });
 
-  const graph = overviewSVG(overviewNodes, overviewLinks, { width, height, nodeSize, outerGroup, innerGroup, color });
+
+  const displayedNodes = overviewNodes.filter(d => d.group === outerGroup || inTimeslice(d.lifetime, times[0]));
+  const displayedLinks = overviewLinks.filter(d => inTimeslice(d.lifetime, times[0]));
+
+  const graph = overviewSVG(displayedNodes, displayedLinks, { width, height, nodeSize, outerGroup, innerGroup, color });
   document.getElementById(graphContainer).append(graph);
 
-  const times = timeslices(data, timestep);
-  const timeline = Scrubber(times, timestep, { delay: 1000 });
-  document.getElementById(timelineContainer).append(timeline);
+  timeline.querySelector("#timeline-range").addEventListener("input", (_) => {
+    const timeslice = timeline.value;
+    const displayedNodes = overviewNodes.filter(d => d.group === outerGroup || inTimeslice(d.lifetime, timeslice));
+    const displayedLinks = overviewLinks.filter(d => inTimeslice(d.lifetime, timeslice));
+
+    const graph = overviewSVG(displayedNodes, displayedLinks, { width, height, nodeSize, outerGroup, innerGroup, color });
+    document.getElementById(graphContainer).replaceChildren(graph);
+  });
 }
 
 

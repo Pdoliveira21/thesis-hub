@@ -1,15 +1,10 @@
-// (IMPORT) import { Graph } from './Graph.js';
-// import d3 from 'd3';
-
-class ClusterGraph extends Graph {
-
-  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color, clickNodeCallback = () => {}) {
+class DetailGraph extends Graph {
+  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color) {
     super(width, height, nodeSize, nodeSpace);
 
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
-    this.clickNodeCallback = clickNodeCallback;
     this.initialize();
   }
 
@@ -18,44 +13,45 @@ class ClusterGraph extends Graph {
   }
 
   initialize() {
-    this.simulation = d3.forceSimulation()
-      .force("collide", d3.forceCollide(this.nodeSize + 2))
-      .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.01))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.cx : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.cy : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01));
+    // (TODO) invisible links keeping cluster tgether or point of the cluster
+    this.cx = 0;
+    this.cy = 0;
 
+    this.simulation = d3.forceSimulation()
+      .force("collide", d3.forceCollide(this.nodeSize))
+      .force("link", d3.forceLink().id(d => d.id).strength(0.15))
+      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.cx : this.cx).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
+      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.cy : this.cy).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
+  
     this.svg = d3.create("svg")
         .attr("width", this.width)
         .attr("height", this.height)
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
         .attr("style", "max-width: 100%; height: auto;");
-
+    
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", 0.8)
       .selectAll("line");
-
+    
     this.node = this.svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0)
       .selectAll("circle");
   }
 
-  // nodes - array of objects with id, group, value (se outer group and value 0 - coppacity, senao change radius of circle)
-  // links - array of objects with source, target, value (affects the line width)
-  update(nodes, links) {
+  update(nodes, links, cluster) {
+    this.cx = cluster.x || 0;
+    this.cy = cluster.y || 0;
+    console.log(this.cx, this.cy);
+
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
-    // (THINK) some sort heuristics to the national teams nodes....
-    this.circularPositions(nodes, this.outerGroup); 
-    // this should be done only once if the outer group nodes are fixed between updates
-    // all included always even if 0 connections
-    // rearrange velocity? ou transition without animation?, forces vs fx anfd fy
-    
+    this.circularPositions(nodes, this.outerGroup);
     nodes = nodes.map(d => ({
       ...old.get(d.id) || {
-        x: d.group === this.outerGroup ? d.cx * 1.2 : 0, 
-        y: d.group === this.outerGroup ? d.cy * 1.2 : 0
+        x: d.group === this.outerGroup ? d.cx * 1.2 : this.cx, 
+        y: d.group === this.outerGroup ? d.cy * 1.2 : this.cy
       }, 
       ...d}));
     links = links.map(d => ({...d}));
@@ -63,24 +59,21 @@ class ClusterGraph extends Graph {
     this.node = this.node
       .data(nodes, d => d.id)
       .join(enter => enter.append("circle"))
-        .attr("r", this.nodeSize)
+        .attr("r", d => d.group === this.innerGroup ? this.nodeSize * 0.75 : this.nodeSize)
         .attr("fill", d => this.color(d.group))
         .attr("opacity", d => links.some(l => l.source === d.id || l.target === d.id) ? 1.0 : 0.3)
-          
+    
     this.node.append("title").text(d => d.id);
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation));
 
-    this.node.on("click", this.clicked.bind(this));
-
     // .call(node => node.on("mouseenter", (_, d) => hovered(d)))
     // .call(node => node.on("mouseleave", () => hovered(null)));
-    // .on("click", clicked);
-
+    
     this.link = this.link
       .data(links, d => [d.source, d.target])
       .join("line")
-        .attr("stroke-width", d => Math.min(d.value * 0.75, this.nodeSize * 2));
+        .attr("stroke-width", 1.0 * 0.75);
 
     this.simulation.nodes(nodes);
     this.simulation.force("link").links(links);
@@ -107,11 +100,5 @@ class ClusterGraph extends Graph {
         node.cy = position.y;
       }
     });
-  }
-
-  clicked(event, d) {
-    if (event && event.isTrusted && "function" === typeof this.clickNodeCallback) {
-      this.clickNodeCallback(d);
-    }
   }
 }

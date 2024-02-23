@@ -9,59 +9,191 @@
   <script src="./utils/Utils.js"></script>
   <script src="./graphs/Graph.js"></script>
   <script src="./graphs/ClusterGraph.js"></script>
+  <script src="./graphs/DetailGraph.js"></script>
   <script src="./scrubbers/Timeline.js"></script>
   <script src="./TemporalGraph.js"></script>
 </head>
 
 <body>
   <div id="temporal-graph">
-    <div id="graph-container"></div>
+    <div style="display: flex;">
+      <div id="graph-container"></div>
+      <div id="details-container"></div>
+    </div>
     <div id="timeline-container" style="width: 800px;"></div>
   </div>
 
   <script type="module">
     
     const data = {
-      "nodes": [
-        {"id": "A", "name": "A", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "B", "name": "B", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "C", "name": "C", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "D", "name": "D", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "E", "name": "E", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "F", "name": "F", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "G", "name": "G", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "H", "name": "H", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "I", "name": "I", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "J", "name": "J", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "K", "name": "K", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "L", "name": "L", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "M", "name": "M", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "N", "name": "N", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "O", "name": "O", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "P", "name": "P", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
-        {"id": "C1", "name": "C1", "group": "clubs", "lifetime": {"start": 2, "end": 3}},
-        {"id": "C2", "name": "C2", "group": "clubs", "lifetime": {"start": 0, "end": 3}},
-        {"id": "C3", "name": "C3", "group": "clubs", "lifetime": {"start": 0, "end": 3}},
+      "2011": [
+        {
+          "id": 1,
+          "name": "Selecao A",
+          "clubs": [
+            {
+              "id": 1,
+              "name": "Clube A",
+              "players": [
+                {
+                  "id": 1,
+                  "name": "Jogador A"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Clube B",
+              "players": [
+                {
+                  "id": 3,
+                  "name": "Jogador C"
+                },
+                {
+                  "id": 4,
+                  "name": "Jogador D"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Selecao B",
+          "clubs": [
+            {
+              "id": 1,
+              "name": "Clube A",
+              "players": [
+                {
+                  "id": 5,
+                  "name": "Jogador E"
+                },
+                {
+                  "id": 6,
+                  "name": "Jogador F"
+                }
+              ]
+            },
+            {
+              "id": 4,
+              "name": "Clube D",
+              "players": [
+                {
+                  "id": 7,
+                  "name": "Jogador G"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Selecao C",
+          "clubs": [
+            {
+              "id": 3,
+              "name": "Clube C",
+              "players": [
+                {
+                  "id": 8,
+                  "name": "Jogador H"
+                },
+                {
+                  "id": 9,
+                  "name": "Jogador I"
+                },
+                {
+                  "id": 10,
+                  "name": "Jogador J"
+                }
+              ]
+            }
+          ]
+        }
       ],
-      "links": [
-        {"source": "C1", "target": "B", "value": 6, "lifetime": {"start": 2, "end": 3}},
-        {"source": "C1", "target": "D", "value": 2, "lifetime": {"start": 2, "end": 3}},
-        {"source": "C1", "target": "F", "value": 2, "lifetime": {"start": 2, "end": 3}},
-        {"source": "C1", "target": "N", "value": 1, "lifetime": {"start": 2, "end": 3}},
-        {"source": "C2", "target": "A", "value": 1, "lifetime": {"start": 0, "end": 3}},
-        {"source": "C2", "target": "C", "value": 1, "lifetime": {"start": 0, "end": 3}},
-        {"source": "C2", "target": "G", "value": 3, "lifetime": {"start": 0, "end": 3}},
-        {"source": "C2", "target": "H", "value": 3, "lifetime": {"start": 0, "end": 3}},
-        {"source": "C2", "target": "I", "value": 3, "lifetime": {"start": 0, "end": 3}},
-        {"source": "C3", "target": "E", "value": 5, "lifetime": {"start": 0, "end": 3}},
-        {"source": "C3", "target": "K", "value": 2, "lifetime": {"start": 0, "end": 3}},
-        {"source": "C3", "target": "M", "value": 7, "lifetime": {"start": 1, "end": 1}},
-        {"source": "C3", "target": "M", "value": 1, "lifetime": {"start": 2, "end": 3}},
-        {"source": "C2", "target": "M", "value": 3, "lifetime": {"start": 2, "end": 3}},
-        {"source": "C3", "target": "O", "value": 2, "lifetime": {"start": 0, "end": 3}},
+      "2012": [
+        {
+          "id": 1,
+          "name": "Selecao A",
+          "clubs": [
+            {
+              "id": 1,
+              "name": "Clube A",
+              "players": [
+                {
+                  "id": 1,
+                  "name": "Jogador A"
+                },
+                {
+                  "id": 5,
+                  "name": "Jogador E"
+                },
+                {
+                  "id": 6,
+                  "name": "Jogador F"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Clube B",
+              "players": [
+                {
+                  "id": 3,
+                  "name": "Jogador C"
+                },
+                {
+                  "id": 4,
+                  "name": "Jogador D"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Selecao B",
+          "clubs": [
+            {
+              "id": 4,
+              "name": "Clube D",
+              "players": [
+                {
+                  "id": 7,
+                  "name": "Jogador G"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Selecao C",
+          "clubs": [
+            {
+              "id": 3,
+              "name": "Clube C",
+              "players": [
+                {
+                  "id": 8,
+                  "name": "Jogador H"
+                },
+                {
+                  "id": 9,
+                  "name": "Jogador I"
+                },
+                {
+                  "id": 10,
+                  "name": "Jogador J"
+                }
+              ]
+            }
+          ]
+        }
       ],
     };
 
-    const graph = new TemporalGraph(data, "graph-container", {});
+    const graph = new TemporalGraph(data, {});
   </script>
 </body>

@@ -20,6 +20,10 @@ class Timeline {
     return this.timeline;
   }
 
+  getValue() {
+    return this.timeline.value;
+  }
+
   initialize() {
     this.timeline = document.createElement("form");
     this.timeline.id = "form-timeline";

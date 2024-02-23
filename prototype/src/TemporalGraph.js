@@ -4,51 +4,122 @@
 
 class TemporalGraph {
 
-  constructor(data, graphContainer, {
+  constructor(data, {
     width = 800,
     height = 800,
     nodeSize = 12,
     nodeSpace = 15,
-    // timestep = 1,
     outerGroup = "national teams",
-    innerGroup = "clubs",
-    // detailGroup = "players",
+    clusterGroup = "clubs",
+    detailGroup = "players",
     color = d3.scaleOrdinal(d3.schemeCategory10),
+    graphContainer = "graph-container",
+    detailsContainer = "details-container",
+    timelineContainer = "timeline-container"
   }) {
 
-    // from data in that format - in desider format
-    // from data get timeslices
-    // send to graphs according the ones to be displayed, 
-    // the graph it self is manage at their own level
-
-    // usar para ja a data nao formato oficil para ver se funciona a logica das classes
-    // so depois mudar estas funcoes para a data oficial que nao deve afetar a logica dos graficos em si
-
-    this.data = {
-      nodes: data.nodes.map(d => ({...d})), 
-      links: data.links.map(d => ({...d}))
-    };
-    this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color);
-    this.draw(graphContainer);
-
-    // this.test().then(() => this.draw(graphContainer));
-
-    this.timeline = new Timeline([2, 3, 4, 5, 6, 7, 8, 9], null, (value) => {
-      console.log(value);
-      // filter and update data based on the selected value
+    this.outerGroup = outerGroup;
+    this.clusterGroup = clusterGroup;
+    this.detailGroup = detailGroup;
+    this.parseData(data);
+    
+    this.detailedCluster = null;
+    this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
+    this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, color, (node) => {
+      // (TODO) improve to be possible to detail on outer group nodes as well
+      if (node.group === clusterGroup) {
+        this.detailedCluster = node;
+        this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedCluster);
+      }
     });
-    document.getElementById("timeline-container").replaceChildren(this.timeline.render());    
+    
+    this.timeline = new Timeline(this.times, 1500, (value) => {
+      this.drawClusterGraph(graphContainer, value);
+      if (this.detailedCluster !== null) {
+        this.drawDetailsGraph(detailsContainer, value, this.detailedCluster);
+        // (TODO) update the details clustered node positions
+      }
+    });
+
+    this.drawTimeline(timelineContainer);    
   }
 
-  async test() {
-    await new Promise((resolve, reject) => setTimeout(resolve, 1000));
-    this.data.nodes = this.data.nodes.filter(d => this.data.links.some(l => l.source === d.id || l.target === d.id));
-    this.data.nodes.push({id: "new", name: "new", group: "clubs"});
-    this.data.nodes.push({id: "2acd", name: "new", group: "national teams"});
+  parseData(data) {
+    this.times = Object.keys(data);
+    this.data = {};
+
+    for (let time in data) {
+      const nodes = {outer: [], cluster: [], detail: []};
+      const links = {cluster: [], detail: []};
+
+      const supergroupsSet = new Set();
+      const groupsSet = new Set();
+      const elementsSet = new Set();
+
+      // Process the supergroups
+      data[time].forEach(supergroup => {
+        if (supergroupsSet.has(supergroup.id)) {
+          console.error(`Duplicate supergroup id: ${supergroup.id} in time: ${time}`);
+          return;
+        }
+
+        supergroupsSet.add(supergroup.id);
+        nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, group: this.outerGroup});
+
+        // Process the groups
+        supergroup[this.clusterGroup].forEach(group => {
+          const elementsCount = group[this.detailGroup].length;
+
+          if (!groupsSet.has(group.id)) {
+            groupsSet.add(group.id);
+            nodes.cluster.push({id: `C-${group.id}`, name: group.name, group: this.clusterGroup, value: elementsCount});
+          } else {
+            const index = nodes.cluster.findIndex(d => d.id === `C-${group.id}`);
+            nodes.cluster[index].value += elementsCount;
+          }
+
+          links.cluster.push({source: `C-${group.id}`, target: `O-${supergroup.id}`, value: elementsCount});
+
+          // Process the elements
+          group[this.detailGroup].forEach(element => {
+            if (elementsSet.has(element.id)) {
+              console.error(`Duplicate element id: ${element.id} in time: ${time}`);
+              return;
+            }
+
+            elementsSet.add(element.id);
+            nodes.detail.push({id: `E-${element.id}`, name: element.name, group: this.detailGroup, cluster: `C-${group.id}`, supergroup: `O-${supergroup.id}`});
+            links.detail.push({source: `E-${element.id}`, target: `O-${supergroup.id}`, cluster: `C-${group.id}`, value: 1});
+          });
+        });
+      });
+
+      this.data[time] = { nodes, links };
+    }
   }
 
-  draw(container) {
-    this.clusterGraph.update(this.data.nodes, this.data.links);
+  // (NOTE): logic of keeping only the national teams per year, not all all the time for now
+  // so recalculate fixed positions each update still needed
+  // future: extra boolean to pass this configuration to the ClusterGraph
+
+  drawClusterGraph(container, time) {
+    const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.cluster).map(d => ({...d}));
+    const links = this.data[time].links.cluster.map(d => ({...d}));
+
+    this.clusterGraph.update(nodes, links);
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
+  }
+
+  drawDetailsGraph(container, time, clusterNode) {
+    const clusterId = clusterNode.id;
+    const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.cluster === clusterId)).map(d => ({...d}));
+    const links = this.data[time].links.detail.filter(d => d.cluster === clusterId).map(d => ({...d}));
+
+    this.detailsGraph.update(nodes, links, clusterNode);
+    document.getElementById(container).replaceChildren(this.detailsGraph.render());
+  }
+
+  drawTimeline(container) {
+    document.getElementById(container).replaceChildren(this.timeline.render());
   }
 }

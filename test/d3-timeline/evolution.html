@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<head>
+  <style> body { margin: 0; } </style>
+
+  <link rel="stylesheet" href="./style.css" ></style>
+  
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+  <!-- (TODO) fix imports -->
+  <script src="./utils.js"></script>
+  <script src="./timeline.js"></script>
+  <script src="./temporal-graph.js"></script>
+</head>
+
+<body>
+  <div id="temporal-graph">
+    <div id="graph-container"></div>
+    <div id="timeline-container" style="width: 800px;"></div>
+  </div>
+
+  <script type="module">
+    
+    const data = {
+      "nodes": [
+        {"id": "A", "name": "A", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "B", "name": "B", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "C", "name": "C", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "D", "name": "D", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "E", "name": "E", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "F", "name": "F", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "G", "name": "G", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "H", "name": "H", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "I", "name": "I", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "J", "name": "J", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "K", "name": "K", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "L", "name": "L", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "M", "name": "M", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "N", "name": "N", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "O", "name": "O", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "P", "name": "P", "group": "national teams", "lifetime": {"start": 0, "end": 3}},
+        {"id": "C1", "name": "C1", "group": "clubs", "lifetime": {"start": 2, "end": 3}},
+        {"id": "C2", "name": "C2", "group": "clubs", "lifetime": {"start": 0, "end": 3}},
+        {"id": "C3", "name": "C3", "group": "clubs", "lifetime": {"start": 0, "end": 3}},
+      ],
+      "links": [
+        {"source": "C1", "target": "B", "value": 6, "lifetime": {"start": 2, "end": 3}},
+        {"source": "C1", "target": "D", "value": 2, "lifetime": {"start": 2, "end": 3}},
+        {"source": "C1", "target": "F", "value": 2, "lifetime": {"start": 2, "end": 3}},
+        {"source": "C1", "target": "N", "value": 1, "lifetime": {"start": 2, "end": 3}},
+        {"source": "C2", "target": "A", "value": 1, "lifetime": {"start": 0, "end": 3}},
+        {"source": "C2", "target": "C", "value": 1, "lifetime": {"start": 0, "end": 3}},
+        {"source": "C2", "target": "G", "value": 3, "lifetime": {"start": 0, "end": 3}},
+        {"source": "C2", "target": "H", "value": 3, "lifetime": {"start": 0, "end": 3}},
+        {"source": "C2", "target": "I", "value": 3, "lifetime": {"start": 0, "end": 3}},
+        {"source": "C3", "target": "E", "value": 5, "lifetime": {"start": 0, "end": 3}},
+        {"source": "C3", "target": "K", "value": 2, "lifetime": {"start": 0, "end": 3}},
+        {"source": "C3", "target": "M", "value": 7, "lifetime": {"start": 1, "end": 1}},
+        {"source": "C3", "target": "M", "value": 1, "lifetime": {"start": 2, "end": 3}},
+        {"source": "C2", "target": "M", "value": 3, "lifetime": {"start": 2, "end": 3}},
+        {"source": "C3", "target": "O", "value": 2, "lifetime": {"start": 0, "end": 3}},
+      ],
+    };
+
+    TemporalGraph(data, "graph-container", "timeline-container", {});
+  </script>
+</body>

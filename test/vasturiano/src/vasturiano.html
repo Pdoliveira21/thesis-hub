@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<head>
+  <style> body { margin: 0; } </style>
+
+  <!-- (TODO): fix reference to module -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="./../node_modules/force-graph/dist/force-graph.js"></script>
+  <script src="./Scrubber.js"></script>
+</head>
+
+<body>
+  <form id="form-animation" style="font: 12px var(--sans-serif); font-variant-numeric: tabular-nums; display: flex; height: 33px; align-items: center;">
+    <button id="btn-control" type="button" style="margin-right: 0.4em; width: 5em;"></button>
+    <label style="display: flex; align-items: center;">
+      <!-- GET min and max from the data from the db - PHP like -->
+      <input id="form-range" type="range" min=0 max=3 value=0 step=1 style="width: 180px;">
+      <output id="form-output" style="margin-left: 0.4em;"></output>
+    </label>
+  </form>
+
+  <div id="container"></div>
+
+  <script type="module">
+
+    // Calculate point position in a circle
+    function circlePosition(diameter, index, count) {
+      let angle = (2 * Math.PI * index) / count - (Math.PI / 2);
+      
+      return {
+        x: (diameter / 2) * Math.cos(angle),
+        y: (diameter / 2) * Math.sin(angle),
+      };
+    }
+
+    function opacityToHex(opacity) {
+      return Math.floor(opacity * 255).toString(16).padStart(2, 0);
+    }
+
+    // allow layout costumization with forces? YES with a different logic to implement them
+    // best for zoom and panning
+    // se der para fazer o que ja tinhamos conseguido com o d3 + timeline parece ser a melhor opcao, 
+    // pois tem o essencial + flexiblidade + easier to customize
+    // using html5 canva em vez de svg elements pode prejudicar a performance?? ASK :: affect acessibility
+    
+    // (TODO): dependendo dos dados ver se compensa intervalo ou replicar por timeslice 
+    const data = {
+      "nodes": [
+        {"id": "A", "name": "A", "group": "national teams", "start": 0, "end": 3},
+        {"id": "B", "name": "B", "group": "national teams", "start": 0, "end": 3},
+        {"id": "C", "name": "C", "group": "national teams", "start": 0, "end": 3},
+        {"id": "D", "name": "D", "group": "national teams", "start": 0, "end": 3},
+        {"id": "E", "name": "E", "group": "national teams", "start": 0, "end": 3},
+        {"id": "F", "name": "F", "group": "national teams", "start": 0, "end": 3},
+        {"id": "G", "name": "G", "group": "national teams", "start": 0, "end": 3},
+        {"id": "H", "name": "H", "group": "national teams", "start": 0, "end": 3},
+        {"id": "I", "name": "I", "group": "national teams", "start": 0, "end": 3},
+        {"id": "J", "name": "J", "group": "national teams", "start": 0, "end": 3},
+        {"id": "K", "name": "K", "group": "national teams", "start": 0, "end": 3},
+        {"id": "L", "name": "L", "group": "national teams", "start": 0, "end": 3},
+        {"id": "M", "name": "M", "group": "national teams", "start": 0, "end": 3},
+        {"id": "N", "name": "N", "group": "national teams", "start": 0, "end": 3},
+        {"id": "O", "name": "O", "group": "national teams", "start": 0, "end": 3},
+        {"id": "P", "name": "P", "group": "national teams", "start": 0, "end": 3},
+        {"id": "C1", "name": "C1", "group": "clubs", "start": 2, "end": 3},
+        {"id": "C2", "name": "C2", "group": "clubs", "start": 0, "end": 3},
+        {"id": "C3", "name": "C3", "group": "clubs", "start": 0, "end": 3},
+      ],
+      "links": [
+        {"source": "C1", "target": "B", "value": 6, "start": 2, "end": 3},
+        {"source": "C1", "target": "D", "value": 2, "start": 2, "end": 3},
+        {"source": "C1", "target": "F", "value": 2, "start": 2, "end": 3},
+        {"source": "C1", "target": "N", "value": 1, "start": 2, "end": 3},
+        {"source": "C2", "target": "A", "value": 1, "start": 0, "end": 3},
+        {"source": "C2", "target": "C", "value": 1, "start": 0, "end": 3},
+        {"source": "C2", "target": "G", "value": 3, "start": 0, "end": 3},
+        {"source": "C2", "target": "H", "value": 3, "start": 0, "end": 3},
+        {"source": "C2", "target": "I", "value": 3, "start": 0, "end": 3},
+        {"source": "C3", "target": "E", "value": 5, "start": 0, "end": 3},
+        {"source": "C3", "target": "K", "value": 2, "start": 0, "end": 3},
+        {"source": "C3", "target": "M", "value": 7, "start": 1, "end": 1},
+        {"source": "C3", "target": "M", "value": 1, "start": 2, "end": 3},
+        {"source": "C2", "target": "M", "value": 3, "start": 2, "end": 3},
+        {"source": "C3", "target": "O", "value": 2, "start": 0, "end": 3},
+      ],
+    };
+
+    function _inTimeslice(time, start, end) {
+      return start <= time && time <= end;
+    }
+
+    function _update(time) {
+      highlighNodes.clear();
+      hoverNode = null;
+
+      
+      overwiewNodes = nodes.filter(({start, end}) => _inTimeslice(time, start, end)).map(d => ({...d}));
+      overwiewLinks = links.filter(({start, end}) => _inTimeslice(time, start, end)).map(d => ({...d}));
+      
+      // reuse nodes and links already displayed as old ones to preserve the graph layout between updates
+      // (TODO): a naive implementation, can be improved?
+      const oldData = OverviewGraph.graphData();
+      const oldPositions = new Map(oldData.nodes.map(node => [node.id, {x: node.x, y: node.y}]));
+
+      overwiewNodes.forEach(node => {
+        const oldPos = oldPositions.get(node.id);
+        if (oldPos) {
+          node.x = oldPos.x;
+          node.y = oldPos.y;
+        }
+      });
+
+
+      OverviewGraph.graphData({nodes: overwiewNodes, links: overwiewLinks});
+    }
+
+    const rangeTime = [0, 1, 2, 3];
+    const rangeHTML = document.getElementById('form-range');
+    rangeHTML.addEventListener('input', (event) => {
+      const time = rangeTime[rangeHTML.valueAsNumber]; // Improve code!! and interdependencies
+      _update(time);
+    });
+    Scrubber(rangeTime, {});
+    
+    const nodes = data.nodes.map(d => ({...d}));
+    const links = data.links.map(d => ({...d}));
+    
+    const width = 1000;
+    const height = 1000;
+    const nodes_radius = 16;
+    const nodes_between = 15; 
+    const nodes_teams_count = nodes.filter(d => d.group === "national teams").length;
+    const nodes_clubs_count = nodes.filter(d => d.group === "clubs").length;
+  
+    // Calculate the diameter of the circunference based on a heuristic distance between nodes.
+    const circle_diameter = Math.max(
+      (nodes_teams_count * (2.0 * nodes_radius + nodes_between)) / Math.PI, 
+      (nodes_clubs_count * (3.0 * nodes_radius)) / Math.PI, 
+      200
+    );
+    const scale = Math.min(width, height) / (circle_diameter + 2 * nodes_radius);
+
+    // (TODO) (THINK) some sort heuristics to the national teams nodes. 
+    nodes.forEach((node, index) => {
+      if (node.group === "national teams") {
+        const position = circlePosition(circle_diameter * scale, index, nodes_teams_count);
+        node.fx = position.x;
+        node.fy = position.y;
+        node.circleX = position.x;
+        node.circleY = position.y;
+      }
+    });
+
+    /// Overview Graph
+    const getColor = d3.scaleOrdinal(d3.schemeCategory10);
+    const OverviewGraph = ForceGraph()(document.getElementById('container'));
+    
+    let overwiewNodes = nodes.filter(({start, end}) => _inTimeslice(0, start, end)).map(d => ({...d}));
+    let overwiewLinks = links.filter(({start, end}) => _inTimeslice(0, start, end)).map(d => ({...d}));
+
+    // Data Input
+    OverviewGraph
+      .graphData({nodes: overwiewNodes, links: overwiewLinks})
+
+    // Container Layout
+    OverviewGraph
+      .width(width)
+      .height(height);
+
+    // Node and Link Styling
+    OverviewGraph
+      .nodeRelSize(nodes_radius)
+      .nodeVal((node) => {
+        if (node.group === 'national teams') return 2;
+        else if (node.group === 'players') return 0.5;
+        else return 1;
+      })
+      .nodeColor((node) => {
+        const opacity = hoverNode !== null 
+          ? (highlighNodes.has(node) ? 1.0 : 0.3)
+          : (overwiewLinks.some(link => link.source.id === node.id || link.target.id === node.id) ? 1.0 : 0.3); // this info can be precalculated as an attribute
+        return `${getColor(node.group)}${opacityToHex(opacity)}`;
+      })
+      .linkColor((link) => {
+        const opacity = hoverNode !== null 
+          ? (hoverNode.id === link.source.id || hoverNode.id === link.target.id ? 0.8 : 0.1)
+          : 0.8;
+        return `#999999${opacityToHex(opacity)}`;
+      })
+      .linkWidth((link) => Math.min(link.value * 0.75, nodes_radius * 2));
+
+    // Force Engine Configuration 
+    // Looks promising! Different logic but possible to implement everything, ease interaction and still compatible
+    OverviewGraph
+      .d3Force("collide", d3.forceCollide(nodes_radius + 2))
+      .d3Force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.01))
+      .d3Force("x", d3.forceX().x((d) => d.group === "national teams" ? d.circleX : 0).strength((d) => d.group === "national teams" ? 1.0 : 0.01))
+      .d3Force("y", d3.forceY().y((d) => d.group === "national teams" ? d.circleY : 0).strength((d) => d.group === "national teams" ? 1.0 : 0.01))
+      .d3Force("charge", null)
+      .d3Force("center", null);
+    
+    // Interactions
+    const highlighNodes = new Set();
+    let hoverNode = null;
+    let fitted = false;
+
+    OverviewGraph
+      .autoPauseRedraw(false)
+      .onEngineTick(() => {
+        if (!fitted) {
+          fitted = true;
+          OverviewGraph.zoomToFit(0, nodes_radius)
+        }
+      })
+      .onNodeHover((node, _) => {
+        highlighNodes.clear();
+        hoverNode = null;
+
+        if (node) {
+          if (!overwiewLinks.some(link => link.source.id === node.id || link.target.id === node.id)) return;
+          overwiewLinks.filter(link => link.source.id === node.id || link.target.id === node.id).forEach(link => {
+            highlighNodes.add(link.source);
+            highlighNodes.add(link.target);
+          });
+          hoverNode = node;
+        }
+      })
+      .onNodeDrag((node, _) => {
+        if (node.group === "national teams") {
+          node.fx = node.circleX;
+          node.fy = node.circleY;
+          node.x = node.circleX;
+          node.y = node.circleY;
+        }
+      });
+
+      // (PROBLEMA): default das interacoes nao corresponde ao pretendido...
+      // dont click events after pointer drag
+      // dont hover during drag are the lib defaults...
+      // cannot disable the drag of only some nodes...
+
+      // (NOTES):
+      // on node click open detailed view
+      // nodeCanvasObject to define custom node shapes
+      // change graphData to update the graph on new renders (dynamically changes based on this info)
+      // (TODO): improve animations of entering and exiting nodes, inclusive opacity changes and edges weight changes!!
+    
+  </script>
+</body>

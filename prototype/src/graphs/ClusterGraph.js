@@ -19,10 +19,10 @@ class ClusterGraph extends Graph {
 
   initialize() {
     this.simulation = d3.forceSimulation()
-      .force("collide", d3.forceCollide(this.nodeSize + 2))
-      .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.01))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.cx : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.cy : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01));
+      .force("collide", d3.forceCollide(d => (d.group === this.innerGroup ? this.nodeSize * 0.25 * d.value : this.nodeSize) + 2))
+      .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
+      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01))
+      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01));
 
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -47,21 +47,23 @@ class ClusterGraph extends Graph {
     // (THINK) some sort heuristics to the national teams nodes....
     this.circularLayout(nodes, this.outerGroup); 
     nodes = nodes.map(d => ({
-      ...old.get(d.id) || {
-        x: d.group === this.outerGroup ? d.cx * 1.2 : 0, 
-        y: d.group === this.outerGroup ? d.cy * 1.2 : 0
-      }, 
+      ...old.get(d.id) || {x: 0, y: 0},
+      // {
+      //   x: d.group === this.outerGroup ? d.fx * 1.2 : 0, 
+      //   y: d.group === this.outerGroup ? d.fy * 1.2 : 0
+      // }, 
       ...d}));
     links = links.map(d => ({...d}));
 
     this.node = this.node
       .data(nodes, d => d.id)
       .join(enter => enter.append("circle"))
-        .attr("r", d => d.group === this.innerGroup ? this.nodeSize * 0.5 * d.value : this.nodeSize)
+        .attr("r", d => d.group === this.innerGroup ? this.nodeSize * 0.25 * d.value : this.nodeSize)
+        // .attr("r", this.nodeSize)
         .attr("fill", d => this.color(d.group))
         .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
           
-    this.node.append("title").text(d => d.id);
+    this.node.append("title").text(d => d.name);
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation));
 
@@ -73,7 +75,8 @@ class ClusterGraph extends Graph {
     this.link = this.link
       .data(links, d => [d.source, d.target])
       .join("line")
-        .attr("stroke-width", d => Math.min(d.value * 0.75, this.nodeSize * 2));
+        .attr("stroke-width", d => d.value * 0.75);
+        //.attr("stroke-width", d => Math.min(d.value * 0.75, this.nodeSize * 2));
 
     this.simulation.nodes(nodes);
     this.simulation.force("link").links(links);

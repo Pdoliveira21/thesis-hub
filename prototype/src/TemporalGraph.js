@@ -7,7 +7,7 @@ class TemporalGraph {
   constructor(data, {
     width = 800,
     height = 800,
-    nodeSize = 12,
+    nodeSize = 8,
     nodeSpace = 15,
     color = d3.scaleOrdinal(d3.schemeCategory10),
     outerGroup = "national teams",
@@ -22,6 +22,7 @@ class TemporalGraph {
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
     this.parseData(data);
+    console.log(this.data);
     
     this.detailedCluster = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
@@ -67,31 +68,36 @@ class TemporalGraph {
         nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, group: this.outerGroup});
 
         // Process the groups
-        supergroup[this.clusterGroup].forEach(group => {
-          const elementsCount = group[this.detailGroup].length;
-
-          if (!groupsSet.has(group.id)) {
-            groupsSet.add(group.id);
-            nodes.cluster.push({id: `C-${group.id}`, name: group.name, group: this.clusterGroup, value: elementsCount});
+        // supergroup[this.clusterGroup].forEach(group => {
+        for (let groupId in supergroup[this.clusterGroup]) {
+          const group = supergroup[this.clusterGroup][groupId];
+          
+          const elementsCount = Number(group.count);
+          if (!groupsSet.has(groupId)) {
+            groupsSet.add(groupId);
+            nodes.cluster.push({id: `C-${groupId}`, name: group.name, group: this.clusterGroup, value: elementsCount});
           } else {
-            const index = nodes.cluster.findIndex(d => d.id === `C-${group.id}`);
+            const index = nodes.cluster.findIndex(d => d.id === `C-${groupId}`);
             nodes.cluster[index].value += elementsCount;
           }
 
-          links.cluster.push({source: `C-${group.id}`, target: `O-${supergroup.id}`, value: elementsCount});
+          links.cluster.push({source: `C-${groupId}`, target: `O-${supergroup.id}`, value: elementsCount});
 
           // Process the elements
-          group[this.detailGroup].forEach(element => {
-            if (elementsSet.has(element.id)) {
-              console.error(`Duplicate element id: ${element.id} in time: ${time}`);
+          // group[this.detailGroup].forEach(element => {
+          for (let elementId in group[this.detailGroup]) {
+            const element = group[this.detailGroup][elementId];
+
+            if (elementsSet.has(elementId)) {
+              console.error(`Duplicate element id: ${elementId} in time: ${time}`);
               return;
             }
 
-            elementsSet.add(element.id);
-            nodes.detail.push({id: `E-${element.id}`, name: element.name, group: this.detailGroup, cluster: `C-${group.id}`, supergroup: `O-${supergroup.id}`});
-            links.detail.push({source: `E-${element.id}`, target: `O-${supergroup.id}`, cluster: `C-${group.id}`, value: 1});
-          });
-        });
+            elementsSet.add(elementId);
+            nodes.detail.push({id: `E-${elementId}`, name: element.name, group: this.detailGroup, cluster: `C-${groupId}`, supergroup: `O-${supergroup.id}`});
+            links.detail.push({source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
+          };
+        };
       });
 
       this.data[time] = { nodes, links };

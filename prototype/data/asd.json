@@ -1,31 +1,4 @@
-<!DOCTYPE html>
-
-<head>
-  <!-- <link rel="stylesheet" href="./style.css" ></style> -->
-  
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-
-  <!-- (TODO) fix imports -->
-  <script src="./utils/Utils.js"></script>
-  <script src="./graphs/Graph.js"></script>
-  <script src="./graphs/ClusterGraph.js"></script>
-  <script src="./graphs/DetailGraph.js"></script>
-  <script src="./scrubbers/Timeline.js"></script>
-  <script src="./TemporalGraph.js"></script>
-</head>
-
-<body>
-  <div id="temporal-graph">
-    <div style="display: flex;">
-      <div id="graph-container"></div>
-      <div id="details-container"></div>
-    </div>
-    <div id="timeline-container" style="width: 800px;"></div>
-  </div>
-
-  <script type="module">
-    
-    const data = {
+{
   "error_code": "0",
   "error_text": "",
   "data": {
@@ -3775,11 +3748,4 @@
     }
   },
   "timestamp": "1708706108"
-};
-
-
-    const graph = new TemporalGraph(data.data.seasons, {
-      clusterGroup: "teams"
-    });
-  </script>
-</body>
+}

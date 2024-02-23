@@ -1,5 +1,6 @@
 // (IMPORT) import { ClusterGraph } from './ClusterGraph.js';
-// 
+// import d3 from 'd3';
+// import Timeline from './scrubbers/Timeline.js';
 
 class TemporalGraph {
 
@@ -30,8 +31,13 @@ class TemporalGraph {
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color);
     this.draw(graphContainer);
 
-      this.test().then(() => this.draw(graphContainer));
-    
+    // this.test().then(() => this.draw(graphContainer));
+
+    this.timeline = new Timeline([2, 3, 4, 5, 6, 7, 8, 9], null, (value) => {
+      console.log(value);
+      // filter and update data based on the selected value
+    });
+    document.getElementById("timeline-container").replaceChildren(this.timeline.render());    
   }
 
   async test() {
@@ -43,6 +49,6 @@ class TemporalGraph {
 
   draw(container) {
     this.clusterGraph.update(this.data.nodes, this.data.links);
-    document.getElementById(container).replaceChildren(this.clusterGraph.call());
+    document.getElementById(container).replaceChildren(this.clusterGraph.render());
   }
 }

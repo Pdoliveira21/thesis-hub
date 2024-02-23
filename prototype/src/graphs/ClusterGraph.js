@@ -20,7 +20,7 @@ class ClusterGraph extends Graph {
     this.initialize();
   }
 
-  call() {
+  render() {
     return this.svg.node();
   }
 

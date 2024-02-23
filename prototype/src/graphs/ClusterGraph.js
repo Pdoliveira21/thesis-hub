@@ -32,7 +32,7 @@ class ClusterGraph extends Graph {
 
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.8)
+        .attr("stroke-opacity", this.linkOpacity)
       .selectAll("line");
 
     this.node = this.svg.append("g")
@@ -41,17 +41,11 @@ class ClusterGraph extends Graph {
       .selectAll("circle");
   }
 
-  // nodes - array of objects with id, group, value (se outer group and value 0 - coppacity, senao change radius of circle)
-  // links - array of objects with source, target, value (affects the line width)
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
     // (THINK) some sort heuristics to the national teams nodes....
-    this.circularPositions(nodes, this.outerGroup); 
-    // this should be done only once if the outer group nodes are fixed between updates
-    // all included always even if 0 connections
-    // rearrange velocity? ou transition without animation?, forces vs fx anfd fy
-    
+    this.circularLayout(nodes, this.outerGroup); 
     nodes = nodes.map(d => ({
       ...old.get(d.id) || {
         x: d.group === this.outerGroup ? d.cx * 1.2 : 0, 
@@ -63,19 +57,18 @@ class ClusterGraph extends Graph {
     this.node = this.node
       .data(nodes, d => d.id)
       .join(enter => enter.append("circle"))
-        .attr("r", this.nodeSize)
+        .attr("r", d => d.group === this.innerGroup ? this.nodeSize * 0.5 * d.value : this.nodeSize)
         .attr("fill", d => this.color(d.group))
-        .attr("opacity", d => links.some(l => l.source === d.id || l.target === d.id) ? 1.0 : 0.3)
+        .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
           
     this.node.append("title").text(d => d.id);
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation));
 
-    this.node.on("click", this.clicked.bind(this));
-
-    // .call(node => node.on("mouseenter", (_, d) => hovered(d)))
-    // .call(node => node.on("mouseleave", () => hovered(null)));
-    // .on("click", clicked);
+    this.node
+      .on("click", (event, d) => this.clicked(event, d))
+      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link))
+      .on("mouseleave", () => this.unhighlight(this.node, this.link));
 
     this.link = this.link
       .data(links, d => [d.source, d.target])
@@ -86,27 +79,6 @@ class ClusterGraph extends Graph {
     this.simulation.force("link").links(links);
     this.simulation.alpha(1).restart();
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
-  }
-
-  // (SEE) maybe should be a function of the graph class, as may be used in other graphs
-  circularPositions(nodes, group) {
-    const nodesCount = nodes.filter(d => d.group === group).length;
-
-    // Calculate the diameter of the circunference based on a heuristic distance between nodes.
-    const diameter = Math.max(
-      (nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI,
-      ((nodes.length - nodesCount) * (3.0 * this.nodeSize)) / Math.PI,
-      200
-    );
-    const scale = Math.min(this.width, this.height) / (diameter + 2 * this.nodeSize);
-
-    nodes.filter(d => d.group === group).forEach((node, index) => {
-      if (node.group === group) {
-        const position = circunferencePosition(diameter * scale, index, nodesCount);
-        node.cx = position.x;
-        node.cy = position.y;
-      }
-    });
   }
 
   clicked(event, d) {

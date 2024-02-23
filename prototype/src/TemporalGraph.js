@@ -9,10 +9,10 @@ class TemporalGraph {
     height = 800,
     nodeSize = 12,
     nodeSpace = 15,
+    color = d3.scaleOrdinal(d3.schemeCategory10),
     outerGroup = "national teams",
     clusterGroup = "clubs",
     detailGroup = "players",
-    color = d3.scaleOrdinal(d3.schemeCategory10),
     graphContainer = "graph-container",
     detailsContainer = "details-container",
     timelineContainer = "timeline-container"

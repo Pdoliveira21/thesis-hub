@@ -1,6 +1,5 @@
 // (IMPORT) d3 from 'd3';
 
-// Set of base functions for graphs (avoid code duplication)
 class Graph {
 
   constructor(width, height, nodeSize, nodeSpace) {
@@ -8,6 +7,12 @@ class Graph {
     this.height = height;
     this.nodeSize = nodeSize;
     this.nodeSpace = nodeSpace;
+
+    this.dragging = false;
+    this.nodeOpacity = 1.0;
+    this.linkOpacity = 0.8;
+    this.nodeUnhighlightOpacity = 0.3;
+    this.linkUnhighlightOpacity = 0.1;
   }
 
   ticked(link, node) {
@@ -21,27 +26,67 @@ class Graph {
       .attr("cy", d => d.y);
   }
 
-  drag(simulation) {
-    function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    }
-    
-    function dragged(event, d) {
-      d.fx = event.x;
-      d.fy = event.y;
-    }
-    
-    function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    }
+  #dragstarted(event, d, simulation) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    this.dragging = true;
+  }
   
+  #dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+  
+  #dragended(event, d, simulation) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    this.dragging = false;
+  }
+
+  drag(simulation) {
     return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
+        .on("start", (event, d) => this.#dragstarted(event, d, simulation))
+        .on("drag", (event, d) => this.#dragged(event, d))
+        .on("end", (event, d) => this.#dragended(event, d, simulation));
+  }
+
+  connected(d, links) {
+    return links.some(l => l.source === d || l.target === d);
+  }
+
+  highlight(d, node, link) {
+    if (!this.connected(d, link.data()) || this.dragging === true) return;
+
+    let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
+    node.filter(n => !neighbors.has(n)).attr("opacity", this.nodeUnhighlightOpacity);
+    link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
+  }
+
+  unhighlight(node, link) {
+    if (this.dragging === true) return;
+    node.attr("opacity", d => this.connected(d, link.data()) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
+    link.attr("stroke-opacity", this.linkOpacity);
+  }
+
+  circularLayout(nodes, group) {
+    const nodesCount = nodes.filter(d => d.group === group).length;
+
+    // Calculate the diameter of the circunference based on a heuristic distance between nodes.
+    const diameter = Math.max(
+      (nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI,
+      ((nodes.length - nodesCount) * (3.0 * this.nodeSize)) / Math.PI,
+      200
+    );
+    const scale = Math.min(this.width, this.height) / (diameter + 2 * this.nodeSize);
+
+    nodes.filter(d => d.group === group).forEach((node, index) => {
+      if (node.group === group) {
+        const position = circunferencePosition(diameter * scale, index, nodesCount);
+        node.cx = position.x;
+        node.cy = position.y;
+      }
+    });
   }
 }

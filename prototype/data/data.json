@@ -1,0 +1,88 @@
+{
+  "2011": [
+    {
+      "id": 1,
+      "name": "Selecao A",
+      "clubs": [
+        {
+          "id": 1,
+          "name": "Clube A",
+          "players": [
+            {
+              "id": 1,
+              "name": "Jogador A"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Clube B",
+          "players": [
+            {
+              "id": 3,
+              "name": "Jogador C"
+            },
+            {
+              "id": 4,
+              "name": "Jogador D"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Selecao B",
+      "clubs": [
+        {
+          "id": 1,
+          "name": "Clube A",
+          "players": [
+            {
+              "id": 5,
+              "name": "Jogador E"
+            },
+            {
+              "id": 6,
+              "name": "Jogador F"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "Clube D",
+          "players": [
+            {
+              "id": 7,
+              "name": "Jogador G"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Selecao C",
+      "clubs": [
+        {
+          "id": 3,
+          "name": "Clube C",
+          "players": [
+            {
+              "id": 8,
+              "name": "Jogador H"
+            },
+            {
+              "id": 9,
+              "name": "Jogador I"
+            },
+            {
+              "id": 10,
+              "name": "Jogador J"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

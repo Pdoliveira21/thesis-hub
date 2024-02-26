@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-  <!-- <link rel="stylesheet" href="./style.css" ></style> -->
+  <link rel="stylesheet" href="./index.css" ></style>
   
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
@@ -16,11 +16,15 @@
 
 <body>
   <div id="temporal-graph">
-    <div style="display: flex;">
-      <div id="graph-container"></div>
-      <div id="details-container"></div>
+    <div class="view-container">
+      <p class="view-title">Evolution of players in National Teams and Clubs</p>
+      <span id="graph-container"></span>
+      <span id="timeline-container"></span>
     </div>
-    <div id="timeline-container" style="width: 800px;"></div>
+    <div class="view-container">
+      <p class="view-title">Detailed View of a Club</p>
+      <span id="details-container"></span>
+    </div>
   </div>
 
   <script type="module">

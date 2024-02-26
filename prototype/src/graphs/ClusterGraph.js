@@ -6,6 +6,7 @@ class ClusterGraph extends Graph {
   constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color, clickNodeCallback = () => {}) {
     super(width, height, nodeSize, nodeSpace);
 
+    this.scaleFactor = 2.5 / this.nodeSize;
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
@@ -19,7 +20,7 @@ class ClusterGraph extends Graph {
 
   initialize() {
     this.simulation = d3.forceSimulation()
-      .force("collide", d3.forceCollide(d => (d.group === this.innerGroup ? this.nodeSize * 0.25 * d.value : this.nodeSize) + 2))
+      .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
       .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01))
       .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01));
@@ -41,6 +42,14 @@ class ClusterGraph extends Graph {
       .selectAll("circle");
   }
 
+  nodeRadius(d) {
+    return d.group === this.innerGroup ? 2.5 * d.value : this.nodeSize;
+  }
+
+  displayNodeText(d) {
+    return d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize;
+  }
+
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
@@ -57,20 +66,28 @@ class ClusterGraph extends Graph {
 
     this.node = this.node
       .data(nodes, d => d.id)
-      .join(enter => enter.append("circle"))
-        .attr("r", d => d.group === this.innerGroup ? this.nodeSize * 0.25 * d.value : this.nodeSize)
-        // .attr("r", this.nodeSize)
-        .attr("fill", d => this.color(d.group))
-        .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
-          
-    this.node.append("title").text(d => d.name);
+      .join(enter => enter.append("g"))
+        .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
+        .call(g => {          
+          g.append("circle")
+            .attr("r", d => this.nodeRadius(d))
+            .attr("fill", d => this.color(d.group))
+          g.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "central")
+            .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
+            .attr("display", d => this.displayNodeText(d) ? "block" : "none")
+            .text(d => d.name);
+          g.append("title").text(d => d.name);
+        });
+    
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation));
 
     this.node
       .on("click", (event, d) => this.clicked(event, d))
       .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link));
+      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.displayNodeText.bind(this)));
 
     this.link = this.link
       .data(links, d => [d.source, d.target])

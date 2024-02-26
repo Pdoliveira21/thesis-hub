@@ -11,8 +11,8 @@ class Graph {
     this.dragging = false;
     this.nodeOpacity = 1.0;
     this.linkOpacity = 0.8;
-    this.nodeUnhighlightOpacity = 0.3;
-    this.linkUnhighlightOpacity = 0.1;
+    this.nodeUnhighlightOpacity = 0.1;
+    this.linkUnhighlightOpacity = 0.0;
   }
 
   ticked(link, node) {
@@ -22,8 +22,9 @@ class Graph {
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
     node
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y);
+      // .attr("cx", d => d.x)
+      // .attr("cy", d => d.y)
+      .attr("transform", d => `translate(${d.x},${d.y})`);
   }
 
   #dragstarted(event, d, simulation) {
@@ -60,13 +61,24 @@ class Graph {
     if (!this.connected(d, link.data()) || this.dragging === true) return;
 
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
-    node.filter(n => !neighbors.has(n)).attr("opacity", this.nodeUnhighlightOpacity);
+    node.filter(n => !neighbors.has(n)).call(g => {
+      g.lower().attr("opacity", this.nodeUnhighlightOpacity);
+      g.select("text").attr("display", "none");
+    });
+    node.filter(n => neighbors.has(n)).call(g => {
+      g.raise().attr("opacity", this.nodeOpacity);
+      g.select("text").attr("display", "block");
+    });
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
   }
 
-  unhighlight(node, link) {
+  unhighlight(node, link, showText = () => false) {
     if (this.dragging === true) return;
-    node.attr("opacity", d => this.connected(d, link.data()) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
+    
+    node.call(g => {
+      g.attr("opacity", d => this.connected(d, link.data()) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
+      g.select("text").attr("display", d => showText(d) ? "block" : "none");
+    });
     link.attr("stroke-opacity", this.linkOpacity);
   }
 

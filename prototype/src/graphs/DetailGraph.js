@@ -18,7 +18,7 @@ class DetailGraph extends Graph {
     this.cy = 0;
 
     this.simulation = d3.forceSimulation()
-      .force("collide", d3.forceCollide(this.nodeSize))
+      .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(0.15))
       .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : this.cx).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
       .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : this.cy).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
@@ -40,6 +40,10 @@ class DetailGraph extends Graph {
       .selectAll("circle");
   }
 
+  nodeRadius(d) {
+    return d.group === this.innerGroup ? this.nodeSize * 0.25 : this.nodeSize;
+  }
+
   update(nodes, links, cluster) {
     this.cx = cluster.x || 0;
     this.cy = cluster.y || 0;
@@ -58,7 +62,7 @@ class DetailGraph extends Graph {
     this.node = this.node
       .data(nodes, d => d.id)
       .join(enter => enter.append("circle"))
-        .attr("r", d => d.group === this.innerGroup ? this.nodeSize * 0.75 : this.nodeSize)
+        .attr("r", d => this.nodeRadius(d))
         .attr("fill", d => this.color(d.group))
         .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
     

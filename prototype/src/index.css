@@ -1,0 +1,29 @@
+#temporal-graph {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.view-container {
+  border: 1px solid #000;
+}
+
+.view-title {
+  text-align: center;
+  margin: 0;
+  padding: 1em 0;
+  border-bottom: 1px solid #000;
+}
+
+#timeline-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1em 0.5em;
+}
+
+#timeline-container > form {
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}

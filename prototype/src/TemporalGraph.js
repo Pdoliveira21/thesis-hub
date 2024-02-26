@@ -7,7 +7,7 @@ class TemporalGraph {
   constructor(data, {
     width = 800,
     height = 800,
-    nodeSize = 8,
+    nodeSize = 24,
     nodeSpace = 15,
     color = d3.scaleOrdinal(d3.schemeCategory10),
     outerGroup = "national teams",
@@ -22,7 +22,6 @@ class TemporalGraph {
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
     this.parseData(data);
-    console.log(this.data);
     
     this.detailedCluster = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
@@ -68,10 +67,7 @@ class TemporalGraph {
         nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, group: this.outerGroup});
 
         // Process the groups
-        // supergroup[this.clusterGroup].forEach(group => {
-        for (let groupId in supergroup[this.clusterGroup]) {
-          const group = supergroup[this.clusterGroup][groupId];
-          
+        Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {    
           const elementsCount = Number(group.count);
           if (!groupsSet.has(groupId)) {
             groupsSet.add(groupId);
@@ -84,10 +80,7 @@ class TemporalGraph {
           links.cluster.push({source: `C-${groupId}`, target: `O-${supergroup.id}`, value: elementsCount});
 
           // Process the elements
-          // group[this.detailGroup].forEach(element => {
-          for (let elementId in group[this.detailGroup]) {
-            const element = group[this.detailGroup][elementId];
-
+          Object.entries(group[this.detailGroup]).forEach(([elementId, element]) => {
             if (elementsSet.has(elementId)) {
               console.error(`Duplicate element id: ${elementId} in time: ${time}`);
               return;
@@ -96,8 +89,8 @@ class TemporalGraph {
             elementsSet.add(elementId);
             nodes.detail.push({id: `E-${elementId}`, name: element.name, group: this.detailGroup, cluster: `C-${groupId}`, supergroup: `O-${supergroup.id}`});
             links.detail.push({source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
-          };
-        };
+          });
+        });
       });
 
       this.data[time] = { nodes, links };

@@ -76,7 +76,6 @@ class Graph {
     // Calculate the diameter of the circunference based on a heuristic distance between nodes.
     const diameter = Math.max(
       (nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI,
-      ((nodes.length - nodesCount) * (3.0 * this.nodeSize)) / Math.PI,
       200
     );
     const scale = Math.min(this.width, this.height) / (diameter + 2 * this.nodeSize);
@@ -84,8 +83,8 @@ class Graph {
     nodes.filter(d => d.group === group).forEach((node, index) => {
       if (node.group === group) {
         const position = circunferencePosition(diameter * scale, index, nodesCount);
-        node.cx = position.x;
-        node.cy = position.y;
+        node.fx = position.x;
+        node.fy = position.y;
       }
     });
   }

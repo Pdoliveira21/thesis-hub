@@ -20,8 +20,8 @@ class DetailGraph extends Graph {
     this.simulation = d3.forceSimulation()
       .force("collide", d3.forceCollide(this.nodeSize))
       .force("link", d3.forceLink().id(d => d.id).strength(0.15))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.cx : this.cx).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.cy : this.cy).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
+      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : this.cx).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
+      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : this.cy).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -49,8 +49,8 @@ class DetailGraph extends Graph {
     this.circularLayout(nodes, this.outerGroup);
     nodes = nodes.map(d => ({
       ...old.get(d.id) || {
-        x: d.group === this.outerGroup ? d.cx * 1.2 : this.cx, 
-        y: d.group === this.outerGroup ? d.cy * 1.2 : this.cy
+        x: d.group === this.outerGroup ? d.fx : this.cx, 
+        y: d.group === this.outerGroup ? d.fy : this.cy
       }, 
       ...d}));
     links = links.map(d => ({...d}));
@@ -62,7 +62,7 @@ class DetailGraph extends Graph {
         .attr("fill", d => this.color(d.group))
         .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
     
-    this.node.append("title").text(d => d.id);
+    this.node.append("title").text(d => d.name);
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation));
 

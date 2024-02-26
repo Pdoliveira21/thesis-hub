@@ -55,13 +55,7 @@ class ClusterGraph extends Graph {
     
     // (THINK) some sort heuristics to the national teams nodes....
     this.circularLayout(nodes, this.outerGroup); 
-    nodes = nodes.map(d => ({
-      ...old.get(d.id) || {x: 0, y: 0},
-      // {
-      //   x: d.group === this.outerGroup ? d.fx * 1.2 : 0, 
-      //   y: d.group === this.outerGroup ? d.fy * 1.2 : 0
-      // }, 
-      ...d}));
+    nodes = nodes.map(d => ({...old.get(d.id) || {x: 0, y: 0}, ...d}));
     links = links.map(d => ({...d}));
 
     this.node = this.node

@@ -13,15 +13,12 @@ class DetailGraph extends Graph {
   }
 
   initialize() {
-    // (TODO) invisible links keeping cluster tgether or point of the cluster?? 
-    this.cx = 0;
-    this.cy = 0;
-
     this.simulation = d3.forceSimulation()
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
-      .force("link", d3.forceLink().id(d => d.id).strength(0.15))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : this.cx).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : this.cy).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
+      .force("link", d3.forceLink().id(d => d.id).strength(0.5))
+      .force("cluster", d3.forceLink().id(d => d.id).strength(0.35))
+      // .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : this.cx).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
+      // .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : this.cy).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -44,35 +41,48 @@ class DetailGraph extends Graph {
     return d.group === this.innerGroup ? this.nodeSize * 0.25 : this.nodeSize;
   }
 
-  update(nodes, links, cluster) {
-    this.cx = cluster.x || 0;
-    this.cy = cluster.y || 0;
+  displayNodeText(d) {
+    return d.group === this.outerGroup;
+  }
 
+  update(nodes, links, cluster) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
     this.circularLayout(nodes, this.outerGroup);
-    nodes = nodes.map(d => ({
-      ...old.get(d.id) || {
-        x: d.group === this.outerGroup ? d.fx : this.cx, 
-        y: d.group === this.outerGroup ? d.fy : this.cy
-      }, 
-      ...d}));
+    nodes = nodes.map(d => ({...old.get(d.id) || {x: cluster.x || 0, y: cluster.y || 0}, ...d}));
     links = links.map(d => ({...d}));
 
+    let clusterLinks = [];
+    nodes.forEach(d => {
+      if (d.group !== this.innerGroup) return;
+      nodes.filter(n => n.cluster === d.cluster && n.id !== d.id).forEach(n => {
+        clusterLinks.push({source: d.id, target: n.id, value: 1});
+      });
+    });
+    
     this.node = this.node
       .data(nodes, d => d.id)
-      .join(enter => enter.append("circle"))
-        .attr("r", d => this.nodeRadius(d))
-        .attr("fill", d => this.color(d.group))
+      .join(enter => enter.append("g"))
         .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
+        .call(g => {          
+          g.append("circle")
+            .attr("r", d => this.nodeRadius(d))
+            .attr("fill", d => this.color(d.group))
+          // g.append("text")
+          //   .attr("text-anchor", "middle")
+          //   .attr("dominant-baseline", "central")
+          //   .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
+          //   .attr("display", d => this.displayNodeText(d) ? "block" : "none")
+          //   .text(d => d.name);
+          g.append("title").text(d => d.name);
+        });
     
-    this.node.append("title").text(d => d.name);
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation));
 
     this.node
       .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link));
+      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.displayNodeText.bind(this)));
     
     this.link = this.link
       .data(links, d => [d.source, d.target])
@@ -81,6 +91,7 @@ class DetailGraph extends Graph {
 
     this.simulation.nodes(nodes);
     this.simulation.force("link").links(links);
+    this.simulation.force("cluster").links(clusterLinks);
     this.simulation.alpha(1).restart();
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }

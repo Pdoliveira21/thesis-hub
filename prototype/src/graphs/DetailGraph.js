@@ -39,7 +39,9 @@ class DetailGraph extends Graph {
   }
 
   clusterPosition() {
-    if (this.clusters.length === 0) return {x: 0, y: 0};
+    if (this.clusters.length === 0) {
+      return {x: 0, y: 0};
+    }
 
     return {
       x: this.clusters.reduce((acc, c) => acc + c.x, 0) / this.clusters.length, 
@@ -103,23 +105,28 @@ class DetailGraph extends Graph {
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }
 
-  updateClusters(clusters) {
-    let changed = false;
-    clusters.forEach(cluster => {
+  #changedClusters(clusters) {
+    if (clusters.length !== this.clusters.length) {
+      return true;
+    }
+
+    for (let cluster of clusters) {
       const newX = Math.round(cluster.x) || 0;
       const newY = Math.round(cluster.y) || 0;
       const old = this.clusters.find(c => c.id === cluster.id);
 
       if (!old || Math.abs(newX - old.x) > 10 || Math.abs(newY - old.y) > 10) {
-        changed = true;
-        return;
+        return true;
       }
-    });
+    };
 
-    if (changed || clusters.length !== this.clusters.length) {
+    return false;
+  }
+
+  updateClusters(clusters) {
+    if (this.#changedClusters(clusters)) {
       this.clusters = clusters.map(c => ({id: c.id, x: c.x, y: c.y}));
       
-      this.simulation.force("link");
       this.simulation.force("x").x(d => d.group === this.outerGroup ? d.fx : Math.round(this.clusters.find(c => c.id === d.cluster)?.x || 0));
       this.simulation.force("y") .y(d => d.group === this.outerGroup ? d.fy : Math.round(this.clusters.find(c => c.id === d.cluster)?.y || 0));
       this.simulation.alphaTarget(0.3).restart();

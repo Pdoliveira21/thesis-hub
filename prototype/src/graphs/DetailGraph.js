@@ -103,7 +103,7 @@ class DetailGraph extends Graph {
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }
 
-  updateCluster(clusters) {
+  updateClusters(clusters) {
     let changed = false;
     clusters.forEach(cluster => {
       const newX = Math.round(cluster.x) || 0;

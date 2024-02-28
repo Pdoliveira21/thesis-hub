@@ -30,12 +30,7 @@ class TemporalGraph {
       this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedNode);
     }, (nodes, links) => {
       if (this.detailedNode === null) return;
-
-      if (this.detailedNode.group === clusterGroup) {
-        this.detailsGraph.updateCluster([nodes.find(d => d.id === this.detailedNode.id)]);
-      } else {
-        this.detailsGraph.updateCluster(nodes.filter(d => d.group === this.clusterGroup && links.some(l => l.source === d && l.target === this.detailedNode)));
-      }
+      this.updateClustersPositionsInDetailsGraph(nodes, links);
     });
     
     this.timeline = new Timeline(this.times, 1500, (value) => {
@@ -115,20 +110,22 @@ class TemporalGraph {
 
   drawDetailsGraph(container, time, node) {
     const nodeId = node.id;
+    const nodeFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.supergroup === nodeId;
+    const linkFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.target === nodeId;
 
-    if (node.group === this.clusterGroup) {
-      const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.cluster === nodeId)).map(d => ({...d}));
-      const links = this.data[time].links.detail.filter(d => d.cluster === nodeId).map(d => ({...d}));
+    const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(nodeFilter)).map(d => ({...d}));
+    const links = this.data[time].links.detail.filter(linkFilter).map(d => ({...d}));
+    
+    this.detailsGraph.update(nodes, links, node);
+    document.getElementById(container).replaceChildren(this.detailsGraph.render());
+  }
 
-      this.detailsGraph.update(nodes, links, node);
-      document.getElementById(container).replaceChildren(this.detailsGraph.render());
-    } else {
-      const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.supergroup === nodeId)).map(d => ({...d}));
-      const links = this.data[time].links.detail.filter(d => d.target === nodeId).map(d => ({...d}));
+  updateClustersPositionsInDetailsGraph(nodes, links) {
+    const clusters = this.detailedNode.group === this.clusterGroup
+      ? [nodes.find(d => d.id === this.detailedNode.id)]
+      : nodes.filter(d => d.group === this.clusterGroup && links.some(l => l.source === d && l.target === this.detailedNode));
 
-      this.detailsGraph.update(nodes, links, node);
-      document.getElementById(container).replaceChildren(this.detailsGraph.render());
-    }
+    this.detailsGraph.updateClusters(clusters);
   }
 
   drawTimeline(container) {

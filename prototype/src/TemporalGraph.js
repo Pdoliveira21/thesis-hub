@@ -26,11 +26,8 @@ class TemporalGraph {
     this.detailedNode = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, color, (node) => {
-      // (TODO) improve to be possible to detail on outer group nodes as well
-      // if (node.group === clusterGroup) {
-        this.detailedNode = node;
-        this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedNode);
-      // }
+      this.detailedNode = node;
+      this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedNode);
     }, (nodes, links) => {
       if (this.detailedNode === null) return;
 
@@ -45,7 +42,6 @@ class TemporalGraph {
       this.drawClusterGraph(graphContainer, value);
       if (this.detailedNode !== null) {
         this.drawDetailsGraph(detailsContainer, value, this.detailedNode);
-        // (TODO) update the details clustered node positions
       }
     });
 
@@ -124,13 +120,13 @@ class TemporalGraph {
       const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.cluster === nodeId)).map(d => ({...d}));
       const links = this.data[time].links.detail.filter(d => d.cluster === nodeId).map(d => ({...d}));
 
-      this.detailsGraph.update(nodes, links);
+      this.detailsGraph.update(nodes, links, node);
       document.getElementById(container).replaceChildren(this.detailsGraph.render());
     } else {
       const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.supergroup === nodeId)).map(d => ({...d}));
       const links = this.data[time].links.detail.filter(d => d.target === nodeId).map(d => ({...d}));
 
-      this.detailsGraph.update(nodes, links);
+      this.detailsGraph.update(nodes, links, node);
       document.getElementById(container).replaceChildren(this.detailsGraph.render());
     }
   }

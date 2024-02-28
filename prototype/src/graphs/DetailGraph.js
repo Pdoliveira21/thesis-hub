@@ -5,6 +5,7 @@ class DetailGraph extends Graph {
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
+
     this.clusters = [];
     this.initialize();
   }
@@ -16,9 +17,9 @@ class DetailGraph extends Graph {
   initialize() {
     this.simulation = d3.forceSimulation()
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
-      .force("link", d3.forceLink().id(d => d.id).strength(0.15))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
+      .force("link", d3.forceLink().id(d => d.id).strength(0.0))
+      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : 0).strength(0.1))
+      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : 0).strength(0.1));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -37,6 +38,15 @@ class DetailGraph extends Graph {
       .selectAll("circle");
   }
 
+  clusterPosition() {
+    if (this.clusters.length === 0) return {x: 0, y: 0};
+
+    return {
+      x: this.clusters.reduce((acc, c) => acc + c.x, 0) / this.clusters.length, 
+      y: this.clusters.reduce((acc, c) => acc + c.y, 0) / this.clusters.length
+    };
+  }
+
   nodeRadius(d) {
     return d.group === this.innerGroup ? this.nodeSize * 0.25 : this.nodeSize;
   }
@@ -45,11 +55,12 @@ class DetailGraph extends Graph {
     return d.group === this.outerGroup;
   }
 
-  update(nodes, links) {
+  update(nodes, links, focus) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
     this.circularLayout(nodes, this.outerGroup);
-    nodes = nodes.map(d => ({...old.get(d.id) || {x: this.clusters[0]?.x || 0, y: this.clusters[0]?.y || 0}, ...d}));
+    const oldCenter = this.clusterPosition();
+    nodes = nodes.map(d => ({...old.get(d.id) || {x: oldCenter.x, y: oldCenter.y}, ...d}));
     links = links.map(d => ({...d}));
 
     this.node = this.node
@@ -60,13 +71,7 @@ class DetailGraph extends Graph {
           .call(g => {          
             g.append("circle")
               .attr("r", d => this.nodeRadius(d))
-              .attr("fill", d => this.color(d.group))
-            // g.append("text")
-            //   .attr("text-anchor", "middle")
-            //   .attr("dominant-baseline", "central")
-            //   .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
-            //   .attr("display", d => this.displayNodeText(d) ? "block" : "none")
-            //   .text(d => d.name);
+              .attr("fill", d => this.color(d.cluster ? d.cluster : d.group))
             g.append("title").text(d => d.name);
           }),
         update => update
@@ -74,7 +79,7 @@ class DetailGraph extends Graph {
           .call(g => {
             g.select("circle")
               .attr("r", d => this.nodeRadius(d))
-              .attr("fill", d => this.color(d.group));
+              .attr("fill", d => this.color(d.cluster ? d.cluster : d.group));
             g.select("title").text(d => d.name);
           }),
         exit => exit.remove()
@@ -93,35 +98,32 @@ class DetailGraph extends Graph {
         .attr("stroke-width", 1.0 * 0.75);
 
     this.simulation.nodes(nodes);
-    this.simulation.force("link").links(links);
+    this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.05);
     this.simulation.alpha(1).restart();
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }
 
   updateCluster(clusters) {
-    console.log("Updating cluster positions", clusters);
     let changed = false;
-    
     clusters.forEach(cluster => {
       const newX = Math.round(cluster.x) || 0;
       const newY = Math.round(cluster.y) || 0;
       const old = this.clusters.find(c => c.id === cluster.id);
 
-      // console.log(`Cluster ${cluster.id} position: ${newX}, ${newY}`);
       if (!old || Math.abs(newX - old.x) > 10 || Math.abs(newY - old.y) > 10) {
         changed = true;
         return;
       }
     });
 
-    if (changed) {
+    if (changed || clusters.length !== this.clusters.length) {
       this.clusters = clusters.map(c => ({id: c.id, x: c.x, y: c.y}));
       
+      this.simulation.force("link");
       this.simulation.force("x").x(d => d.group === this.outerGroup ? d.fx : Math.round(this.clusters.find(c => c.id === d.cluster)?.x || 0));
-      this.simulation.force("y").y(d => d.group === this.outerGroup ? d.fy : Math.round(this.clusters.find(c => c.id === d.cluster)?.y || 0));
+      this.simulation.force("y") .y(d => d.group === this.outerGroup ? d.fy : Math.round(this.clusters.find(c => c.id === d.cluster)?.y || 0));
       this.simulation.alphaTarget(0.3).restart();
     } else {
-      // console.log("No cluster position change detected");
       this.simulation.alphaTarget(0);
     }
   }

@@ -119,6 +119,11 @@ class ClusterGraph extends Graph {
   clicked(event, d) {
     if (event && event.isTrusted && "function" === typeof this.clickNodeCallback) {
       this.clickNodeCallback(d);
+      
+      if (d.group === this.outerGroup) {
+        // Trigger the tick event of nodes not draggable
+        this.simulation.alpha(0.05).restart();
+      }
     }
   }
 }

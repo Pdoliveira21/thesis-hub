@@ -23,8 +23,6 @@ class Graph {
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
     node
-      // .attr("cx", d => d.x)
-      // .attr("cy", d => d.y)
       .attr("transform", d => `translate(${d.x},${d.y})`);
   }
 

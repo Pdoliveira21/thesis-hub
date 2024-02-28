@@ -3,7 +3,7 @@
 
 class ClusterGraph extends Graph {
 
-  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color, clickNodeCallback = () => {}) {
+  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color, clickNodeCallback = () => {}, tickCallback = () => {}) {
     super(width, height, nodeSize, nodeSpace);
 
     this.scaleFactor = 2.5 / this.nodeSize;
@@ -11,6 +11,7 @@ class ClusterGraph extends Graph {
     this.innerGroup = innerGroup;
     this.color = color;
     this.clickNodeCallback = clickNodeCallback;
+    this.tickCallback = tickCallback;
     this.initialize();
   }
 
@@ -107,7 +108,12 @@ class ClusterGraph extends Graph {
     this.simulation.nodes(nodes);
     this.simulation.force("link").links(links);
     this.simulation.alpha(1).restart();
-    this.simulation.on("tick", () => this.ticked(this.link, this.node));
+    this.simulation.on("tick", () => {
+      this.ticked(this.link, this.node);
+      if ("function" === typeof this.tickCallback) {
+        this.tickCallback(this.node.data());
+      }
+    });
   }
 
   clicked(event, d) {

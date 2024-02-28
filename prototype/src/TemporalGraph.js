@@ -31,6 +31,9 @@ class TemporalGraph {
         this.detailedCluster = node;
         this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedCluster);
       }
+    }, (nodes) => {
+      if (this.detailedCluster === null) return;
+      this.detailsGraph.updateCluster(nodes.find(d => d.id === this.detailedCluster.id));
     });
     
     this.timeline = new Timeline(this.times, 1500, (value) => {

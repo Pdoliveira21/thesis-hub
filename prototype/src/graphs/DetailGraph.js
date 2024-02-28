@@ -5,6 +5,8 @@ class DetailGraph extends Graph {
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
+    this.clusterX = 0;
+    this.clusterY = 0;
     this.initialize();
   }
 
@@ -15,10 +17,9 @@ class DetailGraph extends Graph {
   initialize() {
     this.simulation = d3.forceSimulation()
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
-      .force("link", d3.forceLink().id(d => d.id).strength(0.5))
-      .force("cluster", d3.forceLink().id(d => d.id).strength(0.35))
-      // .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : this.cx).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
-      // .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : this.cy).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
+      .force("link", d3.forceLink().id(d => d.id).strength(0.15))
+      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : this.clusterX).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
+      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : this.clusterY).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -49,17 +50,9 @@ class DetailGraph extends Graph {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
     this.circularLayout(nodes, this.outerGroup);
-    nodes = nodes.map(d => ({...old.get(d.id) || {x: cluster.x || 0, y: cluster.y || 0}, ...d}));
+    nodes = nodes.map(d => ({...old.get(d.id) || {x: this.clusterX, y: this.clusterY}, ...d}));
     links = links.map(d => ({...d}));
 
-    let clusterLinks = [];
-    nodes.forEach(d => {
-      if (d.group !== this.innerGroup) return;
-      nodes.filter(n => n.cluster === d.cluster && n.id !== d.id).forEach(n => {
-        clusterLinks.push({source: d.id, target: n.id, value: 1});
-      });
-    });
-    
     this.node = this.node
       .data(nodes, d => d.id)
       .join(
@@ -102,8 +95,23 @@ class DetailGraph extends Graph {
 
     this.simulation.nodes(nodes);
     this.simulation.force("link").links(links);
-    this.simulation.force("cluster").links(clusterLinks);
     this.simulation.alpha(1).restart();
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
+  }
+
+  updateCluster(cluster) {
+    const x = Math.round(cluster?.x) || 0;
+    const y = Math.round(cluster?.y) || 0;
+
+    if (Math.abs(x - this.clusterX) < 10 && Math.abs(y - this.clusterY) < 10) {
+      this.simulation.alphaTarget(0);  
+      return;
+    }
+
+    this.clusterX = x;
+    this.clusterY = y;
+    this.simulation.force("x").x(d => d.group === this.outerGroup ? d.fx : this.clusterX);
+    this.simulation.force("y").y(d => d.group === this.outerGroup ? d.fy : this.clusterY);
+    this.simulation.alphaTarget(0.3).restart();
   }
 }

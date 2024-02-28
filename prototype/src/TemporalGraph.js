@@ -68,7 +68,7 @@ class TemporalGraph {
 
         // Process the groups
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {    
-          const elementsCount = Number(group.count);
+          const elementsCount = Number(group.count) || Object.keys(group[this.detailGroup]).length;
           if (!groupsSet.has(groupId)) {
             groupsSet.add(groupId);
             nodes.cluster.push({id: `C-${groupId}`, name: group.name, group: this.clusterGroup, value: elementsCount});

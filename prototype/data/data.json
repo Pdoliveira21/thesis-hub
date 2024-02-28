@@ -3,86 +3,126 @@
     {
       "id": 1,
       "name": "Selecao A",
-      "clubs": [
-        {
-          "id": 1,
+      "clubs": {
+        "1": {
           "name": "Clube A",
-          "players": [
-            {
-              "id": 1,
-              "name": "Jogador A"
-            }
-          ]
+          "players": {
+            "1": {"name": "Jogador A"}
+          }
         },
-        {
-          "id": 2,
+        "2": {
           "name": "Clube B",
-          "players": [
-            {
-              "id": 3,
-              "name": "Jogador C"
-            },
-            {
-              "id": 4,
-              "name": "Jogador D"
-            }
-          ]
+          "players": {
+            "3": {"name": "Jogador C"},
+            "4": {"name": "Jogador D"}
+          }  
         }
-      ]
+      }
     },
     {
       "id": 2,
       "name": "Selecao B",
-      "clubs": [
-        {
-          "id": 1,
+      "clubs": {
+        "1": {
           "name": "Clube A",
-          "players": [
-            {
-              "id": 5,
+          "players": {
+            "5": {
               "name": "Jogador E"
             },
-            {
-              "id": 6,
+            "6": {
               "name": "Jogador F"
             }
-          ]
+          }
         },
-        {
-          "id": 4,
+       "4": {
           "name": "Clube D",
-          "players": [
-            {
-              "id": 7,
+          "players": {
+            "7": {
               "name": "Jogador G"
-            }
-          ]
-        }
-      ]
+            }}
+        }}
     },
     {
       "id": 3,
       "name": "Selecao C",
-      "clubs": [
-        {
-          "id": 3,
+      "clubs":{
+        "3": {
           "name": "Clube C",
-          "players": [
-            {
-              "id": 8,
+          "players":{
+            "8": {
               "name": "Jogador H"
             },
-            {
-              "id": 9,
+            "9": {
               "name": "Jogador I"
             },
-            {
-              "id": 10,
+            "10": {
               "name": "Jogador J"
-            }
-          ]
-        }
-      ]
+            }}
+        }}
+    }
+  ],
+  "2012": [
+    {
+      "id": 1,
+      "name": "Selecao A",
+      "clubs":{
+        "1": {
+          "name": "Clube A",
+          "players": {
+            "1": {
+              "name": "Jogador A"
+            },
+            "5": {
+              "id": 5,
+              "name": "Jogador E"
+            },
+            "6": {
+              "id": 6,
+              "name": "Jogador F"
+            }}
+        },
+       "2": {
+          "name": "Clube B",
+          "players":{
+            "3": {
+              "name": "Jogador C"
+            },
+            "4": {
+              "name": "Jogador D"
+            }}
+        }}
+    },
+    {
+      "id": 2,
+      "name": "Selecao B",
+      "clubs":{
+        "4": {
+          "name": "Clube D",
+          "players":{
+            "7": {
+              "name": "Jogador G"
+            }, 
+            "11": {
+              "name": "Jogador K"
+            },
+            "12": {
+              "name": "Jogador L"
+            },
+            "13": {
+              "name": "Jogador M"
+            },
+            "14": {
+              "name": "Jogador N"
+            },
+            "15": {
+              "name": "Jogador O"
+            }}
+        }}
+    },
+    {
+      "id": 3,
+      "name": "Selecao C",
+      "clubs": {}
     }
   ]
 }

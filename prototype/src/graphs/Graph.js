@@ -10,9 +10,10 @@ class Graph {
 
     this.dragging = false;
     this.nodeOpacity = 1.0;
-    this.linkOpacity = 0.8;
+    this.linkOpacity = 0.3;
     this.nodeUnhighlightOpacity = 0.1;
-    this.linkUnhighlightOpacity = 0.0;
+    this.linkUnhighlightOpacity = 0.01;
+    this.linkHighlightOpacity = 0.8;
   }
 
   ticked(link, node) {
@@ -69,7 +70,9 @@ class Graph {
       g.raise().attr("opacity", this.nodeOpacity);
       g.select("text").attr("display", "block");
     });
+
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
+    link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
   }
 
   unhighlight(node, link, showText = () => false) {

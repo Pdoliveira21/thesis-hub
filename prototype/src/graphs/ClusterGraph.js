@@ -43,7 +43,7 @@ class ClusterGraph extends Graph {
   }
 
   nodeRadius(d) {
-    return d.group === this.innerGroup ? 2.5 * d.value : this.nodeSize;
+    return d.group === this.innerGroup ? d.value * 2 + 0.5 : this.nodeSize;
   }
 
   displayNodeText(d) {
@@ -52,7 +52,7 @@ class ClusterGraph extends Graph {
 
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
-    
+
     // (THINK) some sort heuristics to the national teams nodes....
     this.circularLayout(nodes, this.outerGroup); 
     nodes = nodes.map(d => ({...old.get(d.id) || {x: 0, y: 0}, ...d}));
@@ -60,20 +60,35 @@ class ClusterGraph extends Graph {
 
     this.node = this.node
       .data(nodes, d => d.id)
-      .join(enter => enter.append("g"))
-        .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
-        .call(g => {          
-          g.append("circle")
-            .attr("r", d => this.nodeRadius(d))
-            .attr("fill", d => this.color(d.group))
-          g.append("text")
-            .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "central")
-            .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
-            .attr("display", d => this.displayNodeText(d) ? "block" : "none")
-            .text(d => d.name);
-          g.append("title").text(d => d.name);
-        });
+      .join(
+        enter => enter.append("g")
+          .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
+          .call(g => {
+            g.append("circle")
+              .attr("r", d => this.nodeRadius(d))
+              .attr("fill", d => this.color(d.group))
+            g.append("text")
+              .attr("text-anchor", "middle")
+              .attr("dominant-baseline", "central")
+              .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
+              .attr("display", d => this.displayNodeText(d) ? "block" : "none")
+              .text(d => d.name);
+            g.append("title").text(d => d.name);
+          }),
+        update => update
+          .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
+          .call(g => {
+            g.select("circle")
+              .attr("r", d => this.nodeRadius(d))
+              .attr("fill", d => this.color(d.group));
+            g.select("text")
+              .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
+              .attr("display", d => this.displayNodeText(d) ? "block" : "none")
+              .text(d => d.name);
+            g.select("title").text(d => d.name);
+          }),
+        exit => exit.remove()
+    );
     
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation));

@@ -23,23 +23,28 @@ class TemporalGraph {
     this.detailGroup = detailGroup;
     this.parseData(data);
     
-    this.detailedCluster = null;
+    this.detailedNode = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, color, (node) => {
       // (TODO) improve to be possible to detail on outer group nodes as well
-      if (node.group === clusterGroup) {
-        this.detailedCluster = node;
-        this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedCluster);
+      // if (node.group === clusterGroup) {
+        this.detailedNode = node;
+        this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedNode);
+      // }
+    }, (nodes, links) => {
+      if (this.detailedNode === null) return;
+
+      if (this.detailedNode.group === clusterGroup) {
+        this.detailsGraph.updateCluster([nodes.find(d => d.id === this.detailedNode.id)]);
+      } else {
+        this.detailsGraph.updateCluster(nodes.filter(d => d.group === this.clusterGroup && links.some(l => l.source === d && l.target === this.detailedNode)));
       }
-    }, (nodes) => {
-      if (this.detailedCluster === null) return;
-      this.detailsGraph.updateCluster(nodes.find(d => d.id === this.detailedCluster.id));
     });
     
     this.timeline = new Timeline(this.times, 1500, (value) => {
       this.drawClusterGraph(graphContainer, value);
-      if (this.detailedCluster !== null) {
-        this.drawDetailsGraph(detailsContainer, value, this.detailedCluster);
+      if (this.detailedNode !== null) {
+        this.drawDetailsGraph(detailsContainer, value, this.detailedNode);
         // (TODO) update the details clustered node positions
       }
     });
@@ -112,13 +117,22 @@ class TemporalGraph {
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
   }
 
-  drawDetailsGraph(container, time, clusterNode) {
-    const clusterId = clusterNode.id;
-    const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.cluster === clusterId)).map(d => ({...d}));
-    const links = this.data[time].links.detail.filter(d => d.cluster === clusterId).map(d => ({...d}));
+  drawDetailsGraph(container, time, node) {
+    const nodeId = node.id;
 
-    this.detailsGraph.update(nodes, links, clusterNode);
-    document.getElementById(container).replaceChildren(this.detailsGraph.render());
+    if (node.group === this.clusterGroup) {
+      const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.cluster === nodeId)).map(d => ({...d}));
+      const links = this.data[time].links.detail.filter(d => d.cluster === nodeId).map(d => ({...d}));
+
+      this.detailsGraph.update(nodes, links);
+      document.getElementById(container).replaceChildren(this.detailsGraph.render());
+    } else {
+      const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(d => d.supergroup === nodeId)).map(d => ({...d}));
+      const links = this.data[time].links.detail.filter(d => d.target === nodeId).map(d => ({...d}));
+
+      this.detailsGraph.update(nodes, links);
+      document.getElementById(container).replaceChildren(this.detailsGraph.render());
+    }
   }
 
   drawTimeline(container) {

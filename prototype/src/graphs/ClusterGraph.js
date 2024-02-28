@@ -111,7 +111,7 @@ class ClusterGraph extends Graph {
     this.simulation.on("tick", () => {
       this.ticked(this.link, this.node);
       if ("function" === typeof this.tickCallback) {
-        this.tickCallback(this.node.data());
+        this.tickCallback(this.node.data(), this.link.data());
       }
     });
   }

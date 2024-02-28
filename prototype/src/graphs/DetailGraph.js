@@ -5,8 +5,7 @@ class DetailGraph extends Graph {
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
-    this.clusterX = 0;
-    this.clusterY = 0;
+    this.clusters = [];
     this.initialize();
   }
 
@@ -18,8 +17,8 @@ class DetailGraph extends Graph {
     this.simulation = d3.forceSimulation()
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(0.15))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : this.clusterX).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : this.clusterY).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
+      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.35))
+      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.35));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -46,11 +45,11 @@ class DetailGraph extends Graph {
     return d.group === this.outerGroup;
   }
 
-  update(nodes, links, cluster) {
+  update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
     this.circularLayout(nodes, this.outerGroup);
-    nodes = nodes.map(d => ({...old.get(d.id) || {x: this.clusterX, y: this.clusterY}, ...d}));
+    nodes = nodes.map(d => ({...old.get(d.id) || {x: this.clusters[0]?.x || 0, y: this.clusters[0]?.y || 0}, ...d}));
     links = links.map(d => ({...d}));
 
     this.node = this.node
@@ -99,19 +98,31 @@ class DetailGraph extends Graph {
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }
 
-  updateCluster(cluster) {
-    const x = Math.round(cluster?.x) || 0;
-    const y = Math.round(cluster?.y) || 0;
+  updateCluster(clusters) {
+    console.log("Updating cluster positions", clusters);
+    let changed = false;
+    
+    clusters.forEach(cluster => {
+      const newX = Math.round(cluster.x) || 0;
+      const newY = Math.round(cluster.y) || 0;
+      const old = this.clusters.find(c => c.id === cluster.id);
 
-    if (Math.abs(x - this.clusterX) < 10 && Math.abs(y - this.clusterY) < 10) {
-      this.simulation.alphaTarget(0);  
-      return;
+      // console.log(`Cluster ${cluster.id} position: ${newX}, ${newY}`);
+      if (!old || Math.abs(newX - old.x) > 10 || Math.abs(newY - old.y) > 10) {
+        changed = true;
+        return;
+      }
+    });
+
+    if (changed) {
+      this.clusters = clusters.map(c => ({id: c.id, x: c.x, y: c.y}));
+      
+      this.simulation.force("x").x(d => d.group === this.outerGroup ? d.fx : Math.round(this.clusters.find(c => c.id === d.cluster)?.x || 0));
+      this.simulation.force("y").y(d => d.group === this.outerGroup ? d.fy : Math.round(this.clusters.find(c => c.id === d.cluster)?.y || 0));
+      this.simulation.alphaTarget(0.3).restart();
+    } else {
+      // console.log("No cluster position change detected");
+      this.simulation.alphaTarget(0);
     }
-
-    this.clusterX = x;
-    this.clusterY = y;
-    this.simulation.force("x").x(d => d.group === this.outerGroup ? d.fx : this.clusterX);
-    this.simulation.force("y").y(d => d.group === this.outerGroup ? d.fy : this.clusterY);
-    this.simulation.alphaTarget(0.3).restart();
   }
 }

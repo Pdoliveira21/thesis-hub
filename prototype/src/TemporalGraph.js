@@ -122,8 +122,8 @@ class TemporalGraph {
 
   updateClustersPositionsInDetailsGraph(nodes, links) {
     const clusters = this.detailedNode.group === this.clusterGroup
-      ? [nodes.find(d => d.id === this.detailedNode.id)]
-      : nodes.filter(d => d.group === this.clusterGroup && links.some(l => l.source === d && l.target === this.detailedNode));
+      ? nodes.filter(d => d.id === this.detailedNode.id)
+      : nodes.filter(d => d.group === this.clusterGroup && links.some(l => l.source === d && l.target.id === this.detailedNode.id));
 
     this.detailsGraph.updateClusters(clusters);
   }

@@ -106,18 +106,15 @@ class DetailGraph extends Graph {
   }
 
   #changedClusters(clusters) {
-    if (clusters.length !== this.clusters.length) {
-      return true;
-    }
+    if (clusters.length !== this.clusters.length) return true;
 
     for (let cluster of clusters) {
       const newX = Math.round(cluster.x) || 0;
       const newY = Math.round(cluster.y) || 0;
       const old = this.clusters.find(c => c.id === cluster.id);
-
-      if (!old || Math.abs(newX - old.x) > 10 || Math.abs(newY - old.y) > 10) {
+      
+      if (!old || Math.abs(newX - old.x) > 10 || Math.abs(newY - old.y) > 10) 
         return true;
-      }
     };
 
     return false;

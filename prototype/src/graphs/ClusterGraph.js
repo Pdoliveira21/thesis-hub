@@ -80,6 +80,8 @@ class ClusterGraph extends Graph {
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
           .call(g => {
             g.select("circle")
+              .transition() // (TODO) adjust type of transition and duration but this is the way to go :))
+              .duration(500)
               .attr("r", d => this.nodeRadius(d))
               .attr("fill", d => this.color(d.group));
             g.select("text")

@@ -5,8 +5,8 @@
 class TemporalGraph {
 
   constructor(data, {
-    width = 800,
-    height = 800,
+    width = 1200,
+    height = 1200,
     nodeSize = 24,
     nodeSpace = 15,
     color = d3.scaleOrdinal(d3.schemeCategory10),
@@ -22,7 +22,7 @@ class TemporalGraph {
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
     this.parseData(data);
-    
+
     this.detailedNode = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, color, (node) => {
@@ -32,7 +32,7 @@ class TemporalGraph {
       if (this.detailedNode === null) return;
       this.updateClustersPositionsInDetailsGraph(nodes, links);
     });
-    
+
     this.timeline = new Timeline(this.times, 1500, (value) => {
       this.drawClusterGraph(graphContainer, value);
       if (this.detailedNode !== null) {
@@ -40,7 +40,7 @@ class TemporalGraph {
       }
     });
 
-    this.drawTimeline(timelineContainer);    
+    this.drawTimeline(timelineContainer);
   }
 
   parseData(data) {
@@ -66,7 +66,7 @@ class TemporalGraph {
         nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, group: this.outerGroup});
 
         // Process the groups
-        Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {    
+        Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
           const elementsCount = Number(group.count) || Object.keys(group[this.detailGroup]).length;
           if (!groupsSet.has(groupId)) {
             groupsSet.add(groupId);
@@ -92,8 +92,19 @@ class TemporalGraph {
         });
       });
 
+      nodes.outer.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
       this.data[time] = { nodes, links };
     }
+
+    // (TODO): change to be according to a specific variable
+    // const outerNodes = Object.values(this.data).reduce((acc, time) => {
+    //   return acc.concat(time.nodes.outer.filter(node => !acc.some(n => n.id === node.id)));
+    // }, []);
+    // outerNodes.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+
+    // for (let time in this.data) {
+    //   this.data[time].nodes.outer = outerNodes;
+    // }
   }
 
   // (NOTE): logic of keeping only the national teams per year, not all all the time for now
@@ -115,7 +126,7 @@ class TemporalGraph {
 
     const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(nodeFilter)).map(d => ({...d}));
     const links = this.data[time].links.detail.filter(linkFilter).map(d => ({...d}));
-    
+
     this.detailsGraph.update(nodes, links, node);
     document.getElementById(container).replaceChildren(this.detailsGraph.render());
   }

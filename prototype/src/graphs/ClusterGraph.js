@@ -9,6 +9,7 @@ class ClusterGraph extends Graph {
     this.scaleFactor = 2.5 / this.nodeSize;
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
+    this.outerRadius = null;
     this.color = color;
     this.clickNodeCallback = clickNodeCallback;
     this.tickCallback = tickCallback;
@@ -46,8 +47,16 @@ class ClusterGraph extends Graph {
 
   outerXY(alpha) {
     this.node.filter(d => d.group === this.outerGroup).each(d => {
-      d.fx = d.x + (d.cx - d.x) * (1 - alpha);
-      d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+      if (d.t === undefined) {
+        // does not have old theta - move new node linearly to the new position
+        d.fx = d.x + (d.cx - d.x) * (1 - alpha);
+        d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+      } else {
+        // has old theta - move existing node along the circunference to the new position
+        const factor = alpha ** 2;
+        d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
+        d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
+      }
     });
   }
 
@@ -60,17 +69,15 @@ class ClusterGraph extends Graph {
   }
 
   update(nodes, links) {
-    const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
+    const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
     // (THINK) some sort heuristics to the national teams nodes....
-    this.circularLayout(nodes, this.outerGroup); 
+    this.outerRadius = this.circularLayout(nodes, this.outerGroup); 
     nodes = nodes.map(d => ({...old.get(d.id) || {
       x: d.group === this.outerGroup ? d.cx * 1.2 : 0, 
-      y: d.group === this.outerGroup ? d.cy * 1.2 : 0
+      y: d.group === this.outerGroup ? d.cy * 1.2 : 0,
     }, ...d}));
     links = links.map(d => ({...d}));
-
-    // console.log(nodes.map(d => ({...d})), links);
 
     this.node = this.node
       .data(nodes, d => d.id)

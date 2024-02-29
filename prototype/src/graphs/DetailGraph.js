@@ -2,6 +2,7 @@ class DetailGraph extends Graph {
   constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color) {
     super(width, height, nodeSize, nodeSpace);
 
+    this.outerRadius = null;
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
@@ -18,8 +19,9 @@ class DetailGraph extends Graph {
     this.simulation = d3.forceSimulation()
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(0.0))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : 0).strength(0.1))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : 0).strength(0.1));
+      .force("x", d3.forceX().x(0).strength(0.1))
+      .force("y", d3.forceY().y(0).strength(0.1))
+      .force("outerXY", this.outerXY.bind(this));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -36,6 +38,29 @@ class DetailGraph extends Graph {
         .attr("stroke", "#fff")
         .attr("stroke-width", 0)
       .selectAll("g");
+  }
+
+  // (TODO): move to a helper class or Grpah class? repeated in ClusterGraph
+  outerXY(alpha) {
+    this.node.filter(d => d.group === this.outerGroup && !d.inPlace).each(d => {
+      // Close enough to the new position - snap to it
+      if (Math.abs(d.fx - d.cx) <= 1.0 && Math.abs(d.fy - d.cy) <= 1.0) {
+        d.fx = d.cx;
+        d.fy = d.cy;
+        d.inPlace = true;
+      } else {
+        if (d.t === undefined) {
+          // does not have old theta - move new node linearly to the new position
+          d.fx = d.x + (d.cx - d.x) * (1 - alpha);
+          d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+        } else {
+          // has old theta - move existing node along the circunference to the new position
+          const factor = Math.max(alpha * 2 - 1, 0);
+          d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
+          d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
+        }
+      }
+    });
   }
 
   clusterPosition() {
@@ -58,14 +83,19 @@ class DetailGraph extends Graph {
   }
 
   update(nodes, links, focus) {
-    const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
-    
-    this.circularLayout(nodes, this.outerGroup);
+    const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
     const oldClusterCenter = this.clusterPosition();
-    nodes = nodes.map(d => ({...old.get(d.id) || {
-      x: this.clusters.find(c => c.id === d.cluster)?.x || oldClusterCenter.x, 
-      y: this.clusters.find(c => c.id === d.cluster)?.y || oldClusterCenter.y
-    }, ...d}))
+    
+    this.outerRadius = this.circularLayout(nodes, this.outerGroup);
+    nodes = nodes.map(d => ({
+      ...old.get(d.id) || {
+        x: d.group === this.outerGroup ? d.cx * 1.2 : (this.clusters.find(c => c.id === d.cluster)?.x || oldClusterCenter.x), 
+        y: d.group === this.outerGroup ? d.cy * 1.2 : (this.clusters.find(c => c.id === d.cluster)?.y || oldClusterCenter.y),
+        t: undefined,
+      },
+      inPlace: false,
+      ...d,
+    }));
     links = links.map(d => ({...d}));
 
     this.node = this.node
@@ -127,8 +157,8 @@ class DetailGraph extends Graph {
     if (this.#changedClusters(clusters)) {
       this.clusters = clusters.map(c => ({id: c.id, x: c.x, y: c.y}));
       
-      this.simulation.force("x").x(d => d.group === this.outerGroup ? d.fx : Math.round(this.clusters.find(c => c.id === d.cluster)?.x || 0));
-      this.simulation.force("y") .y(d => d.group === this.outerGroup ? d.fy : Math.round(this.clusters.find(c => c.id === d.cluster)?.y || 0));
+      this.simulation.force("x").x(d => Math.round(this.clusters.find(c => c.id === d.cluster)?.x || 0));
+      this.simulation.force("y").y(d => Math.round(this.clusters.find(c => c.id === d.cluster)?.y || 0));
       this.simulation.alphaTarget(0.3).restart();
     } else {
       this.simulation.alphaTarget(0);

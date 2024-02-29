@@ -7,10 +7,11 @@ class ClusterGraph extends Graph {
     super(width, height, nodeSize, nodeSpace);
 
     this.scaleFactor = 2.5 / this.nodeSize;
+    this.outerRadius = null;
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
-    this.outerRadius = null;
     this.color = color;
+
     this.clickNodeCallback = clickNodeCallback;
     this.tickCallback = tickCallback;
     this.initialize();
@@ -45,17 +46,25 @@ class ClusterGraph extends Graph {
       .selectAll("g");
   }
 
+  // (TODO): move to a helper class or Grpah class? repeated in DetailGraph
   outerXY(alpha) {
-    this.node.filter(d => d.group === this.outerGroup).each(d => {
-      if (d.t === undefined) {
-        // does not have old theta - move new node linearly to the new position
-        d.fx = d.x + (d.cx - d.x) * (1 - alpha);
-        d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+    this.node.filter(d => d.group === this.outerGroup && !d.inPlace).each(d => {
+      // Close enough to the new position - snap to it
+      if (Math.abs(d.fx - d.cx) <= 1.0 && Math.abs(d.fy - d.cy) <= 1.0) {
+        d.fx = d.cx;
+        d.fy = d.cy;
+        d.inPlace = true;
       } else {
-        // has old theta - move existing node along the circunference to the new position
-        const factor = alpha ** 2;
-        d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
-        d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
+        if (d.t === undefined) {
+          // does not have old theta - move new node linearly to the new position
+          d.fx = d.x + (d.cx - d.x) * (1 - alpha);
+          d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+        } else {
+          // has old theta - move existing node along the circunference to the new position
+          const factor = Math.max(alpha * 2 - 1, 0);
+          d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
+          d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
+        }
       }
     });
   }
@@ -73,10 +82,15 @@ class ClusterGraph extends Graph {
 
     // (THINK) some sort heuristics to the national teams nodes....
     this.outerRadius = this.circularLayout(nodes, this.outerGroup); 
-    nodes = nodes.map(d => ({...old.get(d.id) || {
-      x: d.group === this.outerGroup ? d.cx * 1.2 : 0, 
-      y: d.group === this.outerGroup ? d.cy * 1.2 : 0,
-    }, ...d}));
+    nodes = nodes.map(d => ({
+      ...old.get(d.id) || {
+        x: d.group === this.outerGroup ? d.cx * 1.2 : 0, 
+        y: d.group === this.outerGroup ? d.cy * 1.2 : 0,
+        t: undefined,
+      }, 
+      inPlace: false,
+      ...d, 
+    }));
     links = links.map(d => ({...d}));
 
     this.node = this.node

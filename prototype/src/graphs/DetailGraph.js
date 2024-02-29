@@ -35,7 +35,7 @@ class DetailGraph extends Graph {
     this.node = this.svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0)
-      .selectAll("circle");
+      .selectAll("g");
   }
 
   clusterPosition() {
@@ -61,8 +61,11 @@ class DetailGraph extends Graph {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y}]));
     
     this.circularLayout(nodes, this.outerGroup);
-    const oldCenter = this.clusterPosition();
-    nodes = nodes.map(d => ({...old.get(d.id) || {x: oldCenter.x, y: oldCenter.y}, ...d}));
+    const oldClusterCenter = this.clusterPosition();
+    nodes = nodes.map(d => ({...old.get(d.id) || {
+      x: this.clusters.find(c => c.id === d.cluster)?.x || oldClusterCenter.x, 
+      y: this.clusters.find(c => c.id === d.cluster)?.y || oldClusterCenter.y
+    }, ...d}))
     links = links.map(d => ({...d}));
 
     this.node = this.node

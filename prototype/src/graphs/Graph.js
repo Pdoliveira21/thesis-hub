@@ -96,8 +96,8 @@ class Graph {
     nodes.filter(d => d.group === group).forEach((node, index) => {
       if (node.group === group) {
         const position = circunferencePosition(diameter * scale, index, nodesCount);
-        node.fx = position.x;
-        node.fy = position.y;
+        node.cx = position.x;
+        node.cy = position.y;
       }
     });
   }

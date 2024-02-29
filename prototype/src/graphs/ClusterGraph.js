@@ -23,8 +23,9 @@ class ClusterGraph extends Graph {
     this.simulation = d3.forceSimulation()
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
-      .force("x", d3.forceX().x(d => d.group === this.outerGroup ? d.fx : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01))
-      .force("y", d3.forceY().y(d => d.group === this.outerGroup ? d.fy : 0).strength(d => d.group === this.outerGroup ? 1.0 : 0.01));
+      .force("x", d3.forceX().x(0).strength(0.01))
+      .force("y", d3.forceY().y(0).strength(0.01))
+      .force("outerXY", this.outerXY.bind(this));
 
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -40,7 +41,14 @@ class ClusterGraph extends Graph {
     this.node = this.svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0)
-      .selectAll("circle");
+      .selectAll("g");
+  }
+
+  outerXY(alpha) {
+    this.node.filter(d => d.group === this.outerGroup).each(d => {
+      d.fx = d.x + (d.cx - d.x) * (1 - alpha);
+      d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+    });
   }
 
   nodeRadius(d) {
@@ -56,8 +64,13 @@ class ClusterGraph extends Graph {
 
     // (THINK) some sort heuristics to the national teams nodes....
     this.circularLayout(nodes, this.outerGroup); 
-    nodes = nodes.map(d => ({...old.get(d.id) || {x: 0, y: 0}, ...d}));
+    nodes = nodes.map(d => ({...old.get(d.id) || {
+      x: d.group === this.outerGroup ? d.cx * 1.2 : 0, 
+      y: d.group === this.outerGroup ? d.cy * 1.2 : 0
+    }, ...d}));
     links = links.map(d => ({...d}));
+
+    // console.log(nodes.map(d => ({...d})), links);
 
     this.node = this.node
       .data(nodes, d => d.id)
@@ -66,8 +79,9 @@ class ClusterGraph extends Graph {
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
           .call(g => {
             g.append("circle")
+              // (TODO) details what to animate - improve in the future
               .attr("r", d => this.nodeRadius(d))
-              .attr("fill", d => this.color(d.group))
+              .attr("fill", d => this.color(d.group));
             g.append("text")
               .attr("text-anchor", "middle")
               .attr("dominant-baseline", "central")
@@ -80,8 +94,9 @@ class ClusterGraph extends Graph {
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
           .call(g => {
             g.select("circle")
-              .transition() // (TODO) adjust type of transition and duration but this is the way to go :))
+              .transition() 
               .duration(500)
+              .ease(d3.easeLinear)
               .attr("r", d => this.nodeRadius(d))
               .attr("fill", d => this.color(d.group));
             g.select("text")
@@ -103,9 +118,12 @@ class ClusterGraph extends Graph {
 
     this.link = this.link
       .data(links, d => [d.source, d.target])
-      .join("line")
-        .attr("stroke-width", d => d.value * 0.75);
-        //.attr("stroke-width", d => Math.min(d.value * 0.75, this.nodeSize * 2));
+      .join(
+        enter => enter.append("line")
+          .attr("stroke-width", d => d.value * 0.75),
+          //.attr("stroke-width", d => Math.min(d.value * 0.75, this.nodeSize * 2));
+        exit => exit.remove()
+      );
 
     this.simulation.nodes(nodes);
     this.simulation.force("link").links(links);
@@ -125,6 +143,7 @@ class ClusterGraph extends Graph {
       if (d.group === this.outerGroup) {
         // Trigger the tick event of nodes not draggable
         this.simulation.alpha(0.05).restart();
+        // simulation.tick(??)
       }
     }
   }

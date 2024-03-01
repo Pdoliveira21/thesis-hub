@@ -76,6 +76,10 @@ class ClusterGraph extends Graph {
     return d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize;
   }
 
+  displayNodeImg(d) {
+    return d.img !== undefined && (d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize);
+  }
+
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
@@ -103,16 +107,17 @@ class ClusterGraph extends Graph {
 
             const radius = self.nodeRadius(d);
             const color = self.color(d.group);
-            const displayImg = d.group === self.outerGroup && d.img !== undefined;
+            const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
             g.append("circle")
               .attr("r", radius)
-              .attr("fill", displayImg ? `url(#${d.id}-img)` : color);
+              .attr("fill", displayImg ? `url(#${d.id}-img-cluster)` : color);
+              // TODO: keep fill in color
 
             if (displayImg) {
               g.append("image")
-                .attr("id", `${d.id}-img`)
+                .attr("id", `${d.id}-img-cluster`)
                 .attr("href", d.img)
                 .attr("x", -radius)
                 .attr("y", -radius)
@@ -136,7 +141,7 @@ class ClusterGraph extends Graph {
 
             const radius = self.nodeRadius(d);
             const color = self.color(d.group);
-            const displayImg = d.group === self.outerGroup && d.img !== undefined;
+            const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
             g.select("circle")
@@ -149,10 +154,10 @@ class ClusterGraph extends Graph {
             if (displayImg) {
               g.select("image")
                 .attr("href", d.img)
-                .attr("x", -radius)
-                .attr("y", -radius)
-                .attr("width", radius * 2)
-                .attr("height", radius * 2);
+                // .attr("x", -radius)
+                // .attr("y", -radius)
+                // .attr("width", radius * 2)
+                // .attr("height", radius * 2);
             } else {
               g.select("text")
                 .attr("fill", d3.lab(color).l < 60 ? "white" : "black")

@@ -29,14 +29,15 @@
 
   <script type="module">
     
-    // fetch('https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     const graph = new TemporalGraph(data.data.seasons, {
-    //       clusterGroup: "teams"
-    //     });
-    //   });
+    fetch('https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30')
+      .then(response => response.json())
+      .then(data => {
+        const graph = new TemporalGraph(data.data.seasons, {
+          clusterGroup: "teams"
+        });
+      });
 
+    /*
     const data = {
   "error_code": "0",
   "error_text": "",
@@ -44431,6 +44432,7 @@
     const graph = new TemporalGraph(data.data.seasons, {
           clusterGroup: "teams"
         });
+        */
 
   </script>
 </body>

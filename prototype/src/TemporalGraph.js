@@ -74,7 +74,7 @@ class TemporalGraph {
           const elementsCount = Number(group.count) || Object.keys(group[this.detailGroup]).length;
           if (!groupsSet.has(groupId)) {
             groupsSet.add(groupId);
-            nodes.cluster.push({id: `C-${groupId}`, name: group.name, group: this.clusterGroup, value: elementsCount});
+            nodes.cluster.push({id: `C-${groupId}`, name: group.name, img: group.logo || undefined, group: this.clusterGroup, value: elementsCount});
           } else {
             const index = nodes.cluster.findIndex(d => d.id === `C-${groupId}`);
             nodes.cluster[index].value += elementsCount;

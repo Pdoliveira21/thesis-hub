@@ -98,24 +98,73 @@ class DetailGraph extends Graph {
     }));
     links = links.map(d => ({...d}));
 
+    const self = this;
     this.node = this.node
       .data(nodes, d => d.id)
+      // (TODO): improve animations and text stuff
       .join(
         enter => enter.append("g")
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
-          .call(g => {          
+          .each(function(d) {
+            const g = d3.select(this);
+
+            const radius = self.nodeRadius(d);
+            const color = self.color(d.cluster || d.group);
+            const displayImg = d.group === self.outerGroup && d.img !== undefined; // TODO: extract method
+            const displayText = self.displayNodeText(d);
+
             g.append("circle")
-              .attr("r", d => this.nodeRadius(d))
-              .attr("fill", d => this.color(d.cluster ? d.cluster : d.group))
-            g.append("title").text(d => d.name);
+              .attr("r", radius)
+              .attr("fill", displayImg ? `url(#${d.id}-img-detail)` : color);
+
+            if (displayImg) {
+              g.append("image")
+                .attr("id", `${d.id}-img-detail`)
+                .attr("href", d.img)
+                .attr("x", -radius)
+                .attr("y", -radius)
+                .attr("width", radius * 2)
+                .attr("height", radius * 2);
+            } else {
+              // TODO: improve text positioning and style
+              g.append("text")
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "central")
+                .attr("fill", "white")
+                .attr("display", displayText ? "block" : "none")
+                .text(d.name);
+            }
+
+            g.append("title").text(d.name);
           }),
         update => update
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
-          .call(g => {
+          .each(function(d) {
+            const g = d3.select(this);
+
+            const radius = self.nodeRadius(d);
+            const color = self.color(d.cluster || d.group);
+            const displayImg = d.group === self.outerGroup && d.img !== undefined; // TODO: extract method
+            const displayText = self.displayNodeText(d);
+
             g.select("circle")
-              .attr("r", d => this.nodeRadius(d))
-              .attr("fill", d => this.color(d.cluster ? d.cluster : d.group));
-            g.select("title").text(d => d.name);
+              .attr("r", radius)
+              .attr("fill", displayImg ? `url(#${d.id}-img-detail)` : color);
+
+            if (displayImg) {
+              g.select("image")
+                .attr("href", d.img)
+                .attr("x", -radius)
+                .attr("y", -radius)
+                .attr("width", radius * 2)
+                .attr("height", radius * 2);
+            } else {
+              g.select("text")
+                .attr("display", displayText ? "block" : "none")
+                .text(d.name);
+            }
+
+            g.select("title").text(d.name);
           }),
         exit => exit.remove()
     );

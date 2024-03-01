@@ -11,7 +11,7 @@ class Graph {
     this.dragging = false;
     this.nodeOpacity = 1.0;
     this.linkOpacity = 0.3;
-    this.nodeUnhighlightOpacity = 0.1;
+    this.nodeUnhighlightOpacity = 0.05;
     this.linkUnhighlightOpacity = 0.01;
     this.linkHighlightOpacity = 0.8;
   }

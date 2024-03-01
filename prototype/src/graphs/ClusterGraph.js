@@ -6,7 +6,6 @@ class ClusterGraph extends Graph {
   constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color, clickNodeCallback = () => {}, tickCallback = () => {}) {
     super(width, height, nodeSize, nodeSpace);
 
-    this.scaleFactor = 2.5 / this.nodeSize;
     this.outerRadius = null;
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
@@ -93,38 +92,75 @@ class ClusterGraph extends Graph {
     }));
     links = links.map(d => ({...d}));
 
+    const self = this;
     this.node = this.node
       .data(nodes, d => d.id)
       .join(
         enter => enter.append("g")
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
-          .call(g => {
+          .each(function(d) {
+            const g = d3.select(this);
+
+            const radius = self.nodeRadius(d);
+            const color = self.color(d.group);
+            const displayImg = d.group === self.outerGroup && d.img !== undefined;
+            const displayText = self.displayNodeText(d);
+
             g.append("circle")
-              // (TODO) details what to animate - improve in the future
-              .attr("r", d => this.nodeRadius(d))
-              .attr("fill", d => this.color(d.group));
-            g.append("text")
-              .attr("text-anchor", "middle")
-              .attr("dominant-baseline", "central")
-              .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
-              .attr("display", d => this.displayNodeText(d) ? "block" : "none")
-              .text(d => d.name);
-            g.append("title").text(d => d.name);
+              .attr("r", radius)
+              .attr("fill", displayImg ? `url(#${d.id}-img)` : color);
+
+            if (displayImg) {
+              g.append("image")
+                .attr("id", `${d.id}-img`)
+                .attr("href", d.img)
+                .attr("x", -radius)
+                .attr("y", -radius)
+                .attr("width", radius * 2)
+                .attr("height", radius * 2);
+            } else {
+              g.append("text")
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "central")
+                .attr("fill", d3.lab(color).l < 60 ? "white" : "black")
+                .attr("display", displayText ? "block" : "none")
+                .text(d.name);
+            }
+
+            g.append("title").text(d.name);
           }),
         update => update
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
-          .call(g => {
+          .each(function(d) {
+            const g = d3.select(this);
+
+            const radius = self.nodeRadius(d);
+            const color = self.color(d.group);
+            const displayImg = d.group === self.outerGroup && d.img !== undefined;
+            const displayText = self.displayNodeText(d);
+
             g.select("circle")
               .transition() 
               .duration(500)
               .ease(d3.easeLinear)
-              .attr("r", d => this.nodeRadius(d))
-              .attr("fill", d => this.color(d.group));
-            g.select("text")
-              .attr("fill", d => d3.lab(this.color(d.group)).l < 60 ? "white" : "black")
-              .attr("display", d => this.displayNodeText(d) ? "block" : "none")
-              .text(d => d.name);
-            g.select("title").text(d => d.name);
+              .attr("r", radius)
+              .attr("fill", displayImg ? `url(#${d.id}-img)` : color);
+
+            if (displayImg) {
+              g.select("image")
+                .attr("href", d.img)
+                .attr("x", -radius)
+                .attr("y", -radius)
+                .attr("width", radius * 2)
+                .attr("height", radius * 2);
+            } else {
+              g.select("text")
+                .attr("fill", d3.lab(color).l < 60 ? "white" : "black")
+                .attr("display", displayText ? "block" : "none")
+                .text(d.name);
+            }
+
+            g.select("title").text(d.name);
           }),
         exit => exit.remove()
     );

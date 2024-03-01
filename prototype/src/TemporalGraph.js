@@ -5,11 +5,12 @@
 class TemporalGraph {
 
   constructor(data, {
-    width = 1200,
-    height = 1200,
+    width = 800,
+    height = 800,
     nodeSize = 24,
     nodeSpace = 15,
     color = d3.scaleOrdinal(d3.schemeCategory10),
+    displayAlwaysAllOuter = false,
     outerGroup = "national teams",
     clusterGroup = "clubs",
     detailGroup = "players",
@@ -18,13 +19,16 @@ class TemporalGraph {
     timelineContainer = "timeline-container"
   }) {
 
+    this.displayAlwaysAllOuter = displayAlwaysAllOuter;
     this.outerGroup = outerGroup;
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
     this.parseData(data);
 
     this.detailedNode = null;
+    // (TODO): send if is to display always all outer nodes to simplify internal logic
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
+    // (TODO): send if is to display always all outer nodes to simplify internal logic
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, color, (node) => {
       this.detailedNode = node;
       this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedNode);
@@ -63,7 +67,7 @@ class TemporalGraph {
         }
 
         supergroupsSet.add(supergroup.id);
-        nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, group: this.outerGroup});
+        nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, img: supergroup.img || undefined, group: this.outerGroup});
 
         // Process the groups
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
@@ -92,24 +96,25 @@ class TemporalGraph {
         });
       });
 
+      // (TODO): change to be according to a specific ordering criteria selected
       nodes.outer.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
       this.data[time] = { nodes, links };
     }
 
-    // (TODO): change to be according to a specific variable
-    // const outerNodes = Object.values(this.data).reduce((acc, time) => {
-    //   return acc.concat(time.nodes.outer.filter(node => !acc.some(n => n.id === node.id)));
-    // }, []);
-    // outerNodes.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+    if (this.displayAlwaysAllOuter) {
+      const allOuterNodes = Object.values(this.data).reduce((acc, timeslice) => {
+        return acc.concat(timeslice.nodes.outer.filter(node => !acc.some(n => n.id === node.id)));
+      }, []);
 
-    // for (let time in this.data) {
-    //   this.data[time].nodes.outer = outerNodes;
-    // }
+      // (TODO): change to be according to a specific ordering criteria selected
+      allOuterNodes.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+
+      // (TODO): repeat in every year or should be just once?
+      for (let time in this.data) {
+        this.data[time].nodes.outer = allOuterNodes;
+      }
+    }
   }
-
-  // (NOTE): logic of keeping only the national teams per year, not all all the time for now
-  // so recalculate fixed positions each update still needed
-  // future: extra boolean to pass this configuration to the ClusterGraph
 
   drawClusterGraph(container, time) {
     const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.cluster).map(d => ({...d}));

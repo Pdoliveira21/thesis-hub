@@ -74,7 +74,7 @@ class TemporalGraph {
           const elementsCount = Number(group.count) || Object.keys(group[this.detailGroup]).length;
           if (!groupsSet.has(groupId)) {
             groupsSet.add(groupId);
-            nodes.cluster.push({id: `C-${groupId}`, name: group.name, img: group.logo || undefined, group: this.clusterGroup, value: elementsCount});
+            nodes.cluster.push({id: `C-${groupId}`, name: group.name, img: group.logo || undefined, color: group.color, group: this.clusterGroup, value: elementsCount});
           } else {
             const index = nodes.cluster.findIndex(d => d.id === `C-${groupId}`);
             nodes.cluster[index].value += elementsCount;
@@ -90,7 +90,7 @@ class TemporalGraph {
             }
 
             elementsSet.add(elementId);
-            nodes.detail.push({id: `E-${elementId}`, name: element.name, group: this.detailGroup, cluster: `C-${groupId}`, supergroup: `O-${supergroup.id}`});
+            nodes.detail.push({id: `E-${elementId}`, name: element.name, color: group.color, group: this.detailGroup, cluster: `C-${groupId}`, supergroup: `O-${supergroup.id}`});
             links.detail.push({source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
           });
         });

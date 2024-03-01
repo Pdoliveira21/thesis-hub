@@ -78,8 +78,16 @@ class DetailGraph extends Graph {
     return d.group === this.innerGroup ? this.nodeSize * 0.25 : this.nodeSize;
   }
 
+  nodeColor(d) {
+    return d.group === this.outerGroup ? "#e6e6e6" : (`#${d.color}` || "#333");
+  }
+
   displayNodeText(d) {
     return d.group === this.outerGroup;
+  }
+
+  displayNodeImg(d) {
+    return d.img !== undefined && (d.group === this.outerGroup);
   }
 
   update(nodes, links, focus) {
@@ -109,17 +117,16 @@ class DetailGraph extends Graph {
             const g = d3.select(this);
 
             const radius = self.nodeRadius(d);
-            const color = self.color(d.cluster || d.group);
-            const displayImg = d.group === self.outerGroup && d.img !== undefined; // TODO: extract method
+            const color = self.nodeColor(d);
+            const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
             g.append("circle")
               .attr("r", radius)
-              .attr("fill", displayImg ? `url(#${d.id}-img-detail)` : color);
+              .attr("fill", color);
 
             if (displayImg) {
               g.append("image")
-                .attr("id", `${d.id}-img-detail`)
                 .attr("href", d.img)
                 .attr("x", -radius)
                 .attr("y", -radius)
@@ -130,7 +137,7 @@ class DetailGraph extends Graph {
               g.append("text")
                 .attr("text-anchor", "middle")
                 .attr("dominant-baseline", "central")
-                .attr("fill", "white")
+                .attr("fill", "black")
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
@@ -143,23 +150,30 @@ class DetailGraph extends Graph {
             const g = d3.select(this);
 
             const radius = self.nodeRadius(d);
-            const color = self.color(d.cluster || d.group);
-            const displayImg = d.group === self.outerGroup && d.img !== undefined; // TODO: extract method
+            const color = self.nodeColor(d);
+            const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
             g.select("circle")
               .attr("r", radius)
-              .attr("fill", displayImg ? `url(#${d.id}-img-detail)` : color);
+              .attr("fill", color);
 
             if (displayImg) {
-              g.select("image")
-                .attr("href", d.img)
-                .attr("x", -radius)
-                .attr("y", -radius)
-                .attr("width", radius * 2)
-                .attr("height", radius * 2);
+              g.select("text").remove();
+              
+              const img = g.select("image").empty() ? g.append("image") : g.select("image");
+              img.attr("href", d.img)
+                  .attr("x", -radius)
+                  .attr("y", -radius)
+                  .attr("width", radius * 2)
+                  .attr("height", radius * 2);
             } else {
-              g.select("text")
+              g.select("image").remove();
+
+              const text = g.select("text").empty() ? g.append("text") : g.select("text");
+              text.attr("text-anchor", "middle")
+                .attr("dominant-baseline", "central")
+                .attr("fill", "black")
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }

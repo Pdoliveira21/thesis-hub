@@ -72,12 +72,17 @@ class ClusterGraph extends Graph {
     return d.group === this.innerGroup ? d.value * 2 + 0.5 : this.nodeSize;
   }
 
+  nodeColor(d) {
+    // (TODO): use the color of the node or the same color to all?
+    return d.group === this.outerGroup ? "#e6e6e6" : (this.displayNodeImg(d) ? "none" : `#${d.color}` || "#333");
+  }
+
   displayNodeText(d) {
-    return d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize;
+    return (d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize);
   }
 
   displayNodeImg(d) {
-    return d.img !== undefined && (d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize);
+    return d.img !== undefined && (d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize * 0.35);
   }
 
   update(nodes, links) {
@@ -106,18 +111,16 @@ class ClusterGraph extends Graph {
             const g = d3.select(this);
 
             const radius = self.nodeRadius(d);
-            const color = self.color(d.group);
+            const color = self.nodeColor(d);
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
             g.append("circle")
               .attr("r", radius)
-              .attr("fill", displayImg ? `url(#${d.id}-img-cluster)` : color);
-              // TODO: keep fill in color
+              .attr("fill", color);
 
             if (displayImg) {
               g.append("image")
-                .attr("id", `${d.id}-img-cluster`)
                 .attr("href", d.img)
                 .attr("x", -radius)
                 .attr("y", -radius)
@@ -127,7 +130,7 @@ class ClusterGraph extends Graph {
               g.append("text")
                 .attr("text-anchor", "middle")
                 .attr("dominant-baseline", "central")
-                .attr("fill", d3.lab(color).l < 60 ? "white" : "black")
+                .attr("fill", "black")
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
@@ -140,7 +143,7 @@ class ClusterGraph extends Graph {
             const g = d3.select(this);
 
             const radius = self.nodeRadius(d);
-            const color = self.color(d.group);
+            const color = self.nodeColor(d);
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
@@ -149,22 +152,28 @@ class ClusterGraph extends Graph {
               .duration(500)
               .ease(d3.easeLinear)
               .attr("r", radius)
-              .attr("fill", displayImg ? `url(#${d.id}-img)` : color);
+              .attr("fill", color);
 
             if (displayImg) {
-              g.select("image")
-                .attr("href", d.img)
-                // .attr("x", -radius)
-                // .attr("y", -radius)
-                // .attr("width", radius * 2)
-                // .attr("height", radius * 2);
+              g.select("text").remove();
+
+              const img = g.select("image").empty() ? g.append("image") : g.select("image");
+              img.attr("href", d.img)
+                .attr("x", -radius)
+                .attr("y", -radius)
+                .attr("width", radius * 2)
+                .attr("height", radius * 2);
             } else {
-              g.select("text")
-                .attr("fill", d3.lab(color).l < 60 ? "white" : "black")
+              g.select("image").remove();
+
+              const text = g.select("text").empty() ? g.append("text") : g.select("text");
+              text.attr("text-anchor", "middle")
+                .attr("dominant-baseline", "central")
+                .attr("fill", "black")
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-
+              
             g.select("title").text(d.name);
           }),
         exit => exit.remove()

@@ -28,6 +28,13 @@ class DetailGraph extends Graph {
         .attr("height", this.height)
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
         .attr("style", "max-width: 100%; height: auto;");
+  
+    this.background = this.svg.append("image")
+        .attr("x", -(this.width / 4) / 2)
+        .attr("y", -(this.height / 4) / 2)
+        .attr("width", this.width / 4)
+        .attr("height", this.height / 4)
+        .attr("opacity", 0.15);
     
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
@@ -40,7 +47,6 @@ class DetailGraph extends Graph {
       .selectAll("g");
   }
 
-  // (TODO): move to a helper class or Grpah class? repeated in ClusterGraph
   outerXY(alpha) {
     this.node.filter(d => d.group === this.outerGroup && !d.inPlace).each(d => {
       // Close enough to the new position - snap to it
@@ -79,7 +85,7 @@ class DetailGraph extends Graph {
   }
 
   nodeColor(d) {
-    return d.group === this.outerGroup ? "#e6e6e6" : (`#${d.color}` || "#333");
+    return d.group === this.outerGroup ? "#e6e6e6" : (`#${d.color || "333"}`);
   }
 
   displayNodeText(d) {
@@ -106,6 +112,10 @@ class DetailGraph extends Graph {
     }));
     links = links.map(d => ({...d}));
 
+    if (focus) {
+      this.background.attr("href", focus.img || "");
+    }
+
     const self = this;
     this.node = this.node
       .data(nodes, d => d.id)
@@ -121,18 +131,18 @@ class DetailGraph extends Graph {
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
-            g.append("circle")
-              .attr("r", radius)
-              .attr("fill", color);
-
             if (displayImg) {
+              const imgRadius = radius + 1;
               g.append("image")
                 .attr("href", d.img)
-                .attr("x", -radius)
-                .attr("y", -radius)
-                .attr("width", radius * 2)
-                .attr("height", radius * 2);
+                .attr("x", -imgRadius)
+                .attr("y", -imgRadius)
+                .attr("width", imgRadius * 2)
+                .attr("height", imgRadius * 2);
             } else {
+              g.append("circle")
+                .attr("r", radius)
+                .attr("fill", color);
               // TODO: improve text positioning and style
               g.append("text")
                 .attr("text-anchor", "middle")
@@ -154,24 +164,29 @@ class DetailGraph extends Graph {
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
-            g.select("circle")
-              .attr("r", radius)
-              .attr("fill", color);
-
             if (displayImg) {
+              g.select("circle").remove();
               g.select("text").remove();
               
+              const imgRadius = radius + 1;
               const img = g.select("image").empty() ? g.append("image") : g.select("image");
-              img.attr("href", d.img)
-                  .attr("x", -radius)
-                  .attr("y", -radius)
-                  .attr("width", radius * 2)
-                  .attr("height", radius * 2);
+              img
+                .attr("href", d.img)
+                .attr("x", -imgRadius)
+                .attr("y", -imgRadius)
+                .attr("width", imgRadius * 2)
+                .attr("height", imgRadius * 2);
             } else {
               g.select("image").remove();
 
+              const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
+              circle
+                .attr("r", radius)
+                .attr("fill", color);
+
               const text = g.select("text").empty() ? g.append("text") : g.select("text");
-              text.attr("text-anchor", "middle")
+              text
+                .attr("text-anchor", "middle")
                 .attr("dominant-baseline", "central")
                 .attr("fill", "black")
                 .attr("display", displayText ? "block" : "none")

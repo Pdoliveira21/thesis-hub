@@ -45,7 +45,6 @@ class ClusterGraph extends Graph {
       .selectAll("g");
   }
 
-  // (TODO): move to a helper class or Grpah class? repeated in DetailGraph
   outerXY(alpha) {
     this.node.filter(d => d.group === this.outerGroup && !d.inPlace).each(d => {
       // Close enough to the new position - snap to it
@@ -56,6 +55,7 @@ class ClusterGraph extends Graph {
       } else {
         if (d.t === undefined) {
           // does not have old theta - move new node linearly to the new position
+          // (TODO): make more t dependent to make it more smooth (or scale it to the time of the simulation)
           d.fx = d.x + (d.cx - d.x) * (1 - alpha);
           d.fy = d.y + (d.cy - d.y) * (1 - alpha);
         } else {
@@ -73,8 +73,7 @@ class ClusterGraph extends Graph {
   }
 
   nodeColor(d) {
-    // (TODO): use the color of the node or the same color to all?
-    return d.group === this.outerGroup ? "#e6e6e6" : (this.displayNodeImg(d) ? "none" : `#${d.color}` || "#333");
+    return d.group === this.outerGroup ? "#e6e6e6" : (`#${d.color || "333"}`);
   }
 
   displayNodeText(d) {
@@ -82,7 +81,7 @@ class ClusterGraph extends Graph {
   }
 
   displayNodeImg(d) {
-    return d.img !== undefined && (d.group === this.outerGroup || this.nodeRadius(d) >= this.nodeSize * 0.35);
+    return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4); // this.nodeRadius(d) >= this.nodeSize * 0.35);
   }
 
   update(nodes, links) {
@@ -115,18 +114,24 @@ class ClusterGraph extends Graph {
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
-            g.append("circle")
-              .attr("r", radius)
-              .attr("fill", color);
-
+            // TODO: enter animation on image or circle from 0 (or min defined then) to radius only on inner nodes
+            // TODO: image from the center outwards <---
             if (displayImg) {
+              const imgRadius = radius + 1;
               g.append("image")
                 .attr("href", d.img)
-                .attr("x", -radius)
-                .attr("y", -radius)
-                .attr("width", radius * 2)
-                .attr("height", radius * 2);
+                .attr("x", -imgRadius)
+                .attr("y", -imgRadius)
+                .attr("width", imgRadius * 2)
+                .attr("height", imgRadius * 2);
+                // .attr("transform", "scale(0)")
+                // .transition().duration(1000)
+                // .attr("transform", "scale(1)");
             } else {
+              g.append("circle")
+                // .transition().duration(1000)
+                .attr("r", radius)
+                .attr("fill", color);
               g.append("text")
                 .attr("text-anchor", "middle")
                 .attr("dominant-baseline", "central")
@@ -147,27 +152,32 @@ class ClusterGraph extends Graph {
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
-            g.select("circle")
-              .transition() 
-              .duration(500)
-              .ease(d3.easeLinear)
-              .attr("r", radius)
-              .attr("fill", color);
-
             if (displayImg) {
+              // TODO: if inner node and changing from previous circle to image, start width from old radius * 2, otherwise from 0 (or min defined then)
+              g.select("circle").remove();
               g.select("text").remove();
 
+              const imgRadius = radius + 1;
               const img = g.select("image").empty() ? g.append("image") : g.select("image");
-              img.attr("href", d.img)
-                .attr("x", -radius)
-                .attr("y", -radius)
-                .attr("width", radius * 2)
-                .attr("height", radius * 2);
+              img
+                .attr("href", d.img)
+                .attr("x", -imgRadius)
+                .attr("y", -imgRadius)
+                .attr("width", imgRadius * 2)
+                .attr("height", imgRadius * 2);
             } else {
+              // TODO: if inner node and changing from previous image to circle, start width from old width / 2, otherwise from 0 (or min defined then)
               g.select("image").remove();
 
+              const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
+              circle
+                // .transition().duration(2000)
+                .attr("r", radius)
+                .attr("fill", color);
+
               const text = g.select("text").empty() ? g.append("text") : g.select("text");
-              text.attr("text-anchor", "middle")
+              text
+                .attr("text-anchor", "middle")
                 .attr("dominant-baseline", "central")
                 .attr("fill", "black")
                 .attr("display", displayText ? "block" : "none")

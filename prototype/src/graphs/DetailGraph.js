@@ -145,9 +145,7 @@ class DetailGraph extends Graph {
                 .attr("fill", color);
               // TODO: improve text positioning and style
               g.append("text")
-                .attr("text-anchor", "middle")
-                .attr("dominant-baseline", "central")
-                .attr("fill", "black")
+                .classed("node-text", true)
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
@@ -186,9 +184,7 @@ class DetailGraph extends Graph {
 
               const text = g.select("text").empty() ? g.append("text") : g.select("text");
               text
-                .attr("text-anchor", "middle")
-                .attr("dominant-baseline", "central")
-                .attr("fill", "black")
+                .classed("node-text", true)
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }

@@ -56,7 +56,7 @@ class Graph {
     return links.some(l => l.source === d || l.target === d);
   }
 
-  highlight(d, node, link) {
+  highlight(d, node, link, simulation, radius = () => 0) {
     if (!this.connected(d, link.data()) || this.dragging === true) return;
 
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
@@ -64,16 +64,33 @@ class Graph {
       g.lower().attr("opacity", this.nodeUnhighlightOpacity);
       g.select("text").attr("display", "none");
     });
+
+    var textSizes = {};
     node.filter(n => neighbors.has(n)).call(g => {
       g.raise().attr("opacity", this.nodeOpacity);
       g.select("text").attr("display", "block");
+    }).select("text").each(function(d) {
+      const text = d3.select(this);
+      textSizes[d.id] = {
+        name: d.name,
+        width: text.node().getBBox().width,
+        height: 16
+      };
     });
 
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
     link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
+
+
+    simulation.force("text", d3.forceCollide(d => {
+      if (neighbors.has(d)) {
+        return Math.max(radius(d), textSizes[d.id]?.width / 2);
+      }
+    }).iterations(1)); // (TODO): cahnge force to do not overlap the "g" elements of the highlighhted nodes
+    simulation.alpha(0.05).restart(); // (TOD): restrat only some nodes (the affected ones)?
   }
 
-  unhighlight(node, link, showText = () => false) {
+  unhighlight(node, link, showText = () => false, simulation) {
     if (this.dragging === true) return;
     
     node.call(g => {
@@ -81,6 +98,11 @@ class Graph {
       g.select("text").attr("display", d => showText(d) ? "block" : "none");
     });
     link.attr("stroke-opacity", this.linkOpacity);
+
+    if (simulation) {
+      simulation.force("text", null);
+      simulation.alpha(0.5).restart(); // (TOD): restrat only some nodes?
+    }
   }
 
   circularLayout(nodes, group) {

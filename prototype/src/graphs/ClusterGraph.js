@@ -133,9 +133,7 @@ class ClusterGraph extends Graph {
                 .attr("r", radius)
                 .attr("fill", color);
               g.append("text")
-                .attr("text-anchor", "middle")
-                .attr("dominant-baseline", "central")
-                .attr("fill", "black")
+                .classed("node-text", true)
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
@@ -177,9 +175,7 @@ class ClusterGraph extends Graph {
 
               const text = g.select("text").empty() ? g.append("text") : g.select("text");
               text
-                .attr("text-anchor", "middle")
-                .attr("dominant-baseline", "central")
-                .attr("fill", "black")
+                .classed("node-text", true)
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
@@ -194,8 +190,8 @@ class ClusterGraph extends Graph {
 
     this.node
       .on("click", (event, d) => this.clicked(event, d))
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.displayNodeText.bind(this)));
+      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation, this.nodeRadius.bind(this)))
+      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.displayNodeText.bind(this), this.simulation));
 
     this.link = this.link
       .data(links, d => [d.source, d.target])

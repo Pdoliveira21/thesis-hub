@@ -24,7 +24,9 @@ class ClusterGraph extends Graph {
 
   initialize() {
     this.simulation = d3.forceSimulation()
-      // .velocityDecay(0.6) // (TODO): what is this?
+      // (TODO): investigate more how to "slow down" the simulation 
+      // .alphaDecay(0.01)
+      // .velocityDecay(0.8)
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
       .force("x", d3.forceX().x(0).strength(0.01))
@@ -58,9 +60,9 @@ class ClusterGraph extends Graph {
       } else {
         if (d.t === undefined) {
           // does not have old theta - move new node linearly to the new position
-          // (TODO): make more t dependent to make it more smooth (or scale it to the time of the simulation)
-          d.fx = d.x + (d.cx - d.x) * (1 - alpha);
-          d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+          const factor = Math.max((1 - alpha) * 0.25, 0);
+          d.fx = d.x + (d.cx - d.x) * factor;
+          d.fy = d.y + (d.cy - d.y) * factor;
         } else {
           // has old theta - move existing node along the circunference to the new position
           const factor = Math.max(alpha * 2 - 1, 0);
@@ -130,6 +132,12 @@ class ClusterGraph extends Graph {
                 g.select("image")
                   .attr("transform", "scale(0)")
                   .transition().duration(self.animationDuration).ease(self.animationEase)
+                  .attr("transform", "scale(1)");
+              } else {
+                // (TODO): keep this animation even with the transition forced by the force
+                g.select("image")
+                  .attr("transform", `scale(0.5)`)
+                  .transition().duration(self.animationDuration / 2).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
             } else {

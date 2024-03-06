@@ -56,7 +56,7 @@ class Graph {
     return links.some(l => l.source === d || l.target === d);
   }
 
-  highlight(d, node, link, simulation, radius = () => 0) {
+  highlight(d, node, link, simulation) {
     if (!this.connected(d, link.data()) || this.dragging === true) return;
 
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
@@ -64,33 +64,33 @@ class Graph {
       g.lower().attr("opacity", this.nodeUnhighlightOpacity);
       g.select("text").attr("display", "none");
     });
-
-    var textSizes = {};
     node.filter(n => neighbors.has(n)).call(g => {
       g.raise().attr("opacity", this.nodeOpacity);
       g.select("text").attr("display", "block");
-    }).select("text").each(function(d) {
-      const text = d3.select(this);
-      textSizes[d.id] = {
-        name: d.name,
-        width: text.node().getBBox().width,
-        height: 16
-      };
     });
 
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
     link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
 
+    // Add a force to avoid text overlap.
+    let sizes = {};
+    node.each(function(d) {
+      const g = d3.select(this);
+      sizes[d.id] = {
+        width: g.node().getBBox().width,
+        height: g.node().getBBox().height,
+      };
+    });
 
     simulation.force("text", d3.forceCollide(d => {
       if (neighbors.has(d)) {
-        return Math.max(radius(d), textSizes[d.id]?.width / 2);
+        return Math.max(sizes[d.id].width, sizes[d.id].height) / 2;
       }
     }).iterations(1)); // (TODO): cahnge force to do not overlap the "g" elements of the highlighhted nodes
-    simulation.alpha(0.05).restart(); // (TOD): restrat only some nodes (the affected ones)?
+    simulation.alpha(0.05).restart();
   }
 
-  unhighlight(node, link, showText = () => false, simulation) {
+  unhighlight(node, link, simulation, showText = () => false) {
     if (this.dragging === true) return;
     
     node.call(g => {
@@ -99,10 +99,9 @@ class Graph {
     });
     link.attr("stroke-opacity", this.linkOpacity);
 
-    if (simulation) {
-      simulation.force("text", null);
-      simulation.alpha(0.5).restart(); // (TOD): restrat only some nodes?
-    }
+    // Remove the force to avoid text overlap.
+    simulation.force("text", null);
+    simulation.alpha(0.3).restart();
   }
 
   circularLayout(nodes, group) {
@@ -125,3 +124,5 @@ class Graph {
     return (diameter * scale) / 2;
   }
 }
+
+// https://lvngd.com/blog/rectangular-collision-detection-d3-force-layouts/

@@ -22,6 +22,7 @@ class ClusterGraph extends Graph {
 
   initialize() {
     this.simulation = d3.forceSimulation()
+      // .velocityDecay(0.6) // (TODO): what is this?
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
       .force("x", d3.forceX().x(0).strength(0.01))
@@ -190,8 +191,8 @@ class ClusterGraph extends Graph {
 
     this.node
       .on("click", (event, d) => this.clicked(event, d))
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation, this.nodeRadius.bind(this)))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.displayNodeText.bind(this), this.simulation));
+      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation))
+      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this), this.simulation));
 
     this.link = this.link
       .data(links, d => [d.source, d.target])

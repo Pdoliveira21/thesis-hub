@@ -198,8 +198,8 @@ class DetailGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.displayNodeText.bind(this)));
+      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation))
+      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
     
     this.link = this.link
       .data(links, d => [d.source, d.target])

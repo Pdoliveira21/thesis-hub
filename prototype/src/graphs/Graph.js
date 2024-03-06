@@ -73,21 +73,21 @@ class Graph {
     link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
 
     // Add a force to avoid text overlap.
-    let sizes = {};
-    node.each(function(d) {
-      const g = d3.select(this);
-      sizes[d.id] = {
-        width: g.node().getBBox().width,
-        height: g.node().getBBox().height,
-      };
-    });
+    // let sizes = {};
+    // node.each(function(d) {
+    //   const g = d3.select(this);
+    //   sizes[d.id] = {
+    //     width: g.node().getBBox().width,
+    //     height: g.node().getBBox().height,
+    //   };
+    // });
 
-    simulation.force("text", d3.forceCollide(d => {
-      if (neighbors.has(d)) {
-        return Math.max(sizes[d.id].width, sizes[d.id].height) / 2;
-      }
-    }).iterations(1)); // (TODO): cahnge force to do not overlap the "g" elements of the highlighhted nodes
-    simulation.alpha(0.05).restart();
+    // simulation.force("text", d3.forceCollide(d => {
+    //   if (neighbors.has(d)) {
+    //     return Math.max(sizes[d.id].width, sizes[d.id].height) / 2;
+    //   }
+    // }).iterations(1)); // (TODO): cahnge force to do not overlap the "g" elements of the highlighhted nodes
+    // simulation.alpha(0.05).restart();
   }
 
   unhighlight(node, link, simulation, showText = () => false) {
@@ -100,8 +100,8 @@ class Graph {
     link.attr("stroke-opacity", this.linkOpacity);
 
     // Remove the force to avoid text overlap.
-    simulation.force("text", null);
-    simulation.alpha(0.3).restart();
+    // simulation.force("text", null);
+    // simulation.alpha(0.3).restart();
   }
 
   circularLayout(nodes, group) {

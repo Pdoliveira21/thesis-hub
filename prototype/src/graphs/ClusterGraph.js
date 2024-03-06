@@ -10,6 +10,8 @@ class ClusterGraph extends Graph {
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
+    this.animationDuration = 1000;
+    this.animationEase = d3.easeCubicInOut;
 
     this.clickNodeCallback = clickNodeCallback;
     this.tickCallback = tickCallback;
@@ -115,8 +117,6 @@ class ClusterGraph extends Graph {
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
 
-            // TODO: enter animation on image or circle from 0 (or min defined then) to radius only on inner nodes
-            // TODO: image from the center outwards <---
             if (displayImg) {
               const imgRadius = radius + 1;
               g.append("image")
@@ -125,12 +125,17 @@ class ClusterGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
-                // .attr("transform", "scale(0)")
-                // .transition().duration(1000)
-                // .attr("transform", "scale(1)");
+              
+              if (d.group === self.innerGroup) {
+                g.select("image")
+                  .attr("transform", "scale(0)")
+                  .transition().duration(self.animationDuration).ease(self.animationEase)
+                  .attr("transform", "scale(1)");
+              }
             } else {
               g.append("circle")
-                // .transition().duration(1000)
+                .attr("r", 0)  
+                .transition().duration(self.animationDuration).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
               g.append("text")
@@ -152,7 +157,12 @@ class ClusterGraph extends Graph {
             const displayText = self.displayNodeText(d);
 
             if (displayImg) {
-              // TODO: if inner node and changing from previous circle to image, start width from old radius * 2, otherwise from 0 (or min defined then)
+              // Get the old size of the image/circle
+              const oldRadius = g.select("circle").empty() 
+                ? +g.select("image").attr("width") / 2 
+                : +g.select("circle").attr("r") + 2;
+              
+              // Remove the old circle and text, if exist, and add or update the image properties 
               g.select("circle").remove();
               g.select("text").remove();
 
@@ -164,13 +174,26 @@ class ClusterGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
+
+              if (d.group === self.innerGroup) {
+                g.select("image")
+                  .attr("transform", `scale(${oldRadius / imgRadius})`)
+                  .transition().duration(self.animationDuration).ease(self.animationEase)
+                  .attr("transform", "scale(1)");
+              }
             } else {
-              // TODO: if inner node and changing from previous image to circle, start width from old width / 2, otherwise from 0 (or min defined then)
+              // Get the old size of the image/circle
+              const oldRadius = g.select("image").empty() 
+                ? +g.select("circle").attr("r") 
+                : +g.select("image").attr("width") / 2 - 2;
+
+              // Remove the old image and add or update the circle and text properties
               g.select("image").remove();
 
               const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
               circle
-                // .transition().duration(2000)
+                .attr("r", oldRadius)
+                .transition().duration(self.animationDuration).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
 

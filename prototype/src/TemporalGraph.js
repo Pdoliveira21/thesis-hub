@@ -49,6 +49,14 @@ class TemporalGraph {
     this.drawTimeline(timelineContainer);
   }
 
+  #parseObject(obj, exclude = []) {
+    const newObj = {};
+    Object.keys(obj).filter(key => !exclude.includes(key)).forEach(key => {
+      newObj[key] = obj[key];
+    });
+    return newObj;
+  }
+
   parseData(data) {
     this.times = Object.keys(data);
     this.data = {};
@@ -69,9 +77,7 @@ class TemporalGraph {
         }
 
         supergroupsSet.add(supergroup.id);
-        nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, fk_continente: supergroup.fk_continente, img: supergroup.img || undefined, group: this.outerGroup});
-        // TODO: how to consider here all other filed of original data exept a few (to be more generic to sort in the future)
-        // TODO: same for the other fileds because of filter? (see in the future)
+        nodes.outer.push({id: `O-${supergroup.id}`, img: supergroup.img || undefined, ...this.#parseObject(supergroup, ["id", "img", this.clusterGroup]), group: this.outerGroup});
 
         // Process the groups
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
@@ -99,7 +105,7 @@ class TemporalGraph {
             }
 
             elementsSet.add(elementId);
-            nodes.detail.push({id: `E-${elementId}`, name: element.name, color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, supergroup: `O-${supergroup.id}`});
+            nodes.detail.push({id: `E-${elementId}`, ...this.#parseObject(element), color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, supergroup: `O-${supergroup.id}`});
             links.detail.push({source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
           });
         });

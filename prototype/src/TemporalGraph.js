@@ -97,7 +97,7 @@ class TemporalGraph {
             nodes.cluster[index].supergroup.push(`O-${supergroup.id}`);
           }
 
-          links.cluster.push({source: `C-${groupId}`, target: `O-${supergroup.id}`, value: elementsCount});
+          links.cluster.push({id: `C-${groupId}-O-${supergroup.id}`, source: `C-${groupId}`, target: `O-${supergroup.id}`, value: elementsCount});
 
           // Process the elements
           Object.entries(group[this.detailGroup]).forEach(([elementId, element]) => {

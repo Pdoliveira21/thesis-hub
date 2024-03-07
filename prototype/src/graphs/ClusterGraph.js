@@ -228,11 +228,15 @@ class ClusterGraph extends Graph {
       .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this), this.simulation));
 
     this.link = this.link
-      .data(links, d => [d.source, d.target])
+      .data(links, d => d.id)
       .join(
         enter => enter.append("line")
+          .attr("stroke-width", 0)
+          .transition().duration(this.animationDuration).ease(this.animationEase)
           .attr("stroke-width", d => d.value * 0.75),
-          //.attr("stroke-width", d => Math.min(d.value * 0.75, this.nodeSize * 2));
+        update => update
+          .transition().duration(this.animationDuration).ease(this.animationEase)
+          .attr("stroke-width", d => d.value * 0.75),
         exit => exit.remove()
       );
 

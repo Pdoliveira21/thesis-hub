@@ -6,6 +6,8 @@ class DetailGraph extends Graph {
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
+    this.animationDuration = 2000;
+    this.animationEase = d3.easeCubicInOut;
 
     this.clusters = [];
     this.initialize();
@@ -121,7 +123,6 @@ class DetailGraph extends Graph {
     const self = this;
     this.node = this.node
       .data(nodes, d => d.id)
-      // (TODO): improve animations and text stuff
       .join(
         enter => enter.append("g")
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
@@ -141,8 +142,17 @@ class DetailGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
+              
+              if (d.group === self.innerGroup) {
+                g.select("image")
+                  .attr("transform", "scale(0)")
+                  .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
+                  .attr("transform", "scale(1)");
+              }
             } else {
               g.append("circle")
+                .attr("r", 0)
+                .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
               // TODO: improve text positioning and style
@@ -155,6 +165,7 @@ class DetailGraph extends Graph {
             g.append("title").text(d.name);
           }),
         update => update
+          .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
           .each(function(d) {
             const g = d3.select(this);
@@ -193,7 +204,10 @@ class DetailGraph extends Graph {
 
             g.select("title").text(d.name);
           }),
-        exit => exit.remove()
+        exit => exit
+          .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
+          .attr("opacity", 0)
+          .remove()
     );
     
     this.node.filter(d => d.group === this.innerGroup)
@@ -205,8 +219,16 @@ class DetailGraph extends Graph {
     
     this.link = this.link
       .data(links, d => [d.source, d.target])
-      .join("line")
-        .attr("stroke-width", 1.0 * 0.75);
+      .join(
+        enter => enter.append("line")
+          .attr("stroke-width", 0)
+          .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
+          .attr("stroke-width", 0.75),
+        exit => exit
+          .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
+          .attr("stroke-width", 0)
+          .remove()
+      );
 
     this.simulation.nodes(nodes);
     this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.05);

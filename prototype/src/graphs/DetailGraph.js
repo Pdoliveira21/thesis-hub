@@ -17,6 +17,7 @@ class DetailGraph extends Graph {
 
   initialize() {
     this.simulation = d3.forceSimulation()
+      .force("charge", d3.forceManyBody().strength(-1))
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(0.0))
       .force("x", d3.forceX().x(0).strength(0.1))
@@ -57,8 +58,9 @@ class DetailGraph extends Graph {
       } else {
         if (d.t === undefined) {
           // does not have old theta - move new node linearly to the new position
-          d.fx = d.x + (d.cx - d.x) * (1 - alpha);
-          d.fy = d.y + (d.cy - d.y) * (1 - alpha);
+          const factor = Math.max((1 - alpha) * 0.25, 0);
+          d.fx = d.x + (d.cx - d.x) * factor;
+          d.fy = d.y + (d.cy - d.y) * factor;
         } else {
           // has old theta - move existing node along the circunference to the new position
           const factor = Math.max(alpha * 2 - 1, 0);

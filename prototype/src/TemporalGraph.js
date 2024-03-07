@@ -12,6 +12,7 @@ class TemporalGraph {
     color = d3.scaleOrdinal(d3.schemeCategory10),
     displayAlwaysAllOuter = false,
     defaultOuterSortField = "name",
+    defaultOuterFilter = () => true,
     outerGroup = "national teams",
     clusterGroup = "clubs",
     detailGroup = "players",
@@ -22,6 +23,7 @@ class TemporalGraph {
 
     this.displayAlwaysAllOuter = displayAlwaysAllOuter;
     this.outerSortField = defaultOuterSortField;
+    this.outerFilter = defaultOuterFilter;
     this.outerGroup = outerGroup;
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
@@ -89,10 +91,10 @@ class TemporalGraph {
             const logo = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
             
             groupsSet.add(groupId);
-            nodes.cluster.push({id: `C-${groupId}`, name: name, img: logo, color: groupColor, group: this.clusterGroup, value: elementsCount});
+            nodes.cluster.push({id: `C-${groupId}`, name: name, img: logo, color: groupColor, group: this.clusterGroup, supergroup: [`O-${supergroup.id}`]});
           } else {
             const index = nodes.cluster.findIndex(d => d.id === `C-${groupId}`);
-            nodes.cluster[index].value += elementsCount;
+            nodes.cluster[index].supergroup.push(`O-${supergroup.id}`);
           }
 
           links.cluster.push({source: `C-${groupId}`, target: `O-${supergroup.id}`, value: elementsCount});
@@ -149,13 +151,26 @@ class TemporalGraph {
     }
   }
 
-  // (TODO): sort ajusta ja da timeline inteira, filter tambem será assim? mas precisa de ter sempre uma base com all
-  // ou melhor se apenas no update dar sempre all mas em funcao dos filtros que tiver??
+  filterOuterNodes(filter) {
+    this.outerFilter = "function" === typeof filter ? filter : (() => true);
+
+    // TODO: (future extract method to a updateGraphs method)
+    this.drawClusterGraph(this.graphContainer, this.timeline.getValue());
+    if (this.detailedNode !== null) {
+      this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
+    }
+  }
 
   drawClusterGraph(container, time) {
-    const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.cluster).map(d => ({...d}));
-    const links = this.data[time].links.cluster.map(d => ({...d}));
-
+    const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
+    
+    const links = this.data[time].links.cluster.filter(d => supergroups.includes(d.target)).map(d => ({...d}));
+    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id))
+      .concat(this.data[time].nodes.cluster
+        .filter(d => d.supergroup.some(s => supergroups.includes(s)))
+        .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
+      .map(d => ({...d}));
+    
     this.clusterGraph.update(nodes, links);
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
   }
@@ -165,8 +180,13 @@ class TemporalGraph {
     const nodeFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.supergroup === nodeId;
     const linkFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.target === nodeId;
 
-    const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.detail.filter(nodeFilter)).map(d => ({...d}));
-    const links = this.data[time].links.detail.filter(linkFilter).map(d => ({...d}));
+    const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
+
+    const links = this.data[time].links.detail.filter((d) => linkFilter(d) && supergroups.includes(d.target)).map(d => ({...d}));
+    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id))
+      .concat(this.data[time].nodes.detail
+        .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup)))
+      .map(d => ({...d}));
 
     this.detailsGraph.update(nodes, links, node);
     document.getElementById(container).replaceChildren(this.detailsGraph.render());

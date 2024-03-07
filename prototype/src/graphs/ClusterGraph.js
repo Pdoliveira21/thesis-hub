@@ -170,7 +170,7 @@ class ClusterGraph extends Graph {
               // Get the old size of the image/circle
               const oldRadius = g.select("circle").empty() 
                 ? +g.select("image").attr("width") / 2 
-                : +g.select("circle").attr("r") + 2;
+                : +g.select("circle").attr("r") + 4;
               
               // Remove the old circle and text, if exist, and add or update the image properties 
               g.select("circle").remove();

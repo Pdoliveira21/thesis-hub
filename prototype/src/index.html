@@ -25,6 +25,18 @@
           <option value="name" selected>Name</option>
           <option value="fk_continente">Continente</option>
         </select>
+
+        <p>Filter National Teams by:</p>
+        <span>Continent</span>
+        <select id="filter-national-team-continent" onchange="onFilterChange()">
+          <option value="all" selected>All</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option> 
+        </select>
       </div>
       
       <span id="graph-container"></span>
@@ -57818,6 +57830,18 @@
       var sort = document.getElementById("sort-national-teams").value;
       if (sort && "object" === typeof graph) {
         graph.sortOuterNodes(sort);
+      }
+    }
+
+    // NOTE: (future) same function for every outer node filter that set ups the filter based on the selected values
+    // so that the filter logic is dependent on each use of the TemporalGraph
+    // Possible simplification: allow chain of filters in TemporalGraph (map each filter to a select) 
+    function onFilterChange() {
+      var continent = document.getElementById("filter-national-team-continent").value;
+      if (continent && "object" === typeof graph) {
+        continent === "all"
+          ? graph.filterOuterNodes()
+          : graph.filterOuterNodes((node) => node["fk_continente"] === continent);
       }
     }
   </script>

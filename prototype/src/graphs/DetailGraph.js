@@ -45,8 +45,6 @@ class DetailGraph extends Graph {
       .selectAll("line");
     
     this.node = this.svg.append("g")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 0)
       .selectAll("g");
   }
 

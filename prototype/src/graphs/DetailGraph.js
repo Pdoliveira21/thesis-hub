@@ -187,12 +187,15 @@ class DetailGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
+              
+              // TODO: (future, some color filter for the image to still mantain the club identification??)
             } else {
               g.select("image").remove();
 
               const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
               circle
                 .attr("r", radius)
+                .transition().duration(self.animationDuration).ease(self.animationEase)
                 .attr("fill", color);
 
               const text = g.select("text").empty() ? g.append("text") : g.select("text");
@@ -218,11 +221,13 @@ class DetailGraph extends Graph {
       .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
     
     this.link = this.link
-      .data(links, d => [d.source, d.target])
+      .data(links, d => d.id)
       .join(
         enter => enter.append("line")
           .attr("stroke-width", 0)
           .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
+          .attr("stroke-width", 0.75),
+        update => update
           .attr("stroke-width", 0.75),
         exit => exit
           .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)

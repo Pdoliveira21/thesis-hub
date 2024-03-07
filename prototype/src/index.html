@@ -18,6 +18,15 @@
   <div id="temporal-graph">
     <div class="view-container">
       <p class="view-title">Evolution of players in National Teams and Clubs</p>
+      
+      <div class="view-controls">
+        <span>Sort National Teams by:</span>
+        <select id="sort-national-teams" onchange="onSortChange()">
+          <option value="name" selected>Name</option>
+          <option value="fk_continente">Continente</option>
+        </select>
+      </div>
+      
       <span id="graph-container"></span>
       <span id="timeline-container"></span>
     </div>
@@ -27,8 +36,8 @@
     </div>
   </div>
 
-  <script type="module">
-    
+
+  <script>
     // fetch('https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30')
     //   .then(response => response.json())
     //   .then(data => {
@@ -36,8 +45,7 @@
     //       clusterGroup: "teams"
     //     });
     //   });
-
-    
+  
     const data = {
   "error_code": "0",
   "error_text": "",
@@ -50,6 +58,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "15": {
@@ -193,6 +202,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -304,6 +314,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "4": {
@@ -471,6 +482,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "50": {
@@ -638,6 +650,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "89": {
@@ -799,6 +812,7 @@
         {
           "id": "818",
           "img": "https://www.zerozero.pt/img/logos/equipas/818_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Cro\u00e1cia",
           "teams": {
             "2145": {
@@ -976,6 +990,7 @@
         {
           "id": "819",
           "img": "https://www.zerozero.pt/img/logos/equipas/819_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Dinamarca",
           "teams": {
             "140": {
@@ -1141,6 +1156,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "75": {
@@ -1187,7 +1203,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "2",
               "players": {
                 "439056": { "name": "Unai Sim\u00f3n" },
@@ -1286,6 +1302,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "64": {
@@ -1443,6 +1460,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "63": {
@@ -1594,6 +1612,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "89": {
@@ -1717,6 +1736,7 @@
         {
           "id": "830",
           "img": "https://www.zerozero.pt/img/logos/equipas/830_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Marrocos",
           "teams": {
             "54": {
@@ -1898,6 +1918,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "2093": {
@@ -2049,6 +2070,7 @@
         {
           "id": "833",
           "img": "https://www.zerozero.pt/img/logos/equipas/833_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00eds de Gales",
           "teams": {
             "0": {
@@ -2206,6 +2228,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "64": {
@@ -2387,6 +2410,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "1862": {
@@ -2550,6 +2574,7 @@
         {
           "id": "874",
           "img": "https://www.zerozero.pt/img/logos/equipas/874_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ir\u00e3o",
           "teams": {
             "1111": {
@@ -2692,6 +2717,7 @@
         {
           "id": "875",
           "img": "https://www.zerozero.pt/img/logos/equipas/875_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Jap\u00e3o",
           "teams": {
             "2412": {
@@ -2877,6 +2903,7 @@
         {
           "id": "876",
           "img": "https://www.zerozero.pt/img/logos/equipas/876_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ar\u00e1bia Saudita",
           "teams": {
             "7816": {
@@ -2950,6 +2977,7 @@
         {
           "id": "881",
           "img": "https://www.zerozero.pt/img/logos/equipas/881_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Catar",
           "teams": {
             "3933": {
@@ -3002,10 +3030,10 @@
                 "781324": { "name": "Naif Al-Hadhrami" }
               }
             },
-            "42416": {
-              "color": "2D4C97",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/16/42416_logo_20220511114424_al_jahra.jpg",
-              "name": "Al-Jahra",
+            "8935": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/8935_imgbank.png",
+              "name": "Persepolis FC",
               "count": "1",
               "players": { "211227": { "name": "Abdelkarim Hassan" } }
             },
@@ -3039,6 +3067,7 @@
         {
           "id": "889",
           "img": "https://www.zerozero.pt/img/logos/equipas/889_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Austr\u00e1lia",
           "teams": {
             "88": {
@@ -3204,6 +3233,7 @@
         {
           "id": "904",
           "img": "https://www.zerozero.pt/img/logos/equipas/904_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Canad\u00e1",
           "teams": {
             "8065": {
@@ -3381,6 +3411,7 @@
         {
           "id": "906",
           "img": "https://www.zerozero.pt/img/logos/equipas/906_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Costa Rica",
           "teams": {
             "102041": {
@@ -3506,6 +3537,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "4929": {
@@ -3515,15 +3547,12 @@
               "count": "1",
               "players": { "469996": { "name": "Tyler Adams" } }
             },
-            "96424": {
-              "color": "101010",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/96424_imgbank_1686736713.png",
-              "name": "Los Angeles FC",
-              "count": "2",
-              "players": {
-                "201673": { "name": "Kellyn Acosta" },
-                "405671": { "name": "Aaron Long" }
-              }
+            "2492": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2492_imgbank_1686647582.png",
+              "name": "Chicago Fire",
+              "count": "1",
+              "players": { "201673": { "name": "Kellyn Acosta" } }
             },
             "4852": {
               "color": "AD1814",
@@ -3569,6 +3598,13 @@
               "name": "Celtic",
               "count": "1",
               "players": { "424832": { "name": "Carter-Vickers" } }
+            },
+            "96424": {
+              "color": "101010",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/96424_imgbank_1686736713.png",
+              "name": "Los Angeles FC",
+              "count": "1",
+              "players": { "405671": { "name": "Aaron Long" } }
             },
             "226015": {
               "color": "FDD945",
@@ -3667,6 +3703,7 @@
         {
           "id": "938",
           "img": "https://www.zerozero.pt/img/logos/equipas/938_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Equador",
           "teams": {
             "2361": {
@@ -3829,10 +3866,10 @@
               "count": "1",
               "players": { "308687": { "name": "Romario Ibarra" } }
             },
-            "4331": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/4331_imgbank_1683207326.png",
-              "name": "Instituto",
+            "2362": {
+              "color": "FDD945",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2362_imgbank_1688132030.png",
+              "name": "Barcelona SC",
               "count": "1",
               "players": { "564084": { "name": "Djorkaeff Reasco" } }
             },
@@ -3848,6 +3885,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "134": {
@@ -4017,6 +4055,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "105227": {
@@ -4206,6 +4245,7 @@
         {
           "id": "961",
           "img": "https://www.zerozero.pt/img/logos/equipas/961_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Gana",
           "teams": {
             "114": {
@@ -4368,7 +4408,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "1",
               "players": { "365565": { "name": "I\u00f1aki Williams" } }
             },
@@ -4391,6 +4431,7 @@
         {
           "id": "979",
           "img": "https://www.zerozero.pt/img/logos/equipas/979_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Senegal",
           "teams": {
             "7816": {
@@ -4556,6 +4597,7 @@
         {
           "id": "988",
           "img": "https://www.zerozero.pt/img/logos/equipas/988_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Tun\u00edsia",
           "teams": {
             "2414": {
@@ -4737,6 +4779,7 @@
         {
           "id": "1016",
           "img": "https://www.zerozero.pt/img/logos/equipas/1016_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "S\u00e9rvia",
           "teams": {
             "73": {
@@ -4902,6 +4945,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "110": {
@@ -5071,6 +5115,7 @@
         {
           "id": "838",
           "img": "https://www.zerozero.pt/img/logos/equipas/838_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "R\u00fassia",
           "teams": {
             "25480": {
@@ -5173,6 +5218,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "92": {
@@ -5279,6 +5325,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "2605": {
@@ -5431,6 +5478,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "121": {
@@ -5579,6 +5627,7 @@
         {
           "id": "937",
           "img": "https://www.zerozero.pt/img/logos/equipas/937_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Col\u00f4mbia",
           "teams": {
             "75": {
@@ -5747,6 +5796,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "1775": {
@@ -5895,6 +5945,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "81": {
@@ -6027,6 +6078,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2517": {
@@ -6175,6 +6227,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "6027": {
@@ -6305,6 +6358,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -6435,6 +6489,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "81": {
@@ -6581,6 +6636,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "123": {
@@ -6731,6 +6787,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2254": {
@@ -6887,6 +6944,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "40": {
@@ -6984,7 +7042,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "1",
               "players": { "211249": { "name": "Kepa Arrizabalaga" } }
             },
@@ -7007,6 +7065,7 @@
         {
           "id": "939",
           "img": "https://www.zerozero.pt/img/logos/equipas/939_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Peru",
           "teams": {
             "2599": {
@@ -7153,6 +7212,7 @@
         {
           "id": "818",
           "img": "https://www.zerozero.pt/img/logos/equipas/818_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Cro\u00e1cia",
           "teams": {
             "1779": {
@@ -7313,6 +7373,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "107": {
@@ -7463,6 +7524,7 @@
         {
           "id": "955",
           "img": "https://www.zerozero.pt/img/logos/equipas/955_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Egipto",
           "teams": {
             "75": {
@@ -7595,6 +7657,7 @@
         {
           "id": "874",
           "img": "https://www.zerozero.pt/img/logos/equipas/874_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ir\u00e3o",
           "teams": {
             "7793": {
@@ -7739,6 +7802,7 @@
         {
           "id": "819",
           "img": "https://www.zerozero.pt/img/logos/equipas/819_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Dinamarca",
           "teams": {
             "1047": {
@@ -7891,6 +7955,7 @@
         {
           "id": "827",
           "img": "https://www.zerozero.pt/img/logos/equipas/827_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Isl\u00e2ndia",
           "teams": {
             "147": {
@@ -8049,6 +8114,7 @@
         {
           "id": "906",
           "img": "https://www.zerozero.pt/img/logos/equipas/906_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Costa Rica",
           "teams": {
             "50": {
@@ -8199,6 +8265,7 @@
         {
           "id": "988",
           "img": "https://www.zerozero.pt/img/logos/equipas/988_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Tun\u00edsia",
           "teams": {
             "4016": {
@@ -8355,6 +8422,7 @@
         {
           "id": "979",
           "img": "https://www.zerozero.pt/img/logos/equipas/979_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Senegal",
           "teams": {
             "37027": {
@@ -8509,6 +8577,7 @@
         {
           "id": "876",
           "img": "https://www.zerozero.pt/img/logos/equipas/876_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ar\u00e1bia Saudita",
           "teams": {
             "4043": {
@@ -8589,6 +8658,7 @@
         {
           "id": "1016",
           "img": "https://www.zerozero.pt/img/logos/equipas/1016_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "S\u00e9rvia",
           "teams": {
             "168": {
@@ -8753,6 +8823,7 @@
         {
           "id": "830",
           "img": "https://www.zerozero.pt/img/logos/equipas/830_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Marrocos",
           "teams": {
             "2562": {
@@ -8917,6 +8988,7 @@
         {
           "id": "889",
           "img": "https://www.zerozero.pt/img/logos/equipas/889_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Austr\u00e1lia",
           "teams": {
             "2601": {
@@ -9081,6 +9153,7 @@
         {
           "id": "976",
           "img": "https://www.zerozero.pt/img/logos/equipas/976_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Nig\u00e9ria",
           "teams": {
             "4443": {
@@ -9241,6 +9314,7 @@
         {
           "id": "923",
           "img": "https://www.zerozero.pt/img/logos/equipas/923_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Panam\u00e1",
           "teams": {
             "2273": {
@@ -9393,6 +9467,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "2536": {
@@ -9547,6 +9622,7 @@
         {
           "id": "875",
           "img": "https://www.zerozero.pt/img/logos/equipas/875_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Jap\u00e3o",
           "teams": {
             "1139": {
@@ -9705,6 +9781,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2233": {
@@ -9845,6 +9922,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "87": {
@@ -9987,6 +10065,7 @@
         {
           "id": "1003",
           "img": "https://www.zerozero.pt/img/logos/equipas/1003_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Gr\u00e9cia",
           "teams": {
             "2551": {
@@ -10115,6 +10194,7 @@
         {
           "id": "813",
           "img": "https://www.zerozero.pt/img/logos/equipas/813_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Arg\u00e9lia",
           "teams": {
             "5804": {
@@ -10283,6 +10363,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "4": {
@@ -10415,6 +10496,7 @@
         {
           "id": "875",
           "img": "https://www.zerozero.pt/img/logos/equipas/875_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Jap\u00e3o",
           "teams": {
             "1775": {
@@ -10567,6 +10649,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "92": {
@@ -10701,6 +10784,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "127": {
@@ -10801,6 +10885,7 @@
         {
           "id": "998",
           "img": "https://www.zerozero.pt/img/logos/equipas/998_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00f3snia",
           "teams": {
             "2581": {
@@ -10965,6 +11050,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "86": {
@@ -11067,6 +11153,7 @@
         {
           "id": "838",
           "img": "https://www.zerozero.pt/img/logos/equipas/838_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "R\u00fassia",
           "teams": {
             "171": {
@@ -11161,6 +11248,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "53": {
@@ -11293,6 +11381,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "134": {
@@ -11451,6 +11540,7 @@
         {
           "id": "906",
           "img": "https://www.zerozero.pt/img/logos/equipas/906_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Costa Rica",
           "teams": {
             "2570": {
@@ -11591,6 +11681,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "8614": {
@@ -11707,6 +11798,7 @@
         {
           "id": "818",
           "img": "https://www.zerozero.pt/img/logos/equipas/818_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Cro\u00e1cia",
           "teams": {
             "2096": {
@@ -11863,6 +11955,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "51": {
@@ -12019,6 +12112,7 @@
         {
           "id": "938",
           "img": "https://www.zerozero.pt/img/logos/equipas/938_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Equador",
           "teams": {
             "2361": {
@@ -12161,6 +12255,7 @@
         {
           "id": "961",
           "img": "https://www.zerozero.pt/img/logos/equipas/961_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Gana",
           "teams": {
             "43631": {
@@ -12325,6 +12420,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "2476": {
@@ -12489,6 +12585,7 @@
         {
           "id": "952",
           "img": "https://www.zerozero.pt/img/logos/equipas/952_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Costa do Marfim",
           "teams": {
             "103": {
@@ -12641,6 +12738,7 @@
         {
           "id": "976",
           "img": "https://www.zerozero.pt/img/logos/equipas/976_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Nig\u00e9ria",
           "teams": {
             "120": {
@@ -12809,6 +12907,7 @@
         {
           "id": "889",
           "img": "https://www.zerozero.pt/img/logos/equipas/889_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Austr\u00e1lia",
           "teams": {
             "8220": {
@@ -12969,6 +13068,7 @@
         {
           "id": "874",
           "img": "https://www.zerozero.pt/img/logos/equipas/874_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ir\u00e3o",
           "teams": {
             "8687": {
@@ -13101,6 +13201,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "4163": {
@@ -13247,6 +13348,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "76": {
@@ -13399,6 +13501,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "87": {
@@ -13501,6 +13604,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -13605,6 +13709,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "95": {
@@ -13741,6 +13846,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "143": {
@@ -13869,6 +13975,7 @@
         {
           "id": "937",
           "img": "https://www.zerozero.pt/img/logos/equipas/937_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Col\u00f4mbia",
           "teams": {
             "2294": {
@@ -14023,6 +14130,7 @@
         {
           "id": "917",
           "img": "https://www.zerozero.pt/img/logos/equipas/917_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Honduras",
           "teams": {
             "2500": {
@@ -14165,6 +14273,7 @@
         {
           "id": "983",
           "img": "https://www.zerozero.pt/img/logos/equipas/983_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "\u00c1frica do Sul",
           "teams": {
             "5699": {
@@ -14293,6 +14402,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "63": {
@@ -14433,6 +14543,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "64": {
@@ -14541,6 +14652,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -14629,6 +14741,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "3722": {
@@ -14781,6 +14894,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "94": {
@@ -14879,6 +14993,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "1930": {
@@ -15021,6 +15136,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "50": {
@@ -15073,7 +15189,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "2",
               "players": {
                 "13767": { "name": "Fernando Llorente" },
@@ -15109,6 +15225,7 @@
         {
           "id": "889",
           "img": "https://www.zerozero.pt/img/logos/equipas/889_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Austr\u00e1lia",
           "teams": {
             "5084": {
@@ -15269,6 +15386,7 @@
         {
           "id": "917",
           "img": "https://www.zerozero.pt/img/logos/equipas/917_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Honduras",
           "teams": {
             "10282": {
@@ -15379,6 +15497,7 @@
         {
           "id": "875",
           "img": "https://www.zerozero.pt/img/logos/equipas/875_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Jap\u00e3o",
           "teams": {
             "2526": {
@@ -15511,6 +15630,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "6048": {
@@ -15655,6 +15775,7 @@
         {
           "id": "866",
           "img": "https://www.zerozero.pt/img/logos/equipas/866_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Norte",
           "teams": {
             "5297": {
@@ -15749,6 +15870,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "4355": {
@@ -15881,6 +16003,7 @@
         {
           "id": "890",
           "img": "https://www.zerozero.pt/img/logos/equipas/890_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Nova Zel\u00e2ndia",
           "teams": {
             "9538": {
@@ -16013,6 +16136,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "1135": {
@@ -16169,6 +16293,7 @@
         {
           "id": "813",
           "img": "https://www.zerozero.pt/img/logos/equipas/813_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Arg\u00e9lia",
           "teams": {
             "2466": {
@@ -16333,6 +16458,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "4181": {
@@ -16493,6 +16619,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "51": {
@@ -16649,6 +16776,7 @@
         {
           "id": "952",
           "img": "https://www.zerozero.pt/img/logos/equipas/952_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Costa do Marfim",
           "teams": {
             "1034": {
@@ -16805,6 +16933,7 @@
         {
           "id": "961",
           "img": "https://www.zerozero.pt/img/logos/equipas/961_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Gana",
           "teams": {
             "83": {
@@ -16969,6 +17098,7 @@
         {
           "id": "976",
           "img": "https://www.zerozero.pt/img/logos/equipas/976_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Nig\u00e9ria",
           "teams": {
             "1074": {
@@ -17129,6 +17259,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "2506": {
@@ -17283,6 +17414,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "65": {
@@ -17445,6 +17577,7 @@
         {
           "id": "819",
           "img": "https://www.zerozero.pt/img/logos/equipas/819_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Dinamarca",
           "teams": {
             "2581": {
@@ -17601,6 +17734,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "116": {
@@ -17713,6 +17847,7 @@
         {
           "id": "1003",
           "img": "https://www.zerozero.pt/img/logos/equipas/1003_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Gr\u00e9cia",
           "teams": {
             "1116": {
@@ -17829,6 +17964,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "1919": {
@@ -17957,6 +18093,7 @@
         {
           "id": "1016",
           "img": "https://www.zerozero.pt/img/logos/equipas/1016_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "S\u00e9rvia",
           "teams": {
             "17": {
@@ -18117,6 +18254,7 @@
         {
           "id": "1017",
           "img": "https://www.zerozero.pt/img/logos/equipas/1017_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Eslov\u00e1quia",
           "teams": {
             "5921": {
@@ -18281,6 +18419,7 @@
         {
           "id": "821",
           "img": "https://www.zerozero.pt/img/logos/equipas/821_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Eslov\u00e9nia",
           "teams": {
             "62": {
@@ -18435,6 +18574,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "95": {
@@ -18583,6 +18723,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -18703,6 +18844,7 @@
         {
           "id": "942",
           "img": "https://www.zerozero.pt/img/logos/equipas/942_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Angola",
           "teams": {
             "4": {
@@ -18843,6 +18985,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "39": {
@@ -18981,6 +19124,7 @@
         {
           "id": "889",
           "img": "https://www.zerozero.pt/img/logos/equipas/889_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Austr\u00e1lia",
           "teams": {
             "88": {
@@ -19129,6 +19273,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "66": {
@@ -19253,6 +19398,7 @@
         {
           "id": "906",
           "img": "https://www.zerozero.pt/img/logos/equipas/906_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Costa Rica",
           "teams": {
             "3972": {
@@ -19345,6 +19491,7 @@
         {
           "id": "818",
           "img": "https://www.zerozero.pt/img/logos/equipas/818_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Cro\u00e1cia",
           "teams": {
             "159": {
@@ -19483,6 +19630,7 @@
         {
           "id": "836",
           "img": "https://www.zerozero.pt/img/logos/equipas/836_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Ch\u00e9quia",
           "teams": {
             "66": {
@@ -19639,6 +19787,7 @@
         {
           "id": "952",
           "img": "https://www.zerozero.pt/img/logos/equipas/952_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Costa do Marfim",
           "teams": {
             "75": {
@@ -19803,6 +19952,7 @@
         {
           "id": "938",
           "img": "https://www.zerozero.pt/img/logos/equipas/938_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Equador",
           "teams": {
             "2361": {
@@ -19911,6 +20061,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "75": {
@@ -20021,8 +20172,134 @@
           }
         },
         {
+          "id": "824",
+          "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
+          "name": "Fran\u00e7a",
+          "teams": {
+            "75": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/75_imgbank_1695372514.png",
+              "name": "Arsenal",
+              "count": "1",
+              "players": { "1181": { "name": "Thierry Henry" } }
+            },
+            "108": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/108_imgbank_1683733487.png",
+              "name": "Bayern M\u00fcnchen",
+              "count": "1",
+              "players": { "2594": { "name": "Willy Sagnol" } }
+            },
+            "81": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/81_imgbank_1683906502.png",
+              "name": "Chelsea",
+              "count": "2",
+              "players": {
+                "1349": { "name": "Claude Mak\u00e9l\u00e9l\u00e9" },
+                "1357": { "name": "William Gallas" }
+              }
+            },
+            "64": {
+              "color": "E5E4E2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
+              "name": "Juventus",
+              "count": "3",
+              "players": {
+                "1173": { "name": "Patrick Vieira" },
+                "1995": { "name": "David Trezeguet" },
+                "1999": { "name": "Lilian Thuram" }
+              }
+            },
+            "119": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/119_imgbank_1684487695.png",
+              "name": "Lens",
+              "count": "1",
+              "players": { "3439": { "name": "Alou Diarra" } }
+            },
+            "121": {
+              "color": "990012",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/121_imgbank_1684488024.png",
+              "name": "Lyon",
+              "count": "5",
+              "players": {
+                "1178": { "name": "Sylvain Wiltord" },
+                "3569": { "name": "\u00c9ric Abidal" },
+                "3600": { "name": "Gr\u00e9gory Coupet" },
+                "3619": { "name": "Florent Malouda" },
+                "3622": { "name": "Sidney Govou" }
+              }
+            },
+            "87": {
+              "color": "990012",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/87_imgbank_1683907056.png",
+              "name": "Manchester United",
+              "count": "2",
+              "players": {
+                "1598": { "name": "Mikael Silvestre" },
+                "1421": { "name": "Louis Saha" }
+              }
+            },
+            "122": {
+              "color": "71A6D2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/122_imgbank_1684488057.png",
+              "name": "Marseille",
+              "count": "2",
+              "players": {
+                "1574": { "name": "Fabien Barthez" },
+                "8187": { "name": "Franck Rib\u00e9ry" }
+              }
+            },
+            "123": {
+              "color": "990012",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/123_imgbank_1684488075.png",
+              "name": "Monaco",
+              "count": "1",
+              "players": { "2702": { "name": "Ga\u00ebl Givet" } }
+            },
+            "89": {
+              "color": "101010",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/89_imgbank_1683907276.png",
+              "name": "Newcastle",
+              "count": "1",
+              "players": { "3405": { "name": "Jean-Alain Boumsong" } }
+            },
+            "127": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/127_imgbank_1684500204.png",
+              "name": "Paris SG",
+              "count": "1",
+              "players": { "3615": { "name": "Vikash Dhorasoo" } }
+            },
+            "50": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/50_imgbank_1684146342.png",
+              "name": "Real Madrid",
+              "count": "1",
+              "players": { "1019": { "name": "Zin\u00e9dine Zidane" } }
+            },
+            "4439": {
+              "color": "2D4C97",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/4439_imgbank_1690474593.png",
+              "name": "Wigan Athletic",
+              "count": "1",
+              "players": { "3430": { "name": "Pascal Chimbonda" } }
+            },
+            "125": {
+              "color": "FDD945",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/125_imgbank_1684500099.png",
+              "name": "Nantes",
+              "count": "1",
+              "players": { "3686": { "name": "Micka\u00ebl Landreau" } }
+            }
+          }
+        },
+        {
           "id": "961",
           "img": "https://www.zerozero.pt/img/logos/equipas/961_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Gana",
           "teams": {
             "95": {
@@ -20191,6 +20468,7 @@
         {
           "id": "874",
           "img": "https://www.zerozero.pt/img/logos/equipas/874_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ir\u00e3o",
           "teams": {
             "103": {
@@ -20315,8 +20593,104 @@
           }
         },
         {
+          "id": "828",
+          "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
+          "name": "It\u00e1lia",
+          "teams": {
+            "63": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/63_imgbank_1683890698.png",
+              "name": "Internazionale",
+              "count": "1",
+              "players": { "2029": { "name": "Marco Materazzi" } }
+            },
+            "64": {
+              "color": "E5E4E2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
+              "name": "Juventus",
+              "count": "5",
+              "players": {
+                "1979": { "name": "Gianluigi Buffon" },
+                "1988": { "name": "Alessandro Del Piero" },
+                "1994": { "name": "Mauro Camoranesi" },
+                "1997": { "name": "Gianluca Zambrotta" },
+                "2023": { "name": "Fabio Cannavaro" }
+              }
+            },
+            "65": {
+              "color": "71A6D2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/65_imgbank_1683890661.png",
+              "name": "Lazio",
+              "count": "2",
+              "players": {
+                "2069": { "name": "Angelo Peruzzi" },
+                "2087": { "name": "Massimo Oddo" }
+              }
+            },
+            "66": {
+              "color": "990012",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/66_imgbank_1683890642.png",
+              "name": "Milan",
+              "count": "5",
+              "players": {
+                "1951": { "name": "Gennaro Gattuso" },
+                "1952": { "name": "Pippo Inzaghi" },
+                "1956": { "name": "Alessandro Nesta" },
+                "1962": { "name": "Andrea Pirlo" },
+                "2050": { "name": "Alberto Gilardino" }
+              }
+            },
+            "72": {
+              "color": "660000",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/72_imgbank_1683890624.png",
+              "name": "Roma",
+              "count": "3",
+              "players": {
+                "1926": { "name": "Daniele De Rossi" },
+                "1935": { "name": "Francesco Totti" },
+                "2170": { "name": "Simone Perrotta" }
+              }
+            },
+            "74": {
+              "color": "101010",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/74_imgbank_1683890586.png",
+              "name": "Udinese",
+              "count": "1",
+              "players": { "2122": { "name": "Vincenzo Iaquinta" } }
+            },
+            "3726": {
+              "color": "3E2C64",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3726_imgbank_1683890525.png",
+              "name": "Fiorentina",
+              "count": "1",
+              "players": { "8967": { "name": "Luca Toni" } }
+            },
+            "3731": {
+              "color": "660000",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3731_imgbank_1700492624.png",
+              "name": "Livorno 1915",
+              "count": "1",
+              "players": { "1888": { "name": "Marco Amelia" } }
+            },
+            "3738": {
+              "color": "F785AA",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3738_imgbank_1698308108.png",
+              "name": "Palermo",
+              "count": "4",
+              "players": {
+                "2048": { "name": "Simone Barone" },
+                "2180": { "name": "Andrea Barzagli" },
+                "2184": { "name": "Cristian Zaccardo" },
+                "2416": { "name": "Fabio Grosso" }
+              }
+            }
+          }
+        },
+        {
           "id": "875",
           "img": "https://www.zerozero.pt/img/logos/equipas/875_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Jap\u00e3o",
           "teams": {
             "79": {
@@ -20449,6 +20823,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "87": {
@@ -20571,6 +20946,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "2506": {
@@ -20685,6 +21061,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "75": {
@@ -20795,6 +21172,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "2217": {
@@ -20941,6 +21319,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "159": {
@@ -21081,6 +21460,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "9": {
@@ -21215,6 +21595,7 @@
         {
           "id": "876",
           "img": "https://www.zerozero.pt/img/logos/equipas/876_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ar\u00e1bia Saudita",
           "teams": {
             "5977": {
@@ -21277,6 +21658,7 @@
         {
           "id": "69354",
           "img": "https://www.zerozero.pt/img/logos/equipas/69354_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "S\u00e9rvia e Montenegro",
           "teams": {
             "46": {
@@ -21419,6 +21801,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "75": {
@@ -21517,6 +21900,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "128": {
@@ -21671,6 +22055,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "75": {
@@ -21823,6 +22208,7 @@
         {
           "id": "987",
           "img": "https://www.zerozero.pt/img/logos/equipas/987_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Togo",
           "teams": {
             "7776": {
@@ -21983,6 +22369,7 @@
         {
           "id": "931",
           "img": "https://www.zerozero.pt/img/logos/equipas/931_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Trinidad e Tobago",
           "teams": {
             "5826": {
@@ -22143,6 +22530,7 @@
         {
           "id": "988",
           "img": "https://www.zerozero.pt/img/logos/equipas/988_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Tun\u00edsia",
           "teams": {
             "77": {
@@ -22299,6 +22687,7 @@
         {
           "id": "841",
           "img": "https://www.zerozero.pt/img/logos/equipas/841_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Ucr\u00e2nia",
           "teams": {
             "141": {
@@ -22395,6 +22784,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "110": {
@@ -22537,230 +22927,13 @@
               "players": { "28359": { "name": "Gregg Berhalter" } }
             }
           }
-        },
-        {
-          "id": "828",
-          "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
-          "name": "It\u00e1lia",
-          "teams": {
-            "63": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/63_imgbank_1683890698.png",
-              "name": "Internazionale",
-              "count": "1",
-              "players": { "2029": { "name": "Marco Materazzi" } }
-            },
-            "64": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
-              "name": "Juventus",
-              "count": "5",
-              "players": {
-                "1979": { "name": "Gianluigi Buffon" },
-                "1988": { "name": "Alessandro Del Piero" },
-                "1994": { "name": "Mauro Camoranesi" },
-                "1997": { "name": "Gianluca Zambrotta" },
-                "2023": { "name": "Fabio Cannavaro" }
-              }
-            },
-            "65": {
-              "color": "71A6D2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/65_imgbank_1683890661.png",
-              "name": "Lazio",
-              "count": "2",
-              "players": {
-                "2069": { "name": "Angelo Peruzzi" },
-                "2087": { "name": "Massimo Oddo" }
-              }
-            },
-            "66": {
-              "color": "990012",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/66_imgbank_1683890642.png",
-              "name": "Milan",
-              "count": "5",
-              "players": {
-                "1951": { "name": "Gennaro Gattuso" },
-                "1952": { "name": "Pippo Inzaghi" },
-                "1956": { "name": "Alessandro Nesta" },
-                "1962": { "name": "Andrea Pirlo" },
-                "2050": { "name": "Alberto Gilardino" }
-              }
-            },
-            "72": {
-              "color": "660000",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/72_imgbank_1683890624.png",
-              "name": "Roma",
-              "count": "3",
-              "players": {
-                "1926": { "name": "Daniele De Rossi" },
-                "1935": { "name": "Francesco Totti" },
-                "2170": { "name": "Simone Perrotta" }
-              }
-            },
-            "74": {
-              "color": "101010",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/74_imgbank_1683890586.png",
-              "name": "Udinese",
-              "count": "1",
-              "players": { "2122": { "name": "Vincenzo Iaquinta" } }
-            },
-            "3726": {
-              "color": "3E2C64",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3726_imgbank_1683890525.png",
-              "name": "Fiorentina",
-              "count": "1",
-              "players": { "8967": { "name": "Luca Toni" } }
-            },
-            "3731": {
-              "color": "660000",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3731_imgbank_1700492624.png",
-              "name": "Livorno 1915",
-              "count": "1",
-              "players": { "1888": { "name": "Marco Amelia" } }
-            },
-            "3738": {
-              "color": "F785AA",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3738_imgbank_1698308108.png",
-              "name": "Palermo",
-              "count": "4",
-              "players": {
-                "2048": { "name": "Simone Barone" },
-                "2180": { "name": "Andrea Barzagli" },
-                "2184": { "name": "Cristian Zaccardo" },
-                "2416": { "name": "Fabio Grosso" }
-              }
-            }
-          }
-        },
-        {
-          "id": "824",
-          "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
-          "name": "Fran\u00e7a",
-          "teams": {
-            "75": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/75_imgbank_1695372514.png",
-              "name": "Arsenal",
-              "count": "1",
-              "players": { "1181": { "name": "Thierry Henry" } }
-            },
-            "108": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/108_imgbank_1683733487.png",
-              "name": "Bayern M\u00fcnchen",
-              "count": "1",
-              "players": { "2594": { "name": "Willy Sagnol" } }
-            },
-            "81": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/81_imgbank_1683906502.png",
-              "name": "Chelsea",
-              "count": "2",
-              "players": {
-                "1349": { "name": "Claude Mak\u00e9l\u00e9l\u00e9" },
-                "1357": { "name": "William Gallas" }
-              }
-            },
-            "64": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
-              "name": "Juventus",
-              "count": "3",
-              "players": {
-                "1173": { "name": "Patrick Vieira" },
-                "1995": { "name": "David Trezeguet" },
-                "1999": { "name": "Lilian Thuram" }
-              }
-            },
-            "119": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/119_imgbank_1684487695.png",
-              "name": "Lens",
-              "count": "1",
-              "players": { "3439": { "name": "Alou Diarra" } }
-            },
-            "121": {
-              "color": "990012",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/121_imgbank_1684488024.png",
-              "name": "Lyon",
-              "count": "5",
-              "players": {
-                "1178": { "name": "Sylvain Wiltord" },
-                "3569": { "name": "\u00c9ric Abidal" },
-                "3600": { "name": "Gr\u00e9gory Coupet" },
-                "3619": { "name": "Florent Malouda" },
-                "3622": { "name": "Sidney Govou" }
-              }
-            },
-            "87": {
-              "color": "990012",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/87_imgbank_1683907056.png",
-              "name": "Manchester United",
-              "count": "2",
-              "players": {
-                "1598": { "name": "Mikael Silvestre" },
-                "1421": { "name": "Louis Saha" }
-              }
-            },
-            "122": {
-              "color": "71A6D2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/122_imgbank_1684488057.png",
-              "name": "Marseille",
-              "count": "2",
-              "players": {
-                "1574": { "name": "Fabien Barthez" },
-                "8187": { "name": "Franck Rib\u00e9ry" }
-              }
-            },
-            "123": {
-              "color": "990012",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/123_imgbank_1684488075.png",
-              "name": "Monaco",
-              "count": "1",
-              "players": { "2702": { "name": "Ga\u00ebl Givet" } }
-            },
-            "89": {
-              "color": "101010",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/89_imgbank_1683907276.png",
-              "name": "Newcastle",
-              "count": "1",
-              "players": { "3405": { "name": "Jean-Alain Boumsong" } }
-            },
-            "127": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/127_imgbank_1684500204.png",
-              "name": "Paris SG",
-              "count": "1",
-              "players": { "3615": { "name": "Vikash Dhorasoo" } }
-            },
-            "50": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/50_imgbank_1684146342.png",
-              "name": "Real Madrid",
-              "count": "1",
-              "players": { "1019": { "name": "Zin\u00e9dine Zidane" } }
-            },
-            "4439": {
-              "color": "2D4C97",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/4439_imgbank_1690474593.png",
-              "name": "Wigan Athletic",
-              "count": "1",
-              "players": { "3430": { "name": "Pascal Chimbonda" } }
-            },
-            "125": {
-              "color": "FDD945",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/125_imgbank_1684500099.png",
-              "name": "Nantes",
-              "count": "1",
-              "players": { "3686": { "name": "Micka\u00ebl Landreau" } }
-            }
-          }
         }
       ],
       "Coreia/Jap\u00e3o 2002": [
         {
           "id": "983",
           "img": "https://www.zerozero.pt/img/logos/equipas/983_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "\u00c1frica do Sul",
           "teams": {
             "8789": {
@@ -22921,6 +23094,7 @@
         {
           "id": "819",
           "img": "https://www.zerozero.pt/img/logos/equipas/819_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Dinamarca",
           "teams": {
             "91": {
@@ -23071,6 +23245,7 @@
         {
           "id": "979",
           "img": "https://www.zerozero.pt/img/logos/equipas/979_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Senegal",
           "teams": {
             "130": {
@@ -23207,6 +23382,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "116": {
@@ -23337,6 +23513,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "64": {
@@ -23457,6 +23634,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "50": {
@@ -23563,6 +23741,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "131": {
@@ -23683,6 +23862,7 @@
         {
           "id": "821",
           "img": "https://www.zerozero.pt/img/logos/equipas/821_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Eslov\u00e9nia",
           "teams": {
             "1034": {
@@ -23847,6 +24027,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2248": {
@@ -23991,6 +24172,7 @@
         {
           "id": "840",
           "img": "https://www.zerozero.pt/img/logos/equipas/840_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Turquia",
           "teams": {
             "1113": {
@@ -24109,6 +24291,7 @@
         {
           "id": "906",
           "img": "https://www.zerozero.pt/img/logos/equipas/906_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Costa Rica",
           "teams": {
             "3974": {
@@ -24193,6 +24376,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "8501": {
@@ -24331,6 +24515,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "78": {
@@ -24491,6 +24676,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "9": {
@@ -24607,6 +24793,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "85": {
@@ -24753,6 +24940,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -24853,6 +25041,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "2148": {
@@ -25013,6 +25202,7 @@
         {
           "id": "1005",
           "img": "https://www.zerozero.pt/img/logos/equipas/1005_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rep. Irlanda",
           "teams": {
             "89": {
@@ -25149,6 +25339,7 @@
         {
           "id": "876",
           "img": "https://www.zerozero.pt/img/logos/equipas/876_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ar\u00e1bia Saudita",
           "teams": {
             "4043": {
@@ -25225,6 +25416,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "39": {
@@ -25363,6 +25555,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "75": {
@@ -25469,6 +25662,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "2584": {
@@ -25617,6 +25811,7 @@
         {
           "id": "976",
           "img": "https://www.zerozero.pt/img/logos/equipas/976_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Nig\u00e9ria",
           "teams": {
             "13169": {
@@ -25777,6 +25972,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "64": {
@@ -25869,6 +26065,7 @@
         {
           "id": "938",
           "img": "https://www.zerozero.pt/img/logos/equipas/938_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Equador",
           "teams": {
             "2363": {
@@ -25969,6 +26166,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "4356": {
@@ -26097,6 +26295,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "1928": {
@@ -26219,6 +26418,7 @@
         {
           "id": "875",
           "img": "https://www.zerozero.pt/img/logos/equipas/875_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Jap\u00e3o",
           "teams": {
             "2522": {
@@ -26329,6 +26529,7 @@
         {
           "id": "988",
           "img": "https://www.zerozero.pt/img/logos/equipas/988_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Tun\u00edsia",
           "teams": {
             "115": {
@@ -26443,6 +26644,7 @@
         {
           "id": "838",
           "img": "https://www.zerozero.pt/img/logos/equipas/838_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "R\u00fassia",
           "teams": {
             "1115": {
@@ -26557,6 +26759,7 @@
         {
           "id": "1142",
           "img": "https://www.zerozero.pt/img/logos/equipas/1142_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "China",
           "teams": {
             "3756": {
@@ -26683,6 +26886,7 @@
         {
           "id": "818",
           "img": "https://www.zerozero.pt/img/logos/equipas/818_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Cro\u00e1cia",
           "teams": {
             "1025": {
@@ -26831,6 +27035,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "50": {
@@ -26972,6 +27177,7 @@
         {
           "id": "832",
           "img": "https://www.zerozero.pt/img/logos/equipas/832_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Noruega",
           "teams": {
             "92": {
@@ -27099,6 +27305,7 @@
         {
           "id": "830",
           "img": "https://www.zerozero.pt/img/logos/equipas/830_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Marrocos",
           "teams": {
             "4": {
@@ -27242,6 +27449,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "1874": {
@@ -27355,6 +27563,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "68": {
@@ -27454,6 +27663,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "2273": {
@@ -27543,6 +27753,7 @@
         {
           "id": "995",
           "img": "https://www.zerozero.pt/img/logos/equipas/995_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "\u00c1ustria",
           "teams": {
             "72": {
@@ -27658,6 +27869,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "2148": {
@@ -27815,6 +28027,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "123": {
@@ -27944,6 +28157,7 @@
         {
           "id": "819",
           "img": "https://www.zerozero.pt/img/logos/equipas/819_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Dinamarca",
           "teams": {
             "4271": {
@@ -28087,6 +28301,7 @@
         {
           "id": "983",
           "img": "https://www.zerozero.pt/img/logos/equipas/983_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "\u00c1frica do Sul",
           "teams": {
             "1929": {
@@ -28243,6 +28458,7 @@
         {
           "id": "876",
           "img": "https://www.zerozero.pt/img/logos/equipas/876_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ar\u00e1bia Saudita",
           "teams": {
             "7818": {
@@ -28336,6 +28552,7 @@
         {
           "id": "976",
           "img": "https://www.zerozero.pt/img/logos/equipas/976_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Nig\u00e9ria",
           "teams": {
             "42": {
@@ -28485,6 +28702,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "2223": {
@@ -28640,6 +28858,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "50": {
@@ -28691,7 +28910,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "3",
               "players": {
                 "54739": { "name": "Rafael Alkorta" },
@@ -28725,6 +28944,7 @@
         {
           "id": "817",
           "img": "https://www.zerozero.pt/img/logos/equipas/817_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Bulg\u00e1ria",
           "teams": {
             "1816": {
@@ -28858,6 +29078,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "81": {
@@ -28967,6 +29188,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "2492": {
@@ -29066,6 +29288,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "140": {
@@ -29181,6 +29404,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "5790": {
@@ -29302,6 +29526,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -29405,6 +29630,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "135": {
@@ -29562,6 +29788,7 @@
         {
           "id": "874",
           "img": "https://www.zerozero.pt/img/logos/equipas/874_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ir\u00e3o",
           "teams": {
             "8935": {
@@ -29673,6 +29900,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "85": {
@@ -29802,6 +30030,7 @@
         {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rom\u00e9nia",
           "teams": {
             "9592": {
@@ -29945,6 +30174,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "78": {
@@ -30050,6 +30280,7 @@
         {
           "id": "937",
           "img": "https://www.zerozero.pt/img/logos/equipas/937_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Col\u00f4mbia",
           "teams": {
             "2298": {
@@ -30179,6 +30410,7 @@
         {
           "id": "988",
           "img": "https://www.zerozero.pt/img/logos/equipas/988_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Tun\u00edsia",
           "teams": {
             "115": {
@@ -30264,6 +30496,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2218": {
@@ -30395,6 +30628,7 @@
         {
           "id": "818",
           "img": "https://www.zerozero.pt/img/logos/equipas/818_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Cro\u00e1cia",
           "teams": {
             "149": {
@@ -30524,6 +30758,7 @@
         {
           "id": "918",
           "img": "https://www.zerozero.pt/img/logos/equipas/918_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Jamaica",
           "teams": {
             "11771": {
@@ -30661,6 +30896,7 @@
         {
           "id": "875",
           "img": "https://www.zerozero.pt/img/logos/equipas/875_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Jap\u00e3o",
           "teams": {
             "2537": {
@@ -30766,6 +31002,7 @@
         {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rom\u00e9nia",
           "teams": {
             "1093": {
@@ -30883,6 +31120,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "4151": {
@@ -30996,6 +31234,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "9400": {
@@ -31137,6 +31376,7 @@
         {
           "id": "937",
           "img": "https://www.zerozero.pt/img/logos/equipas/937_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Col\u00f4mbia",
           "teams": {
             "2292": {
@@ -31226,6 +31466,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "3744": {
@@ -31365,6 +31606,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "5214": {
@@ -31488,6 +31730,7 @@
         {
           "id": "838",
           "img": "https://www.zerozero.pt/img/logos/equipas/838_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "R\u00fassia",
           "teams": {
             "5036": {
@@ -31595,6 +31838,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "2486": {
@@ -31726,6 +31970,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "1124": {
@@ -31855,6 +32100,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "41": {
@@ -31929,7 +32175,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "1",
               "players": { "736": { "name": "Julen Guerrero" } }
             },
@@ -31952,6 +32198,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "5211": {
@@ -32039,6 +32286,7 @@
         {
           "id": "935",
           "img": "https://www.zerozero.pt/img/logos/equipas/935_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Bolivia",
           "teams": {
             "2302": {
@@ -32130,6 +32378,7 @@
         {
           "id": "976",
           "img": "https://www.zerozero.pt/img/logos/equipas/976_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Nig\u00e9ria",
           "teams": {
             "5792": {
@@ -32287,6 +32536,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2218": {
@@ -32426,6 +32676,7 @@
         {
           "id": "817",
           "img": "https://www.zerozero.pt/img/logos/equipas/817_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Bulg\u00e1ria",
           "teams": {
             "1040": {
@@ -32539,6 +32790,7 @@
         {
           "id": "1003",
           "img": "https://www.zerozero.pt/img/logos/equipas/1003_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Gr\u00e9cia",
           "teams": {
             "1920": {
@@ -32620,6 +32872,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "4356": {
@@ -32745,6 +32998,7 @@
         {
           "id": "1005",
           "img": "https://www.zerozero.pt/img/logos/equipas/1005_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rep. Irlanda",
           "teams": {
             "139": {
@@ -32882,6 +33136,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "68": {
@@ -32963,6 +33218,7 @@
         {
           "id": "832",
           "img": "https://www.zerozero.pt/img/logos/equipas/832_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Noruega",
           "teams": {
             "2029": {
@@ -33088,6 +33344,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "1121": {
@@ -33185,6 +33442,7 @@
         {
           "id": "876",
           "img": "https://www.zerozero.pt/img/logos/equipas/876_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ar\u00e1bia Saudita",
           "teams": {
             "248120": {
@@ -33280,6 +33538,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "140": {
@@ -33369,6 +33628,7 @@
         {
           "id": "830",
           "img": "https://www.zerozero.pt/img/logos/equipas/830_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Marrocos",
           "teams": {
             "2445": {
@@ -33504,6 +33764,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "63": {
@@ -33585,6 +33846,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "1121": {
@@ -33710,6 +33972,7 @@
         {
           "id": "995",
           "img": "https://www.zerozero.pt/img/logos/equipas/995_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "\u00c1ustria",
           "teams": {
             "1755": {
@@ -33803,6 +34066,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "26772": {
@@ -33942,6 +34206,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "116": {
@@ -34063,6 +34328,7 @@
         {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rom\u00e9nia",
           "teams": {
             "1094": {
@@ -34128,6 +34394,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2297": {
@@ -34274,6 +34541,7 @@
         {
           "id": "1144",
           "img": "https://www.zerozero.pt/img/logos/equipas/1144_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "URSS",
           "teams": {
             "141": {
@@ -34373,6 +34641,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2240": {
@@ -34494,6 +34763,7 @@
         {
           "id": "906",
           "img": "https://www.zerozero.pt/img/logos/equipas/906_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Costa Rica",
           "teams": {
             "3974": {
@@ -34573,6 +34843,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "138": {
@@ -34702,6 +34973,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "5214": {
@@ -34825,6 +35097,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -34920,6 +35193,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "16": {
@@ -35037,6 +35311,7 @@
         {
           "id": "937",
           "img": "https://www.zerozero.pt/img/logos/equipas/937_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Col\u00f4mbia",
           "teams": {
             "2298": {
@@ -35116,6 +35391,7 @@
         {
           "id": "869",
           "img": "https://www.zerozero.pt/img/logos/equipas/869_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "EAU",
           "teams": {
             "7798": {
@@ -35193,6 +35469,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "40": {
@@ -35252,7 +35529,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "2",
               "players": {
                 "54739": { "name": "Rafael Alkorta" },
@@ -35288,6 +35565,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "140": {
@@ -35383,6 +35661,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2393": {
@@ -35508,6 +35787,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "5211": {
@@ -35603,6 +35883,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "81": {
@@ -35712,6 +35993,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "1121": {
@@ -35805,6 +36087,7 @@
         {
           "id": "1005",
           "img": "https://www.zerozero.pt/img/logos/equipas/1005_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rep. Irlanda",
           "teams": {
             "139": {
@@ -35944,6 +36227,7 @@
         {
           "id": "955",
           "img": "https://www.zerozero.pt/img/logos/equipas/955_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Egipto",
           "teams": {
             "2413": {
@@ -36027,6 +36311,7 @@
         {
           "id": "817",
           "img": "https://www.zerozero.pt/img/logos/equipas/817_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Bulg\u00e1ria",
           "teams": {
             "1040": {
@@ -36144,6 +36429,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "63": {
@@ -36237,6 +36523,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "3726": {
@@ -36370,6 +36657,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "13022": {
@@ -36475,6 +36763,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "1775": {
@@ -36572,6 +36861,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "4356": {
@@ -36675,6 +36965,7 @@
         {
           "id": "845",
           "img": "https://www.zerozero.pt/img/logos/equipas/845_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Iraque",
           "teams": {
             "13227": {
@@ -36750,6 +37041,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "2292": {
@@ -36855,6 +37147,7 @@
         {
           "id": "904",
           "img": "https://www.zerozero.pt/img/logos/equipas/904_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Canad\u00e1",
           "teams": {
             "13267": {
@@ -36998,6 +37291,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "116": {
@@ -37105,6 +37399,7 @@
         {
           "id": "1144",
           "img": "https://www.zerozero.pt/img/logos/equipas/1144_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "URSS",
           "teams": {
             "141": {
@@ -37176,6 +37471,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "1942": {
@@ -37282,6 +37578,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2229": {
@@ -37395,12 +37692,13 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "3",
               "players": {
                 "25625": { "name": "Andoni Zubizarreta" },
@@ -37482,6 +37780,7 @@
         {
           "id": "813",
           "img": "https://www.zerozero.pt/img/logos/equipas/813_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Arg\u00e9lia",
           "teams": {
             "2475": {
@@ -37625,6 +37924,7 @@
         {
           "id": "1014",
           "img": "https://www.zerozero.pt/img/logos/equipas/1014_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Irl. Norte",
           "teams": {
             "92": {
@@ -37774,6 +38074,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2395": {
@@ -37899,6 +38200,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "107": {
@@ -38014,6 +38316,7 @@
         {
           "id": "819",
           "img": "https://www.zerozero.pt/img/logos/equipas/819_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Dinamarca",
           "teams": {
             "1049": {
@@ -38153,6 +38456,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "2594": {
@@ -38268,6 +38572,7 @@
         {
           "id": "830",
           "img": "https://www.zerozero.pt/img/logos/equipas/830_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Marrocos",
           "teams": {
             "8429": {
@@ -38385,6 +38690,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "75": {
@@ -38508,6 +38814,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "2049": {
@@ -38609,6 +38916,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "4": {
@@ -38686,6 +38994,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "2055": {
@@ -38785,6 +39094,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "64": {
@@ -38870,6 +39180,7 @@
         {
           "id": "947",
           "img": "https://www.zerozero.pt/img/logos/equipas/947_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Camar\u00f5es",
           "teams": {
             "2477": {
@@ -38975,6 +39286,7 @@
         {
           "id": "939",
           "img": "https://www.zerozero.pt/img/logos/equipas/939_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Peru",
           "teams": {
             "2350": {
@@ -39076,6 +39388,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "1124": {
@@ -39181,6 +39494,7 @@
         {
           "id": "995",
           "img": "https://www.zerozero.pt/img/logos/equipas/995_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "\u00c1ustria",
           "teams": {
             "159": {
@@ -39296,6 +39610,7 @@
         {
           "id": "813",
           "img": "https://www.zerozero.pt/img/logos/equipas/813_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Arg\u00e9lia",
           "teams": {
             "2461": {
@@ -39417,6 +39732,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "2263": {
@@ -39492,6 +39808,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "1781": {
@@ -39592,6 +39909,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "92": {
@@ -39699,6 +40017,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "16": {
@@ -39828,6 +40147,7 @@
         {
           "id": "910",
           "img": "https://www.zerozero.pt/img/logos/equipas/910_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Salvador",
           "teams": {
             "11287": {
@@ -39919,6 +40239,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "92": {
@@ -40034,6 +40355,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "127": {
@@ -40119,6 +40441,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "10364": {
@@ -40222,6 +40545,7 @@
         {
           "id": "847",
           "img": "https://www.zerozero.pt/img/logos/equipas/847_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Kuwait",
           "teams": {
             "7734": {
@@ -40309,6 +40633,7 @@
         {
           "id": "1014",
           "img": "https://www.zerozero.pt/img/logos/equipas/1014_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Irl. Norte",
           "teams": {
             "75": {
@@ -40462,6 +40787,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "51": {
@@ -40534,7 +40860,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "1",
               "players": { "28069": { "name": "Santiago Urquiaga" } }
             }
@@ -40543,6 +40869,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "116": {
@@ -40662,6 +40989,7 @@
         {
           "id": "917",
           "img": "https://www.zerozero.pt/img/logos/equipas/917_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Honduras",
           "teams": {
             "27282": {
@@ -40757,6 +41085,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2256": {
@@ -40870,6 +41199,7 @@
         {
           "id": "1144",
           "img": "https://www.zerozero.pt/img/logos/equipas/1144_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "URSS",
           "teams": {
             "1115": {
@@ -40955,6 +41285,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "1875": {
@@ -41072,6 +41403,7 @@
         {
           "id": "890",
           "img": "https://www.zerozero.pt/img/logos/equipas/890_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Nova Zel\u00e2ndia",
           "teams": {
             "8987": {
@@ -41187,6 +41519,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "64": {
@@ -41274,6 +41607,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2218": {
@@ -41369,6 +41703,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "126": {
@@ -41476,6 +41811,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "4107": {
@@ -41563,6 +41899,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "7836": {
@@ -41674,6 +42011,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -41781,6 +42119,7 @@
         {
           "id": "988",
           "img": "https://www.zerozero.pt/img/logos/equipas/988_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Tun\u00edsia",
           "teams": {
             "4015": {
@@ -41888,6 +42227,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "2517": {
@@ -41993,6 +42333,7 @@
         {
           "id": "995",
           "img": "https://www.zerozero.pt/img/logos/equipas/995_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "\u00c1ustria",
           "teams": {
             "63710": {
@@ -42112,6 +42453,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2258": {
@@ -42225,6 +42567,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "51": {
@@ -42274,7 +42617,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "1",
               "players": { "27488": { "name": "Dani" } }
             },
@@ -42318,6 +42661,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "100": {
@@ -42419,6 +42763,7 @@
         {
           "id": "939",
           "img": "https://www.zerozero.pt/img/logos/equipas/939_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Peru",
           "teams": {
             "23221": {
@@ -42490,6 +42835,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "143": {
@@ -42601,6 +42947,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "1875": {
@@ -42708,6 +43055,7 @@
         {
           "id": "874",
           "img": "https://www.zerozero.pt/img/logos/equipas/874_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Ir\u00e3o",
           "teams": {
             "78850": {
@@ -42823,6 +43171,7 @@
         {
           "id": "1147",
           "img": "https://www.zerozero.pt/img/logos/equipas/1147_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "RDA",
           "teams": {
             "10419": {
@@ -42916,6 +43265,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -43003,6 +43353,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "2274": {
@@ -43092,6 +43443,7 @@
         {
           "id": "889",
           "img": "https://www.zerozero.pt/img/logos/equipas/889_imgbank_flag.png",
+          "fk_continente": "6",
           "name": "Austr\u00e1lia",
           "teams": {
             "61064": {
@@ -43197,6 +43549,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "8218": {
@@ -43270,6 +43623,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2248": {
@@ -43369,6 +43723,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "84": {
@@ -43474,6 +43829,7 @@
         {
           "id": "1148",
           "img": "https://www.zerozero.pt/img/logos/equipas/1148_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Zaire",
           "teams": {
             "7385": {
@@ -43541,6 +43897,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "145": {
@@ -43628,6 +43985,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "2128": {
@@ -43757,6 +44115,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2229": {
@@ -43870,6 +44229,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "2051": {
@@ -43969,6 +44329,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2547": {
@@ -44082,6 +44443,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "64": {
@@ -44165,6 +44527,7 @@
         {
           "id": "916",
           "img": "https://www.zerozero.pt/img/logos/equipas/916_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Haiti",
           "teams": {
             "9036": {
@@ -44244,6 +44607,7 @@
         {
           "id": "817",
           "img": "https://www.zerozero.pt/img/logos/equipas/817_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Bulg\u00e1ria",
           "teams": {
             "1818": {
@@ -44319,6 +44683,7 @@
         {
           "id": "1144",
           "img": "https://www.zerozero.pt/img/logos/equipas/1144_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "URSS",
           "teams": {
             "171": {
@@ -44388,6 +44753,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "4355": {
@@ -44483,6 +44849,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "1775": {
@@ -44566,6 +44933,7 @@
         {
           "id": "910",
           "img": "https://www.zerozero.pt/img/logos/equipas/910_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Salvador",
           "teams": {
             "11287": {
@@ -44641,6 +45009,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "3720": {
@@ -44724,6 +45093,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2395": {
@@ -44801,6 +45171,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "2128": {
@@ -44942,6 +45313,7 @@
         {
           "id": "1006",
           "img": "https://www.zerozero.pt/img/logos/equipas/1006_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Israel",
           "teams": {
             "1977": {
@@ -45045,6 +45417,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2241": {
@@ -45146,6 +45519,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "2581": {
@@ -45249,6 +45623,7 @@
         {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rom\u00e9nia",
           "teams": {
             "172": {
@@ -45342,6 +45717,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "8269": {
@@ -45439,6 +45815,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "108": {
@@ -45552,6 +45929,7 @@
         {
           "id": "939",
           "img": "https://www.zerozero.pt/img/logos/equipas/939_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Peru",
           "teams": {
             "2351": {
@@ -45617,6 +45995,7 @@
         {
           "id": "817",
           "img": "https://www.zerozero.pt/img/logos/equipas/817_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Bulg\u00e1ria",
           "teams": {
             "1816": {
@@ -45690,6 +46069,7 @@
         {
           "id": "830",
           "img": "https://www.zerozero.pt/img/logos/equipas/830_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Marrocos",
           "teams": {
             "2445": {
@@ -45786,6 +46166,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "1136": {
@@ -45909,6 +46290,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2395": {
@@ -45974,6 +46356,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "8614": {
@@ -46065,6 +46448,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "126": {
@@ -46182,6 +46566,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "107": {
@@ -46295,6 +46680,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "1179": {
@@ -46374,12 +46760,13 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "1",
               "players": { "26272": { "name": "Jos\u00e9 \u00c1ngel Iribar" } }
             },
@@ -46455,6 +46842,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "8434": {
@@ -46548,6 +46936,7 @@
         {
           "id": "811",
           "img": "https://www.zerozero.pt/img/logos/equipas/811_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Portugal",
           "teams": {
             "9": {
@@ -46621,6 +47010,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "1943": {
@@ -46696,6 +47086,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2254": {
@@ -46801,6 +47192,7 @@
         {
           "id": "817",
           "img": "https://www.zerozero.pt/img/logos/equipas/817_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Bulg\u00e1ria",
           "teams": {
             "162": {
@@ -46886,6 +47278,7 @@
         {
           "id": "1144",
           "img": "https://www.zerozero.pt/img/logos/equipas/1144_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "URSS",
           "teams": {
             "2093": {
@@ -46991,6 +47384,7 @@
         {
           "id": "866",
           "img": "https://www.zerozero.pt/img/logos/equipas/866_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Norte",
           "teams": {
             "9490": {
@@ -47068,6 +47462,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "3726": {
@@ -47167,6 +47562,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "2273": {
@@ -47248,6 +47644,7 @@
         {
           "id": "1144",
           "img": "https://www.zerozero.pt/img/logos/equipas/1144_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "URSS",
           "teams": {
             "2093": {
@@ -47331,6 +47728,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "135": {
@@ -47424,6 +47822,7 @@
         {
           "id": "937",
           "img": "https://www.zerozero.pt/img/logos/equipas/937_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Col\u00f4mbia",
           "teams": {
             "2296": {
@@ -47521,6 +47920,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2393": {
@@ -47602,6 +48002,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "8246": {
@@ -47727,6 +48128,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "2261": {
@@ -47814,6 +48216,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "63": {
@@ -47913,6 +48316,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "161": {
@@ -48024,6 +48428,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2254": {
@@ -48112,6 +48517,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "1882": {
@@ -48217,6 +48623,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "8614": {
@@ -48318,6 +48725,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "50": {
@@ -48353,7 +48761,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "2",
               "players": {
                 "26035": { "name": "Carmelo Cedr\u00fan" },
@@ -48391,6 +48799,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "5985": {
@@ -48478,6 +48887,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "1179": {
@@ -48559,6 +48969,7 @@
         {
           "id": "817",
           "img": "https://www.zerozero.pt/img/logos/equipas/817_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Bulg\u00e1ria",
           "teams": {
             "162": {
@@ -48654,6 +49065,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "2576": {
@@ -48799,6 +49211,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "4461": {
@@ -48916,6 +49329,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "1878": {
@@ -49003,6 +49417,7 @@
         {
           "id": "1014",
           "img": "https://www.zerozero.pt/img/logos/equipas/1014_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Irl. Norte",
           "teams": {
             "87": {
@@ -49144,6 +49559,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2218": {
@@ -49233,6 +49649,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "3823": {
@@ -49354,6 +49771,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "1097": {
@@ -49440,6 +49858,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "2331": {
@@ -49522,6 +49941,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "85": {
@@ -49639,6 +50059,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "2130": {
@@ -49772,6 +50193,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "5985": {
@@ -49869,6 +50291,7 @@
         {
           "id": "833",
           "img": "https://www.zerozero.pt/img/logos/equipas/833_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00eds de Gales",
           "teams": {
             "12373": {
@@ -49984,6 +50407,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "8614": {
@@ -50079,6 +50503,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2241": {
@@ -50180,6 +50605,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "2580": {
@@ -50285,6 +50711,7 @@
         {
           "id": "1144",
           "img": "https://www.zerozero.pt/img/logos/equipas/1144_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "URSS",
           "teams": {
             "2093": {
@@ -50366,6 +50793,7 @@
         {
           "id": "995",
           "img": "https://www.zerozero.pt/img/logos/equipas/995_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "\u00c1ustria",
           "teams": {
             "5695": {
@@ -50455,6 +50883,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2241": {
@@ -50556,6 +50985,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "1025": {
@@ -50643,6 +51073,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "1139": {
@@ -50756,6 +51187,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "8614": {
@@ -50875,6 +51307,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "4107": {
@@ -50964,6 +51397,7 @@
         {
           "id": "840",
           "img": "https://www.zerozero.pt/img/logos/equipas/840_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Turquia",
           "teams": {
             "134": {
@@ -51039,6 +51473,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "4041": {
@@ -51166,6 +51601,7 @@
         {
           "id": "861",
           "img": "https://www.zerozero.pt/img/logos/equipas/861_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "Coreia do Sul",
           "teams": {
             "309855": {
@@ -51215,6 +51651,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2395": {
@@ -51280,6 +51717,7 @@
         {
           "id": "995",
           "img": "https://www.zerozero.pt/img/logos/equipas/995_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "\u00c1ustria",
           "teams": {
             "7845": {
@@ -51365,6 +51803,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "1882": {
@@ -51470,6 +51909,7 @@
         {
           "id": "820",
           "img": "https://www.zerozero.pt/img/logos/equipas/820_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Esc\u00f3cia",
           "teams": {
             "1874": {
@@ -51589,6 +52029,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "77": {
@@ -51718,6 +52159,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "63": {
@@ -51801,6 +52243,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "1102": {
@@ -51888,6 +52331,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "4190": {
@@ -52001,6 +52445,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2258": {
@@ -52098,6 +52543,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "1097": {
@@ -52165,6 +52611,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "13917": {
@@ -52286,6 +52733,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "4355": {
@@ -52403,6 +52851,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "43": {
@@ -52442,7 +52891,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "4",
               "players": {
                 "21975": { "name": "Agust\u00edn Ga\u00ednza" },
@@ -52496,6 +52945,7 @@
         {
           "id": "826",
           "img": "https://www.zerozero.pt/img/logos/equipas/826_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Inglaterra",
           "teams": {
             "88": {
@@ -52616,6 +53066,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "2261": {
@@ -52697,6 +53148,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "0": {
@@ -52781,6 +53233,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "173": {
@@ -52878,6 +53331,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "73": {
@@ -52975,6 +53429,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "2328": {
@@ -53068,6 +53523,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2393": {
@@ -53143,6 +53599,7 @@
         {
           "id": "935",
           "img": "https://www.zerozero.pt/img/logos/equipas/935_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Bolivia",
           "teams": {
             "0": {
@@ -53232,6 +53689,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "159": {
@@ -53355,6 +53813,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "2139": {
@@ -53444,6 +53903,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2241": {
@@ -53529,6 +53989,7 @@
         {
           "id": "835",
           "img": "https://www.zerozero.pt/img/logos/equipas/835_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pol\u00f3nia",
           "teams": {
             "9359": {
@@ -53636,6 +54097,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "3832": {
@@ -53749,6 +54211,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "63428": {
@@ -53852,6 +54315,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "151": {
@@ -53927,6 +54391,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "0": {
@@ -54050,6 +54515,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "157": {
@@ -54117,6 +54583,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "72": {
@@ -54212,6 +54679,7 @@
         {
           "id": "832",
           "img": "https://www.zerozero.pt/img/logos/equipas/832_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Noruega",
           "teams": {
             "1088": {
@@ -54315,6 +54783,7 @@
         {
           "id": "907",
           "img": "https://www.zerozero.pt/img/logos/equipas/907_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Cuba",
           "teams": {
             "266687": {
@@ -54368,6 +54837,7 @@
         {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rom\u00e9nia",
           "teams": {
             "8225": {
@@ -54455,6 +54925,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "11334": {
@@ -54564,6 +55035,7 @@
         {
           "id": "13182",
           "img": "https://www.zerozero.pt/img/logos/equipas/13182_imgbank_flag.png",
+          "fk_continente": "2",
           "name": "\u00cdndias Orientais Holandesas",
           "teams": {
             "0": {
@@ -54615,18 +55087,13 @@
               "players": { "21612": { "name": "Van Den Burg" } }
             }
           }
-        },
-        {
-          "id": "1726",
-          "img": "https://www.zerozero.pt/img/logos/equipas/",
-          "name": "",
-          "teams": []
         }
       ],
       "It\u00e1lia 1934": [
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2233": {
@@ -54703,6 +55170,7 @@
         {
           "id": "822",
           "img": "https://www.zerozero.pt/img/logos/equipas/822_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Espanha",
           "teams": {
             "50": {
@@ -54748,7 +55216,7 @@
             "38": {
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/38_imgbank_1695724455.png",
-              "name": "Athletic",
+              "name": "Athletic Bilbao",
               "count": "5",
               "players": {
                 "20993": { "name": "Guillermo Gorostiza" },
@@ -54809,6 +55277,7 @@
         {
           "id": "995",
           "img": "https://www.zerozero.pt/img/logos/equipas/995_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "\u00c1ustria",
           "teams": {
             "159": {
@@ -54890,6 +55359,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "3826": {
@@ -55011,6 +55481,7 @@
         {
           "id": "812",
           "img": "https://www.zerozero.pt/img/logos/equipas/812_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Alemanha",
           "teams": {
             "105": {
@@ -55152,6 +55623,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "1775": {
@@ -55257,6 +55729,7 @@
         {
           "id": "1018",
           "img": "https://www.zerozero.pt/img/logos/equipas/1018_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00ed\u00e7a",
           "teams": {
             "161": {
@@ -55356,6 +55829,7 @@
         {
           "id": "825",
           "img": "https://www.zerozero.pt/img/logos/equipas/825_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Pa\u00edses Baixos",
           "teams": {
             "1937": {
@@ -55489,6 +55963,7 @@
         {
           "id": "1145",
           "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Checoslov\u00e1quia",
           "teams": {
             "151": {
@@ -55552,6 +56027,7 @@
         {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rom\u00e9nia",
           "teams": {
             "44258": {
@@ -55643,6 +56119,7 @@
         {
           "id": "828",
           "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "It\u00e1lia",
           "teams": {
             "63": {
@@ -55728,6 +56205,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "67532": {
@@ -55788,6 +56266,7 @@
         {
           "id": "1004",
           "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Hungria",
           "teams": {
             "1064": {
@@ -55855,6 +56334,7 @@
         {
           "id": "955",
           "img": "https://www.zerozero.pt/img/logos/equipas/955_imgbank_flag.png",
+          "fk_continente": "5",
           "name": "Egipto",
           "teams": {
             "2414": {
@@ -55929,6 +56409,7 @@
         {
           "id": "839",
           "img": "https://www.zerozero.pt/img/logos/equipas/839_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Su\u00e9cia",
           "teams": {
             "2131": {
@@ -56044,6 +56525,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "9657": {
@@ -56161,6 +56643,7 @@
         {
           "id": "814",
           "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Argentina",
           "teams": {
             "2217": {
@@ -56274,6 +56757,7 @@
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Chile",
           "teams": {
             "2261": {
@@ -56358,6 +56842,7 @@
         {
           "id": "824",
           "img": "https://www.zerozero.pt/img/logos/equipas/824_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Fran\u00e7a",
           "teams": {
             "5710": {
@@ -56437,6 +56922,7 @@
         {
           "id": "831",
           "img": "https://www.zerozero.pt/img/logos/equipas/831_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "M\u00e9xico",
           "teams": {
             "2503": {
@@ -56493,6 +56979,7 @@
         {
           "id": "829",
           "img": "https://www.zerozero.pt/img/logos/equipas/829_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Jugosl\u00e1via",
           "teams": {
             "3832": {
@@ -56561,6 +57048,7 @@
         {
           "id": "816",
           "img": "https://www.zerozero.pt/img/logos/equipas/816_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Brasil",
           "teams": {
             "2228": {
@@ -56671,6 +57159,7 @@
         {
           "id": "935",
           "img": "https://www.zerozero.pt/img/logos/equipas/935_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Bolivia",
           "teams": {
             "2373": {
@@ -56751,6 +57240,7 @@
         {
           "id": "940",
           "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Uruguai",
           "teams": {
             "2393": {
@@ -56836,6 +57326,7 @@
         {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "Rom\u00e9nia",
           "teams": {
             "4287": {
@@ -56967,6 +57458,7 @@
         {
           "id": "939",
           "img": "https://www.zerozero.pt/img/logos/equipas/939_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Peru",
           "teams": {
             "2351": {
@@ -57042,6 +57534,7 @@
         {
           "id": "934",
           "img": "https://www.zerozero.pt/img/logos/equipas/934_imgbank_flag.png",
+          "fk_continente": "3",
           "name": "Estados Unidos",
           "teams": {
             "44025": {
@@ -57117,6 +57610,7 @@
         {
           "id": "834",
           "img": "https://www.zerozero.pt/img/logos/equipas/834_imgbank_flag.png",
+          "fk_continente": "4",
           "name": "Paraguai",
           "teams": {
             "2328": {
@@ -57206,6 +57700,7 @@
         {
           "id": "815",
           "img": "https://www.zerozero.pt/img/logos/equipas/815_imgbank_flag.png",
+          "fk_continente": "1",
           "name": "B\u00e9lgica",
           "teams": {
             "15773": {
@@ -57312,13 +57807,19 @@
       ]
     }
   },
-  "timestamp": "1709304959"
+  "timestamp": "1709804591"
 }
 
-    const graph = new TemporalGraph(data.data.seasons, {
-          clusterGroup: "teams"
-        });
-      
-
+    var graph = new TemporalGraph(data.data.seasons, {
+      clusterGroup: "teams"
+    });
+    
+    function onSortChange() {
+      var sort = document.getElementById("sort-national-teams").value;
+      if (sort && "object" === typeof graph) {
+        graph.sortOuterNodes(sort);
+      }
+    }
   </script>
+
 </body>

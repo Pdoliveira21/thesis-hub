@@ -16,6 +16,10 @@
   border-bottom: 1px solid #000;
 }
 
+.view-controls {
+  padding: 1em;
+}
+
 #timeline-container {
   width: 100%;
   display: flex;

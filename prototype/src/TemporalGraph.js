@@ -11,6 +11,7 @@ class TemporalGraph {
     nodeSpace = 15,
     color = d3.scaleOrdinal(d3.schemeCategory10),
     displayAlwaysAllOuter = false,
+    defaultOuterSortField = "name",
     outerGroup = "national teams",
     clusterGroup = "clubs",
     detailGroup = "players",
@@ -20,18 +21,19 @@ class TemporalGraph {
   }) {
 
     this.displayAlwaysAllOuter = displayAlwaysAllOuter;
+    this.outerSortField = defaultOuterSortField;
     this.outerGroup = outerGroup;
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
+    this.graphContainer = graphContainer;
+    this.detailsContainer = detailsContainer;
     this.parseData(data);
 
     this.detailedNode = null;
-    // (TODO): send if is to display always all outer nodes to simplify internal logic
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
-    // (TODO): send if is to display always all outer nodes to simplify internal logic
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, color, (node) => {
       this.detailedNode = node;
-      this.drawDetailsGraph(detailsContainer, this.timeline.getValue(), this.detailedNode);
+      this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
     }, (nodes, links) => {
       if (this.detailedNode === null) return;
       this.updateClustersPositionsInDetailsGraph(nodes, links);
@@ -40,7 +42,7 @@ class TemporalGraph {
     this.timeline = new Timeline(this.times, 1500, (value) => {
       this.drawClusterGraph(graphContainer, value);
       if (this.detailedNode !== null) {
-        this.drawDetailsGraph(detailsContainer, value, this.detailedNode);
+        this.drawDetailsGraph(this.detailsContainer, value, this.detailedNode);
       }
     });
 
@@ -67,7 +69,9 @@ class TemporalGraph {
         }
 
         supergroupsSet.add(supergroup.id);
-        nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, img: supergroup.img || undefined, group: this.outerGroup});
+        nodes.outer.push({id: `O-${supergroup.id}`, name: supergroup.name, fk_continente: supergroup.fk_continente, img: supergroup.img || undefined, group: this.outerGroup});
+        // TODO: how to consider here all other filed of original data exept a few (to be more generic to sort in the future)
+        // TODO: same for the other fileds because of filter? (see in the future)
 
         // Process the groups
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
@@ -101,8 +105,7 @@ class TemporalGraph {
         });
       });
 
-      // (TODO): change to be according to a specific ordering criteria selected
-      nodes.outer.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+      this.#sortNodes(nodes.outer, this.outerSortField);
       this.data[time] = { nodes, links };
     }
 
@@ -111,15 +114,37 @@ class TemporalGraph {
         return acc.concat(timeslice.nodes.outer.filter(node => !acc.some(n => n.id === node.id)));
       }, []);
 
-      // (TODO): change to be according to a specific ordering criteria selected
-      allOuterNodes.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-
-      // (TODO): repeat in every year or should be just once?
+      this.#sortNodes(allOuterNodes, this.outerSortField);
       for (let time in this.data) {
         this.data[time].nodes.outer = allOuterNodes;
       }
     }
   }
+
+  #sortNodes(nodes, field = "name") {
+    nodes.sort((a, b) => {
+      if (a[field] === b[field]) {
+        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+      }
+
+      return a[field].toLowerCase().localeCompare(b[field].toLowerCase());
+    });
+  }
+
+  sortOuterNodes(field = "name") {
+    for (let time in this.data) {
+      this.#sortNodes(this.data[time].nodes.outer, field);
+    };
+
+    // TODO: (future extract method to a updateGraphs method)
+    this.drawClusterGraph(this.graphContainer, this.timeline.getValue());
+    if (this.detailedNode !== null) {
+      this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
+    }
+  }
+
+  // (TODO): sort ajusta ja da timeline inteira, filter tambem será assim? mas precisa de ter sempre uma base com all
+  // ou melhor se apenas no update dar sempre all mas em funcao dos filtros que tiver??
 
   drawClusterGraph(container, time) {
     const nodes = this.data[time].nodes.outer.concat(this.data[time].nodes.cluster).map(d => ({...d}));

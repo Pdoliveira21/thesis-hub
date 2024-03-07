@@ -27,6 +27,7 @@ class ClusterGraph extends Graph {
       // (TODO): investigate more how to "slow down" the simulation 
       // .alphaDecay(0.01)
       // .velocityDecay(0.8)
+      .force("charge", d3.forceManyBody().strength(-1))
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
       .force("x", d3.forceX().x(0).strength(0.01))
@@ -133,13 +134,14 @@ class ClusterGraph extends Graph {
                   .attr("transform", "scale(0)")
                   .transition().duration(self.animationDuration).ease(self.animationEase)
                   .attr("transform", "scale(1)");
-              } else {
-                // (TODO): keep this animation even with the transition forced by the force
-                g.select("image")
-                  .attr("transform", `scale(0.5)`)
-                  .transition().duration(self.animationDuration / 2).ease(self.animationEase)
-                  .attr("transform", "scale(1)");
-              }
+              } 
+              // else {
+              //   // (TODO): keep this animation even with the transition forced by the force
+              //   g.select("image")
+              //     .attr("transform", `scale(0.5)`)
+              //     .transition().duration(self.animationDuration / 2).ease(self.animationEase)
+              //     .attr("transform", "scale(1)");
+              // }
             } else {
               g.append("circle")
                 .attr("r", 0)  
@@ -193,7 +195,7 @@ class ClusterGraph extends Graph {
               // Get the old size of the image/circle
               const oldRadius = g.select("image").empty() 
                 ? +g.select("circle").attr("r") 
-                : +g.select("image").attr("width") / 2 - 2;
+                : +g.select("image").attr("width") / 2 - 8;
 
               // Remove the old image and add or update the circle and text properties
               g.select("image").remove();

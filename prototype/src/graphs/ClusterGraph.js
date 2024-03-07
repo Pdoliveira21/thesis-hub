@@ -10,7 +10,7 @@ class ClusterGraph extends Graph {
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
     this.color = color;
-    this.animationDuration = 1000;
+    this.animationDuration = 2000;
     this.animationEase = d3.easeCubicInOut;
 
     this.clickNodeCallback = clickNodeCallback;
@@ -132,7 +132,7 @@ class ClusterGraph extends Graph {
               if (d.group === self.innerGroup) {
                 g.select("image")
                   .attr("transform", "scale(0)")
-                  .transition().duration(self.animationDuration).ease(self.animationEase)
+                  .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               } 
               // else {
@@ -145,7 +145,7 @@ class ClusterGraph extends Graph {
             } else {
               g.append("circle")
                 .attr("r", 0)  
-                .transition().duration(self.animationDuration).ease(self.animationEase)
+                .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
               g.append("text")
@@ -216,7 +216,10 @@ class ClusterGraph extends Graph {
               
             g.select("title").text(d.name);
           }),
-        exit => exit.remove()
+        exit => exit
+          .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
+          .attr("opacity", 0)
+          .remove()
     );
     
     this.node.filter(d => d.group === this.innerGroup)
@@ -232,12 +235,15 @@ class ClusterGraph extends Graph {
       .join(
         enter => enter.append("line")
           .attr("stroke-width", 0)
-          .transition().duration(this.animationDuration).ease(this.animationEase)
+          .transition().duration(this.animationDuration * 0.6).ease(this.animationEase)
           .attr("stroke-width", d => d.value * 0.75),
         update => update
           .transition().duration(this.animationDuration).ease(this.animationEase)
           .attr("stroke-width", d => d.value * 0.75),
-        exit => exit.remove()
+        exit => exit
+          .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
+          .attr("stroke-width", 0)
+          .remove()
       );
 
     this.simulation.nodes(nodes);

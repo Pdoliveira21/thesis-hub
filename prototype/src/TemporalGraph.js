@@ -41,7 +41,7 @@ class TemporalGraph {
       this.updateClustersPositionsInDetailsGraph(nodes, links);
     });
 
-    this.timeline = new Timeline(this.times, 1500, (value) => {
+    this.timeline = new Timeline(this.times, 2500, (value) => {
       this.drawClusterGraph(graphContainer, value);
       if (this.detailedNode !== null) {
         this.drawDetailsGraph(this.detailsContainer, value, this.detailedNode);

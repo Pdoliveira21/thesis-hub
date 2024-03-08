@@ -1,0 +1,49 @@
+#temporal-graph {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.view-container {
+  border: 1px solid #000;
+}
+
+.view-title {
+  text-align: center;
+  margin: 0;
+  padding: 1em 0;
+  border-bottom: 1px solid #000;
+}
+
+.view-controls {
+  padding: 1em;
+}
+
+.view-controls-filters {
+  display: flex;
+  column-gap: 5em;
+}
+
+#timeline-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1em 0.5em;
+}
+
+#timeline-container > form {
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* SVG CLASSES */
+
+.node-text {
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: #000;
+  text-shadow: -1px -1px 0 #FFF, 0 -1px 0 #FFF, 1px -1px 0 #FFF, 1px 0 0 #FFF, 1px 1px 0 #FFF, 0 1px 0 #FFF, -1px 1px 0 #FFF, -1px 0 0 #FFF;;
+}

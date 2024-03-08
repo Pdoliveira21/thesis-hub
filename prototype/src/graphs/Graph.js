@@ -10,9 +10,10 @@ class Graph {
 
     this.dragging = false;
     this.nodeOpacity = 1.0;
-    this.linkOpacity = 0.8;
-    this.nodeUnhighlightOpacity = 0.3;
-    this.linkUnhighlightOpacity = 0.1;
+    this.linkOpacity = 0.3;
+    this.nodeUnhighlightOpacity = 0.05;
+    this.linkUnhighlightOpacity = 0.01;
+    this.linkHighlightOpacity = 0.8;
   }
 
   ticked(link, node) {
@@ -22,8 +23,7 @@ class Graph {
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
     node
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y);
+      .attr("transform", d => `translate(${d.x},${d.y})`);
   }
 
   #dragstarted(event, d, simulation) {
@@ -56,36 +56,72 @@ class Graph {
     return links.some(l => l.source === d || l.target === d);
   }
 
-  highlight(d, node, link) {
+  highlight(d, node, link, simulation) {
     if (!this.connected(d, link.data()) || this.dragging === true) return;
 
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
-    node.filter(n => !neighbors.has(n)).attr("opacity", this.nodeUnhighlightOpacity);
+    node.filter(n => !neighbors.has(n)).call(g => {
+      g.lower().attr("opacity", this.nodeUnhighlightOpacity);
+      g.select("text").attr("display", "none");
+    });
+    node.filter(n => neighbors.has(n)).call(g => {
+      g.raise().attr("opacity", this.nodeOpacity);
+      g.select("text").attr("display", "block");
+    });
+
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
+    link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
+
+    // Add a force to avoid text overlap.
+    // let sizes = {};
+    // node.each(function(d) {
+    //   const g = d3.select(this);
+    //   sizes[d.id] = {
+    //     width: g.node().getBBox().width,
+    //     height: g.node().getBBox().height,
+    //   };
+    // });
+
+    // simulation.force("text", d3.forceCollide(d => {
+    //   if (neighbors.has(d)) {
+    //     return Math.max(sizes[d.id].width, sizes[d.id].height) / 2;
+    //   }
+    // }).iterations(1)); // (TODO): cahnge force to do not overlap the "g" elements of the highlighhted nodes
+    // simulation.alpha(0.05).restart();
   }
 
-  unhighlight(node, link) {
+  unhighlight(node, link, simulation, showText = () => false) {
     if (this.dragging === true) return;
-    node.attr("opacity", d => this.connected(d, link.data()) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
+    
+    node.call(g => {
+      g.attr("opacity", d => this.connected(d, link.data()) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
+      g.select("text").attr("display", d => showText(d) ? "block" : "none");
+    });
     link.attr("stroke-opacity", this.linkOpacity);
+
+    // Remove the force to avoid text overlap.
+    // simulation.force("text", null);
+    // simulation.alpha(0.3).restart();
   }
 
   circularLayout(nodes, group) {
     const nodesCount = nodes.filter(d => d.group === group).length;
 
     // Calculate the diameter of the circunference based on a heuristic distance between nodes.
-    const diameter = Math.max(
-      (nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI,
-      200
-    );
+    const diameter = Math.max((nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI, 200);
     const scale = Math.min(this.width, this.height) / (diameter + 2 * this.nodeSize);
 
     nodes.filter(d => d.group === group).forEach((node, index) => {
       if (node.group === group) {
         const position = circunferencePosition(diameter * scale, index, nodesCount);
-        node.fx = position.x;
-        node.fy = position.y;
+        node.cx = position.x;
+        node.cy = position.y;
+        node.theta = position.theta;
       }
     });
+
+    return (diameter * scale) / 2;
   }
 }
+
+// https://lvngd.com/blog/rectangular-collision-detection-d3-force-layouts/

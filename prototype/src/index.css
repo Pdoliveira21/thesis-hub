@@ -20,6 +20,11 @@
   padding: 1em;
 }
 
+.view-controls-filters {
+  display: flex;
+  column-gap: 5em;
+}
+
 #timeline-container {
   width: 100%;
   display: flex;

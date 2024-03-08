@@ -12,6 +12,7 @@ class TemporalGraph {
     displayAlwaysAllOuter = false,
     defaultOuterSortField = "name",
     defaultOuterFilter = () => true,
+    defaultClusterFilter = () => true,
     outerGroup = "national teams",
     clusterGroup = "clubs",
     detailGroup = "players",
@@ -23,6 +24,7 @@ class TemporalGraph {
     this.displayAlwaysAllOuter = displayAlwaysAllOuter;
     this.outerSortField = defaultOuterSortField;
     this.outerFilter = defaultOuterFilter;
+    this.clusterFilter = defaultClusterFilter;
     this.outerGroup = outerGroup;
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
@@ -160,13 +162,24 @@ class TemporalGraph {
     }
   }
 
+  filterClusterNodes(filter) {
+    this.clusterFilter = "function" === typeof filter ? filter : (() => true);
+
+    // TODO: (future extract method to a updateGraphs method)
+    this.drawClusterGraph(this.graphContainer, this.timeline.getValue());
+    if (this.detailedNode !== null) {
+      this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
+    }
+  }
+
   drawClusterGraph(container, time) {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
+    const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
     
-    const links = this.data[time].links.cluster.filter(d => supergroups.includes(d.target)).map(d => ({...d}));
+    const links = this.data[time].links.cluster.filter(d => supergroups.includes(d.target) && groups.includes(d.source)).map(d => ({...d}));
     const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id)) // TODO: (future) show all outer nodes?
       .concat(this.data[time].nodes.cluster
-        .filter(d => d.supergroup.some(s => supergroups.includes(s)))
+        .filter(d => groups.includes(d.id) && d.supergroup.some(s => supergroups.includes(s)))
         .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
       .map(d => ({...d}));
     
@@ -180,11 +193,12 @@ class TemporalGraph {
     const linkFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.target === nodeId;
 
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
+    const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
 
-    const links = this.data[time].links.detail.filter((d) => linkFilter(d) && supergroups.includes(d.target)).map(d => ({...d}));
+    const links = this.data[time].links.detail.filter((d) => linkFilter(d) && supergroups.includes(d.target) && groups.includes(d.cluster)).map(d => ({...d}));
     const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id)) // TODO: (future) show all outer nodes?
       .concat(this.data[time].nodes.detail
-        .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup)))
+        .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster)))
       .map(d => ({...d}));
 
     this.detailsGraph.update(nodes, links, node);

@@ -21,22 +21,58 @@
       
       <div class="view-controls">
         <span>Sort National Teams by:</span>
-        <select id="sort-national-teams" onchange="onSortChange()">
+        <select id="sort-national-teams" onchange="onNationalTeamsSortChange()">
           <option value="name" selected>Name</option>
           <option value="fk_continente">Continente</option>
         </select>
 
-        <p>Filter National Teams by:</p>
-        <span>Continent</span>
-        <select id="filter-national-team-continent" onchange="onFilterChange()">
-          <option value="all" selected>All</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option> 
-        </select>
+        <div class="view-controls-filters">
+          <div>
+            <p>Filter National Teams by:</p>
+            <span>Continent</span>
+            <select id="filter-national-team-continent" onchange="onNationalTeamsFilterChange()">
+              <option value="all" selected>All</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option> 
+            </select>
+          </div>
+
+          <div>
+            <p>Filter Clubs by:</p>
+            <span>Color (just to test)</span>
+            <select id="filter-clubs-color" onchange="onClubsFilterChange()">
+              <option value="all" selected>All</option>
+              <option value="AD1814">AD1814</option>
+              <option value="273E7C">273E7C</option>
+              <option value="71A6D2">71A6D2</option>
+              <option value="800020">800020</option>
+              <option value="2D4C97">2D4C97</option>
+              <option value="FDD945">FDD945</option>
+              <option value="990012">990012</option>
+              <option value="660000">660000</option>
+              <option value="E5E4E2">E5E4E2</option>
+              <option value="FBB82E">FBB82E</option>
+              <option value="347C17">347C17</option>
+              <option value="7D0541">7D0541</option>
+              <option value="2B3856">2B3856</option>
+              <option value="DC143C">DC143C</option>
+              <option value="4863A0">4863A0</option>
+              <option value="4682B4">4682B4</option>
+              <option value="6AA121">6AA121</option>
+              <option value="3E2C64">3E2C64</option>
+              <option value="101010">101010</option>
+            </select>
+          </div>
+
+          <div>
+            <p>Filter Players by:</p>
+            <span>(TODO) future filter</span>
+          </div>
+        </div>
       </div>
       
       <span id="graph-container"></span>
@@ -57828,7 +57864,7 @@
       clusterGroup: "teams"
     });
     
-    function onSortChange() {
+    function onNationalTeamsSortChange() {
       var sort = document.getElementById("sort-national-teams").value;
       if (sort && "object" === typeof graph) {
         graph.sortOuterNodes(sort);
@@ -57838,12 +57874,21 @@
     // NOTE: (future) same function for every outer node filter that set ups the filter based on the selected values
     // so that the filter logic is dependent on each use of the TemporalGraph
     // Possible simplification: allow chain of filters in TemporalGraph (map each filter to a select) 
-    function onFilterChange() {
+    function onNationalTeamsFilterChange() {
       var continent = document.getElementById("filter-national-team-continent").value;
       if (continent && "object" === typeof graph) {
         continent === "all"
           ? graph.filterOuterNodes()
           : graph.filterOuterNodes((node) => node["fk_continente"] === continent);
+      }
+    }
+
+    function onClubsFilterChange() {
+      var color = document.getElementById("filter-clubs-color").value;
+      if (color && "object" === typeof graph) {
+        color === "all"
+          ? graph.filterClusterNodes()
+          : graph.filterClusterNodes((node) => node["color"] === color);
       }
     }
   </script>

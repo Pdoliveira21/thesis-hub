@@ -152,14 +152,7 @@ class ClusterGraph extends Graph {
                   .attr("transform", "scale(0)")
                   .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                   .attr("transform", "scale(1)");
-              } 
-              // else {
-              //   // (TODO): keep this animation even with the transition forced by the force
-              //   g.select("image")
-              //     .attr("transform", `scale(0.5)`)
-              //     .transition().duration(self.animationDuration / 2).ease(self.animationEase)
-              //     .attr("transform", "scale(1)");
-              // }
+              }
             } else {
               g.append("circle")
                 .attr("r", 0)  

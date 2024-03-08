@@ -120,7 +120,6 @@ class Graph {
       }
     });
 
-    // (TODO): improve this logic!
     return (diameter * scale) / 2;
   }
 }

@@ -173,7 +173,6 @@ class DetailGraph extends Graph {
                 .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
-              // TODO: improve text positioning and style
               g.append("text")
                 .classed("node-text", true)
                 .attr("display", displayText ? "block" : "none")

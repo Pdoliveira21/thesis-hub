@@ -54,6 +54,10 @@ class DetailGraph extends Graph {
         .attr("width", this.width / 4)
         .attr("height", this.height / 4)
         .attr("opacity", 0.15);
+
+    this.cluster = this.svg.append("g")
+        .attr("opacity", 0.3)
+      .selectAll("image");
     
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
@@ -134,11 +138,39 @@ class DetailGraph extends Graph {
     }));
     links = links.map(d => ({...d}));
 
-    if (focus) {
-      this.background.attr("href", focus.img || "");
-    }
+    
+    
+    
+    this.background.attr("href", focus ? focus.img || "" : "");
+    
 
+    
+    const clusters = focus && focus.group === this.outerGroup
+      ? [...new Map(nodes.filter(d => d.group === this.innerGroup).map(d => ([d.cluster, {id: d.cluster, img: d.clusterImg, x: d.x, y: d.y}]))).values()] : [];
+    
     const self = this;
+    this.cluster = this.cluster
+      .data(clusters, d => d.id)
+      .join(
+        enter => enter.append("image")
+          .attr("href", d => d.img)
+          .attr("x", d => d.x - 20)
+          .attr("y", d => d.y - 20)
+          .attr("width", 40)
+          .attr("height", 40)
+          .attr("opacity", 0)
+          .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
+          .attr("opacity", 1),
+        update => update
+          .attr("href", d => d.img)
+          .attr("x", d => d.x - 20)
+          .attr("y", d => d.y - 20),
+        exit => exit
+          .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
+          .attr("opacity", 0)
+          .remove()
+      );
+    
     this.node = this.node
       .data(nodes, d => d.id)
       .join(
@@ -204,8 +236,6 @@ class DetailGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
-              
-              // TODO: (future, some color filter for the image to still mantain the club identification??)
             } else {
               g.select("image").remove();
 
@@ -283,5 +313,10 @@ class DetailGraph extends Graph {
     } else {
       this.simulation.alphaTarget(0);
     }
+
+    // Update Cluster Images Positions
+    this.cluster
+      .attr("x", d => (Math.round(this.clusters.find(c => c.id === d.id)?.x) || 0) - 20)
+      .attr("y", d => (Math.round(this.clusters.find(c => c.id === d.id)?.y) || 0) - 20);
   }
 }

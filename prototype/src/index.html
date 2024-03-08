@@ -70,7 +70,13 @@
 
           <div>
             <p>Filter Players by:</p>
-            <span>(TODO) future filter</span>
+            <span>Name (just to test)</span>
+            <select id="filter-players-name" onchange="onPlayersFilterChange()">
+              <option value="all" selected>All</option>
+              <option value="Ri">Ri</option>
+              <option value="Vit">Vit</option>
+              <option value="Cos">Cos</option>
+            </select>
           </div>
         </div>
       </div>
@@ -57889,6 +57895,15 @@
         color === "all"
           ? graph.filterClusterNodes()
           : graph.filterClusterNodes((node) => node["color"] === color);
+      }
+    }
+
+    function onPlayersFilterChange() {
+      var name = document.getElementById("filter-players-name").value;
+      if (name && "object" === typeof graph) {
+        name === "all"
+          ? graph.filterElementNodes()
+          : graph.filterElementNodes((node) => node["name"].includes(name));
       }
     }
   </script>

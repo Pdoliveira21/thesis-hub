@@ -9,7 +9,6 @@ class TemporalGraph {
     height = 800,
     nodeSize = 24,
     nodeSpace = 15,
-    color = d3.scaleOrdinal(d3.schemeCategory10),
     displayAlwaysAllOuter = false,
     defaultOuterSortField = "name",
     defaultOuterFilter = () => true,
@@ -32,8 +31,8 @@ class TemporalGraph {
     this.parseData(data);
 
     this.detailedNode = null;
-    this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, color);
-    this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, color, (node) => {
+    this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup);
+    this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, (node) => {
       this.detailedNode = node;
       this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
     }, (nodes, links) => {
@@ -165,7 +164,7 @@ class TemporalGraph {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
     
     const links = this.data[time].links.cluster.filter(d => supergroups.includes(d.target)).map(d => ({...d}));
-    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id))
+    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id)) // TODO: (future) show all outer nodes?
       .concat(this.data[time].nodes.cluster
         .filter(d => d.supergroup.some(s => supergroups.includes(s)))
         .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
@@ -183,7 +182,7 @@ class TemporalGraph {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
 
     const links = this.data[time].links.detail.filter((d) => linkFilter(d) && supergroups.includes(d.target)).map(d => ({...d}));
-    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id))
+    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id)) // TODO: (future) show all outer nodes?
       .concat(this.data[time].nodes.detail
         .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup)))
       .map(d => ({...d}));

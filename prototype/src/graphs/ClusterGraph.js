@@ -3,13 +3,12 @@
 
 class ClusterGraph extends Graph {
 
-  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, color, clickNodeCallback = () => {}, tickCallback = () => {}) {
+  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, clickNodeCallback = () => {}, tickCallback = () => {}) {
     super(width, height, nodeSize, nodeSpace);
 
     this.outerRadius = null;
     this.outerGroup = outerGroup;
     this.innerGroup = innerGroup;
-    this.color = color;
     this.animationDuration = 2000;
     this.animationEase = d3.easeCubicInOut;
 
@@ -39,6 +38,23 @@ class ClusterGraph extends Graph {
         .attr("height", this.height)
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
         .attr("style", "max-width: 100%; height: auto;");
+
+    let pattern = this.svg.append("defs").append("pattern")
+        .attr("id", "stripes")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("patternUnits", "userSpaceOnUse");
+
+    pattern.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", "#333");
+
+    pattern.append("path")
+        .attr("d", "M-1,1 l2,-2 M0,10 l10,-10 M9,11 l2,-2")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 3)
+        .attr("stroke-opacity", 0.3);
 
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
@@ -77,6 +93,10 @@ class ClusterGraph extends Graph {
   }
 
   nodeColor(d) {
+    if (d.id.split("-")[1] === "0") { // TODO: (future) review this condition
+      return "url(#stripes)";
+    }
+
     return d.group === this.outerGroup ? "#e6e6e6" : (`#${d.color || "333"}`);
   }
 

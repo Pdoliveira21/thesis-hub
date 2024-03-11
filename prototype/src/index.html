@@ -13,6 +13,7 @@
   <script src="./scrubbers/Timeline.js"></script>
   <script src="./scrubbers/Filter.js"></script>
   <script src="./scrubbers/Sort.js"></script>
+  <script src="./scrubbers/Search.js"></script>
   <script src="./TemporalGraph.js"></script>
 </head>
 
@@ -22,6 +23,7 @@
       <div class="view-controls">
         <div id="controls-sort"></div>
         <div id="controls-filters" class="view-controls-filters"></div>
+        <div id="controls-search"></div>
       </div>
       
       <span id="graph-container"></span>
@@ -78880,7 +78882,9 @@
       
       const sortFields = Sort.extractSortFields(data, ["id", "img", "teams"]);
       const filters = Filter.extractFilters(data, outerGroup, clusterGroup, detailGroup, ["id", "name", "img", "logo", "count"]);
-      
+      const search = Search.extractSearchNames(data, "teams");
+      console.log(search);
+
       const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, (sort) => {
         if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
       });

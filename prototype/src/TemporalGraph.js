@@ -82,13 +82,12 @@ class TemporalGraph {
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
           const elementsId = Object.keys(group[this.detailGroup]).map(id => `E-${id}`);
           const groupColor = group.color && group.color !== "" ? group.color : undefined;
+          const groupLogo  = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
           
           if (!groupsSet.has(groupId)) {
-            const name = group.name && group.name !== "" ? group.name : this.noClusterLegend;
-            const logo = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
-            
+            const name = group.name && group.name !== "" ? group.name : this.noClusterLegend;           
             groupsSet.add(groupId);
-            nodes.cluster.push({id: `C-${groupId}`, name: name, img: logo, color: groupColor, ...this.#parseObject(group, ["name", "logo", "img", "color", this.detailGroup]), group: this.clusterGroup, supergroups: [`O-${supergroup.id}`], elements: elementsId});
+            nodes.cluster.push({id: `C-${groupId}`, name: name, img: groupLogo, color: groupColor, ...this.#parseObject(group, ["name", "logo", "img", "color", this.detailGroup]), group: this.clusterGroup, supergroups: [`O-${supergroup.id}`], elements: elementsId});
           } else {
             const index = nodes.cluster.findIndex(d => d.id === `C-${groupId}`);
             nodes.cluster[index].supergroups.push(`O-${supergroup.id}`);
@@ -105,7 +104,7 @@ class TemporalGraph {
             }
 
             elementsSet.add(elementId);
-            nodes.detail.push({id: `E-${elementId}`, ...this.#parseObject(element), color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, supergroup: `O-${supergroup.id}`});
+            nodes.detail.push({id: `E-${elementId}`, ...this.#parseObject(element), color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, clusterImg: groupLogo, supergroup: `O-${supergroup.id}`});
             links.detail.push({id: `E-${elementId}-O-${supergroup.id}`, source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
           });
         });

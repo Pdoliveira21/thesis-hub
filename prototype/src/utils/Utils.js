@@ -25,3 +25,11 @@ function circunferencePosition(diameter, index, count) {
     theta: angle,
   };
 }
+
+function accessObjectByString(obj, str) {
+  return str.split('.').reduce((acc, key) => acc && acc[key], obj);
+}
+
+function capitalizeStringWords(str) {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+}

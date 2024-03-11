@@ -13,6 +13,8 @@ class TemporalGraph {
     defaultOuterSortField = "name",
     defaultOuterFilter = () => true,
     defaultClusterFilter = () => true,
+    defaultDetailFilter = () => true,
+    noClusterLegend = "No Club",
     outerGroup = "national teams",
     clusterGroup = "clubs",
     detailGroup = "players",
@@ -21,16 +23,16 @@ class TemporalGraph {
     timelineContainer = "timeline-container"
   }) {
 
-    this.displayAlwaysAllOuter = displayAlwaysAllOuter;
-    this.outerSortField = defaultOuterSortField;
     this.outerFilter = defaultOuterFilter;
     this.clusterFilter = defaultClusterFilter;
+    this.detailFilter = defaultDetailFilter;
+    this.noClusterLegend = noClusterLegend;
     this.outerGroup = outerGroup;
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
     this.graphContainer = graphContainer;
     this.detailsContainer = detailsContainer;
-    this.parseData(data);
+    this.parseData(data, displayAlwaysAllOuter, defaultOuterSortField);
 
     this.detailedNode = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup);
@@ -42,13 +44,7 @@ class TemporalGraph {
       this.updateClustersPositionsInDetailsGraph(nodes, links);
     });
 
-    this.timeline = new Timeline(this.times, 2500, (value) => {
-      this.drawClusterGraph(graphContainer, value);
-      if (this.detailedNode !== null) {
-        this.drawDetailsGraph(this.detailsContainer, value, this.detailedNode);
-      }
-    });
-
+    this.timeline = new Timeline(this.times, 2500, (value) => this.#updateGraphs(value));
     this.drawTimeline(timelineContainer);
   }
 
@@ -60,7 +56,7 @@ class TemporalGraph {
     return newObj;
   }
 
-  parseData(data) {
+  parseData(data, displayAlwaysAllOuter, outerSortField) {
     this.times = Object.keys(data);
     this.data = {};
 
@@ -84,21 +80,21 @@ class TemporalGraph {
 
         // Process the groups
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
-          const elementsCount = Number(group.count) || Object.keys(group[this.detailGroup]).length;
+          const elementsId = Object.keys(group[this.detailGroup]).map(id => `E-${id}`);
           const groupColor = group.color && group.color !== "" ? group.color : undefined;
           const groupLogo  = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
           
           if (!groupsSet.has(groupId)) {
-            const name = group.name && group.name !== "" ? group.name : "No Team";
-            
+            const name = group.name && group.name !== "" ? group.name : this.noClusterLegend;           
             groupsSet.add(groupId);
-            nodes.cluster.push({id: `C-${groupId}`, name: name, img: groupLogo, color: groupColor, group: this.clusterGroup, supergroup: [`O-${supergroup.id}`]});
+            nodes.cluster.push({id: `C-${groupId}`, name: name, img: groupLogo, color: groupColor, ...this.#parseObject(group, ["name", "logo", "img", "color", this.detailGroup]), group: this.clusterGroup, supergroups: [`O-${supergroup.id}`], elements: elementsId});
           } else {
             const index = nodes.cluster.findIndex(d => d.id === `C-${groupId}`);
-            nodes.cluster[index].supergroup.push(`O-${supergroup.id}`);
+            nodes.cluster[index].supergroups.push(`O-${supergroup.id}`);
+            nodes.cluster[index].elements = nodes.cluster[index].elements.concat(elementsId);
           }
 
-          links.cluster.push({id: `C-${groupId}-O-${supergroup.id}`, source: `C-${groupId}`, target: `O-${supergroup.id}`, value: elementsCount});
+          links.cluster.push({id: `C-${groupId}-O-${supergroup.id}`, source: `C-${groupId}`, target: `O-${supergroup.id}`, elements: elementsId});
 
           // Process the elements
           Object.entries(group[this.detailGroup]).forEach(([elementId, element]) => {
@@ -114,16 +110,16 @@ class TemporalGraph {
         });
       });
 
-      this.#sortNodes(nodes.outer, this.outerSortField);
+      this.#sortNodes(nodes.outer, outerSortField);
       this.data[time] = { nodes, links };
     }
 
-    if (this.displayAlwaysAllOuter) {
+    if (displayAlwaysAllOuter) {
       const allOuterNodes = Object.values(this.data).reduce((acc, timeslice) => {
         return acc.concat(timeslice.nodes.outer.filter(node => !acc.some(n => n.id === node.id)));
       }, []);
 
-      this.#sortNodes(allOuterNodes, this.outerSortField);
+      this.#sortNodes(allOuterNodes, outerSortField);
       for (let time in this.data) {
         this.data[time].nodes.outer = allOuterNodes;
       }
@@ -144,43 +140,46 @@ class TemporalGraph {
     for (let time in this.data) {
       this.#sortNodes(this.data[time].nodes.outer, field);
     };
-
-    // TODO: (future extract method to a updateGraphs method)
-    this.drawClusterGraph(this.graphContainer, this.timeline.getValue());
-    if (this.detailedNode !== null) {
-      this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
-    }
+    this.#updateGraphs();
   }
 
   filterOuterNodes(filter) {
     this.outerFilter = "function" === typeof filter ? filter : (() => true);
-
-    // TODO: (future extract method to a updateGraphs method)
-    this.drawClusterGraph(this.graphContainer, this.timeline.getValue());
-    if (this.detailedNode !== null) {
-      this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
-    }
+    this.#updateGraphs();
   }
 
   filterClusterNodes(filter) {
     this.clusterFilter = "function" === typeof filter ? filter : (() => true);
+    this.#updateGraphs();
+  }
 
-    // TODO: (future extract method to a updateGraphs method)
-    this.drawClusterGraph(this.graphContainer, this.timeline.getValue());
+  filterDetailNodes(filter) {
+    this.detailFilter = "function" === typeof filter ? filter : (() => true);
+    this.#updateGraphs();
+  }
+
+  #updateGraphs(time = this.timeline.getValue()) {
+    this.drawClusterGraph(this.graphContainer, time);
     if (this.detailedNode !== null) {
-      this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
+      this.drawDetailsGraph(this.detailsContainer, time, this.detailedNode);
     }
   }
 
   drawClusterGraph(container, time) {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
     const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
+    const elements = this.data[time].nodes.detail.filter(this.detailFilter).map(d => d.id);
     
-    const links = this.data[time].links.cluster.filter(d => supergroups.includes(d.target) && groups.includes(d.source)).map(d => ({...d}));
-    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id)) // TODO: (future) show all outer nodes?
-      .concat(this.data[time].nodes.cluster
-        .filter(d => groups.includes(d.id) && d.supergroup.some(s => supergroups.includes(s)))
-        .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
+    const links = this.data[time].links.cluster
+      .filter(d => supergroups.includes(d.target) && groups.includes(d.source) && d.elements.some(e => elements.includes(e)))
+      .map(d => ({...d, value: d.elements.filter(e => elements.includes(e)).length}));
+    
+    const nodes = this.data[time].nodes.outer
+      .filter(d => supergroups.includes(d.id))
+      .concat(
+        this.data[time].nodes.cluster
+          .filter(d => groups.includes(d.id) && d.supergroups.some(s => supergroups.includes(s)) && d.elements.some(e => elements.includes(e)))
+          .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
       .map(d => ({...d}));
     
     this.clusterGraph.update(nodes, links);
@@ -194,11 +193,17 @@ class TemporalGraph {
 
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
     const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
+    const elements = this.data[time].nodes.detail.filter(this.detailFilter).map(d => d.id);
 
-    const links = this.data[time].links.detail.filter((d) => linkFilter(d) && supergroups.includes(d.target) && groups.includes(d.cluster)).map(d => ({...d}));
-    const nodes = this.data[time].nodes.outer.filter(d => supergroups.includes(d.id)) // TODO: (future) show all outer nodes?
-      .concat(this.data[time].nodes.detail
-        .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster)))
+    const links = this.data[time].links.detail
+      .filter((d) => linkFilter(d) && supergroups.includes(d.target) && groups.includes(d.cluster) && elements.includes(d.source))
+      .map(d => ({...d}));
+    
+    const nodes = this.data[time].nodes.outer
+      .filter(d => supergroups.includes(d.id)) 
+      .concat(
+        this.data[time].nodes.detail
+          .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster) && elements.includes(d.id)))
       .map(d => ({...d}));
 
     this.detailsGraph.update(nodes, links, node);

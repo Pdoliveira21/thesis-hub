@@ -18,9 +18,8 @@
 <body>
   <div id="temporal-graph">
     <div class="view-container">
-      <p class="view-title">Evolution of players in National Teams and Clubs</p>
-      
       <div class="view-controls">
+        <!-- TODO: make this dynamic too -->
         <span>Sort National Teams by:</span>
         <select id="sort-national-teams" onchange="onNationalTeamsSortChange()">
           <option value="name" selected>Name</option>
@@ -34,8 +33,6 @@
       <span id="timeline-container"></span>
     </div>
     <div class="view-container">
-      <p class="view-title">Detailed View of a Club</p>
-
       <div style="height: 120px;"></div>
       <span id="details-container"></span>
     </div>
@@ -78870,6 +78867,8 @@
       noClusterLegend: "No Team",
     });    
     
+    // TODO: more dynamic
+    // TODO: extract to function of outer, cluster and detail names according to endpoint to not have to change in alot of places
     function onNationalTeamsSortChange() {
       var sort = document.getElementById("sort-national-teams").value;
       if (sort && "object" === typeof graph) {
@@ -78877,30 +78876,42 @@
       }
     }
 
-    // TODO: filters fields and options based on the data
-    let filterNationalTeams = new Filter("National Teams", [{
-        id: "filter-national-team-fk_continent",
-        field: "fk_continente",
-        options: ["1", "2", "3", "4", "5", "6"],
-      }],
-     (filter) => graph.filterOuterNodes(filter),
-    );
+    function extractFilters(data, exclude = []) {
+      let filters = {}
 
-    let filterClubs = new Filter("Clubs", [{
-        id: "filter-clubs-color",
-        field: "color",
-        options: ["005000", "101010", "FDD945", "AD1814", "800020", "273E7C", "71A6D2", "2D4C97", "4682B4", "4863A0", "3E2C64", "347C17"],
-      }],
-     (filter) => graph.filterClusterNodes(filter),
-    );
-    
-    let filterPlayers = new Filter("Players", [{
-      id: "filter-players-position",
-      field: "posicao",
-      options: ["Guarda Redes", "Defesa", "M\u00e9dio", "Avan\u00e7ado", "Jogador de Campo", "Fixo"],
-    }],
-    (filter) => graph.filterDetailNodes(filter),
-    );
+      function extract(data, parent) {
+        if ("object" !== typeof data || data === null) return;
+
+        if (Array.isArray(data)) {
+          data.forEach((item) => extract(item, "national teams"));
+          return;
+        } 
+
+        for (let key in data) {
+          if (exclude.includes(key)) continue;
+          
+          if ("object" === typeof data[key]) {
+            extract(data[key], (parent === "teams" || parent === "players") && key !== "players" ? parent : key);
+          } else {
+            if (!filters[parent]) filters[parent] = {};
+            if (!filters[parent][key]) filters[parent][key] = [];
+            if (data[key] && data[key] !== "" && !filters[parent][key].includes(data[key])) {
+              filters[parent][key].push(data[key]);
+              filters[parent][key].sort();
+            }
+          }
+        }
+      }
+
+      extract(data, null);
+      return filters;
+    }
+
+    const filters = extractFilters(data.data.seasons, ["id", "name", "img", "logo", "count"]);
+
+    const filterNationalTeams = new Filter("National Teams", "national-teams", filters["national teams"], (filter) => graph.filterOuterNodes(filter));
+    const filterClubs = new Filter("Clubs", "teams", filters["teams"], (filter) => graph.filterClusterNodes(filter));
+    const filterPlayers = new Filter("Players", "players", filters["players"], (filter) => graph.filterDetailNodes(filter));
 
     document.getElementById("controls-filters").append(filterNationalTeams.render(), filterClubs.render(), filterPlayers.render());
 

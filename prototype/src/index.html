@@ -12,6 +12,7 @@
   <script src="./graphs/DetailGraph.js"></script>
   <script src="./scrubbers/Timeline.js"></script>
   <script src="./scrubbers/Filter.js"></script>
+  <script src="./scrubbers/Sort.js"></script>
   <script src="./TemporalGraph.js"></script>
 </head>
 
@@ -19,13 +20,7 @@
   <div id="temporal-graph">
     <div class="view-container">
       <div class="view-controls">
-        <!-- TODO: make this dynamic too -->
-        <span>Sort National Teams by:</span>
-        <select id="sort-national-teams" onchange="onNationalTeamsSortChange()">
-          <option value="name" selected>Name</option>
-          <option value="fk_continente">Continente</option>
-        </select>
-
+        <div id="controls-sort"></div>
         <div id="controls-filters" class="view-controls-filters"></div>
       </div>
       
@@ -78867,14 +78862,28 @@
       noClusterLegend: "No Team",
     });    
     
-    // TODO: more dynamic
-    // TODO: extract to function of outer, cluster and detail names according to endpoint to not have to change in alot of places
-    function onNationalTeamsSortChange() {
-      var sort = document.getElementById("sort-national-teams").value;
-      if (sort && "object" === typeof graph) {
-        graph.sortOuterNodes(sort);
-      }
+    function extractSortFields(data, exclude) {
+      let fields = [];
+
+      for (let time in data) {
+        
+        
+        data[time].forEach((item) => {
+          Object.keys(item).forEach((key) => {
+            if (exclude.includes(key) || "object" === typeof item[key]) return;
+
+            if (!fields.includes(key)) {
+              fields.push(key);
+            }
+          });
+        });
     }
+      return fields;
+    }
+
+    const sortFields = extractSortFields(data.data.seasons, ["id", "img", "teams"]);
+    const sortNationalTeams = new Sort("National Teams", "national-teams", sortFields, "name", (sort) => graph.sortOuterNodes(sort));
+    document.getElementById("controls-sort").append(sortNationalTeams.render());
 
     function extractFilters(data, exclude = []) {
       let filters = {}

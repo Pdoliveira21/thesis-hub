@@ -11,6 +11,7 @@
   <script src="./graphs/ClusterGraph.js"></script>
   <script src="./graphs/DetailGraph.js"></script>
   <script src="./scrubbers/Timeline.js"></script>
+  <script src="./scrubbers/Filter.js"></script>
   <script src="./TemporalGraph.js"></script>
 </head>
 
@@ -26,62 +27,7 @@
           <option value="fk_continente">Continente</option>
         </select>
 
-        <div class="view-controls-filters">
-          <div>
-            <p>Filter National Teams by:</p>
-            <span>Continent</span>
-            <select id="filter-national-team-continent" onchange="onNationalTeamsFilterChange()">
-              <option value="all" selected>All</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option> 
-            </select>
-          </div>
-
-          <div>
-            <p>Filter Clubs by:</p>
-            <span>Color (just to test)</span>
-            <select id="filter-clubs-color" onchange="onClubsFilterChange()">
-              <option value="all" selected>All</option>
-              <option value="AD1814">AD1814</option>
-              <option value="273E7C">273E7C</option>
-              <option value="71A6D2">71A6D2</option>
-              <option value="800020">800020</option>
-              <option value="2D4C97">2D4C97</option>
-              <option value="FDD945">FDD945</option>
-              <option value="990012">990012</option>
-              <option value="660000">660000</option>
-              <option value="E5E4E2">E5E4E2</option>
-              <option value="FBB82E">FBB82E</option>
-              <option value="347C17">347C17</option>
-              <option value="7D0541">7D0541</option>
-              <option value="2B3856">2B3856</option>
-              <option value="DC143C">DC143C</option>
-              <option value="4863A0">4863A0</option>
-              <option value="4682B4">4682B4</option>
-              <option value="6AA121">6AA121</option>
-              <option value="3E2C64">3E2C64</option>
-              <option value="101010">101010</option>
-            </select>
-          </div>
-
-          <div>
-            <p>Filter Players by:</p>
-            <span>Position</span>
-            <select id="filter-players-position" onchange="onPlayersFilterChange()">
-              <option value="all" selected>All</option>
-              <option value="Guarda Redes">Guarda Redes</option>
-              <option value="Defesa">Defesa</option>
-              <option value="Medio">Médio</option>
-              <option value="Avancado">Avançado</option>
-              <option value="Jogador de Campo">Jogador de Campo</option>
-              <option value="Fixo">Fixo</option>
-            </select>
-          </div>
-        </div>
+        <div id="controls-filters" class="view-controls-filters"></div>
       </div>
       
       <span id="graph-container"></span>
@@ -78918,10 +78864,11 @@
   "timestamp": "1710112403"
 };
 
+    
     var graph = new TemporalGraph(data.data.seasons, {
       clusterGroup: "teams",
       noClusterLegend: "No Team",
-    });
+    });    
     
     function onNationalTeamsSortChange() {
       var sort = document.getElementById("sort-national-teams").value;
@@ -78930,41 +78877,33 @@
       }
     }
 
-    // NOTE: (future) same function for every outer node filter that set ups the filter based on the selected values
-    // so that the filter logic is dependent on each use of the TemporalGraph
-    // Possible simplification: allow chain of filters in TemporalGraph (map each filter to a select) 
-    function onNationalTeamsFilterChange() {
-      var continent = document.getElementById("filter-national-team-continent").value;
-      if (continent && "object" === typeof graph) {
-        continent === "all"
-          ? graph.filterOuterNodes()
-          : graph.filterOuterNodes((node) => node["fk_continente"] === continent);
-      }
-    }
+    // TODO: filters fields and options based on the data
+    let filterNationalTeams = new Filter("National Teams", [{
+        id: "filter-national-team-fk_continent",
+        field: "fk_continente",
+        options: ["1", "2", "3", "4", "5", "6"],
+      }],
+     (filter) => graph.filterOuterNodes(filter),
+    );
 
-    function onClubsFilterChange() {
-      var color = document.getElementById("filter-clubs-color").value;
-      if (color && "object" === typeof graph) {
-        color === "all"
-          ? graph.filterClusterNodes()
-          : graph.filterClusterNodes((node) => node["color"] === color);
-      }
-    }
+    let filterClubs = new Filter("Clubs", [{
+        id: "filter-clubs-color",
+        field: "color",
+        options: ["005000", "101010", "FDD945", "AD1814", "800020", "273E7C", "71A6D2", "2D4C97", "4682B4", "4863A0", "3E2C64", "347C17"],
+      }],
+     (filter) => graph.filterClusterNodes(filter),
+    );
+    
+    let filterPlayers = new Filter("Players", [{
+      id: "filter-players-position",
+      field: "posicao",
+      options: ["Guarda Redes", "Defesa", "M\u00e9dio", "Avan\u00e7ado", "Jogador de Campo", "Fixo"],
+    }],
+    (filter) => graph.filterDetailNodes(filter),
+    );
 
-    function onPlayersFilterChange() {
-      var name = document.getElementById("filter-players-position").value;
-      if (name && "object" === typeof graph) {
-        name === "all"
-          ? graph.filterDetailNodes()
-          : graph.filterDetailNodes((node) => {
-            if (name === "Medio")
-              return node["posicao"] === "M\u00e9dio" || node["posicao"] === "Médio";
-            else if (name === "Avancado")
-              return node["posicao"] === "Avan\u00e7ado" || node["posicao"] === "Avançado";
-            return node["posicao"] === name;
-          });
-      }
-    }
+    document.getElementById("controls-filters").append(filterNationalTeams.render(), filterClubs.render(), filterPlayers.render());
+
   </script>
 
 </body>

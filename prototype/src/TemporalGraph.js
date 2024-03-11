@@ -14,6 +14,7 @@ class TemporalGraph {
     defaultOuterFilter = () => true,
     defaultClusterFilter = () => true,
     defaultDetailFilter = () => true,
+    noClusterLegend = "No Club",
     outerGroup = "national teams",
     clusterGroup = "clubs",
     detailGroup = "players",
@@ -25,6 +26,7 @@ class TemporalGraph {
     this.outerFilter = defaultOuterFilter;
     this.clusterFilter = defaultClusterFilter;
     this.detailFilter = defaultDetailFilter;
+    this.noClusterLegend = noClusterLegend;
     this.outerGroup = outerGroup;
     this.clusterGroup = clusterGroup;
     this.detailGroup = detailGroup;
@@ -82,7 +84,7 @@ class TemporalGraph {
           const groupColor = group.color && group.color !== "" ? group.color : undefined;
           
           if (!groupsSet.has(groupId)) {
-            const name = group.name && group.name !== "" ? group.name : "No Team";
+            const name = group.name && group.name !== "" ? group.name : this.noClusterLegend;
             const logo = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
             
             groupsSet.add(groupId);

@@ -66,4 +66,35 @@ class Filter {
       });
     }
   }
+
+  static extractFilters(data, outerGroup, clusterGroup, detailGroup, exclude = []) {
+    let filters = {}
+
+    function extract(data, parent) {
+      if ("object" !== typeof data || data === null) return;
+
+      if (Array.isArray(data)) {
+        data.forEach((item) => extract(item, outerGroup));
+        return;
+      } 
+
+      for (let key in data) {
+        if (exclude.includes(key)) continue;
+        
+        if ("object" === typeof data[key]) {
+          extract(data[key], (parent === clusterGroup || parent === detailGroup) && key !== detailGroup ? parent : key);
+        } else {
+          if (!filters[parent]) filters[parent] = {};
+          if (!filters[parent][key]) filters[parent][key] = [];
+          if (data[key] && data[key] !== "" && !filters[parent][key].includes(data[key])) {
+            filters[parent][key].push(data[key]);
+            filters[parent][key].sort();
+          }
+        }
+      }
+    }
+
+    extract(data, null);
+    return filters;
+  }
 }

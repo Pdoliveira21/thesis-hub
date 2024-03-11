@@ -35,54 +35,6 @@
 
 
   <script>
-    // (TODO): rethink where this methods should be placed - here or in the respective scrubber classes?
-    function extractSortFields(data, exclude = []) {
-      let fields = new Set();
-
-      for (let time in data) {
-        data[time].forEach((item) => {
-          for (let key in item) {
-            if (exclude.includes(key) || "object" === typeof item[key]) continue;
-            fields.add(key);
-          };
-        });
-      }
-
-      return Array.from(fields).sort();
-    }
-
-    function extractFilters(data, outerGroup, clusterGroup, detailGroup, exclude = []) {
-      let filters = {}
-
-      function extract(data, parent) {
-        if ("object" !== typeof data || data === null) return;
-
-        if (Array.isArray(data)) {
-          data.forEach((item) => extract(item, outerGroup));
-          return;
-        } 
-
-        for (let key in data) {
-          if (exclude.includes(key)) continue;
-          
-          if ("object" === typeof data[key]) {
-            extract(data[key], (parent === clusterGroup || parent === detailGroup) && key !== detailGroup ? parent : key);
-          } else {
-            if (!filters[parent]) filters[parent] = {};
-            if (!filters[parent][key]) filters[parent][key] = [];
-            if (data[key] && data[key] !== "" && !filters[parent][key].includes(data[key])) {
-              filters[parent][key].push(data[key]);
-              filters[parent][key].sort();
-            }
-          }
-        }
-      }
-
-      extract(data, null);
-      return filters;
-    }
-   
-
     // NOTE: simulate params received by arguments to this template
     const endpoint = 'https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30';
     const dataPath = "data.seasons";
@@ -98,12 +50,10 @@
     // fetch(endpoint)
     //   .then(response => response.json())
     //   .then(data => {
-    //     const graph = new TemporalGraph(data, {
-    //       clusterGroup: "teams"
-    //     });
+    //     initInfoVis(data);
     //   });
   
-    const rawData = {
+    const raw = {
   "error_code": "0",
   "error_text": "",
   "data": {
@@ -78915,31 +78865,37 @@
   },
   "timestamp": "1710112403"
 };
-
+    initInfoVis(raw);
     
-    const data = dataPath ? accessObjectByString(rawData, dataPath) : rawData;
-
-    let graph = new TemporalGraph(data, graphConfigs);    
-    
-    const sortFields = extractSortFields(data, ["id", "img", "teams"]);
-    const sortNationalTeams = new Sort(capitalizeStringWords(outerGroup), outerGroup.replace(' ', '-'), sortFields, "name", (sort) => {
-      if (graph && "object" === typeof graph) {
-        graph.sortOuterNodes(sort);
-      }
-    });
-    document.getElementById("controls-sort").append(sortNationalTeams.render());
-
-    
+    function initInfoVis(raw) {
+      const data = dataPath ? accessObjectByString(raw, dataPath) : raw;
+      let graph = new TemporalGraph(data, graphConfigs);
       
+      const outerName = capitalizeStringWords(outerGroup);
+      const clusterName = capitalizeStringWords(clusterGroup);
+      const detailName = capitalizeStringWords(detailGroup);
+      const outerPrefix = outerGroup.replace(' ', '-');
+      const clusterPrefix = clusterGroup.replace(' ', '-');
+      const detailPrefix = detailGroup.replace(' ', '-');
+      
+      const sortFields = Sort.extractSortFields(data, ["id", "img", "teams"]);
+      const filters = Filter.extractFilters(data, outerGroup, clusterGroup, detailGroup, ["id", "name", "img", "logo", "count"]);
+      
+      const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, (sort) => {
+        if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
+      });
+      const filterNationalTeams = new Filter(outerName, outerPrefix, filters[outerGroup], (filter) => {
+        if (graph && "object" === typeof graph) graph.filterOuterNodes(filter);
+      });
+      const filterClubs = new Filter(clusterName, clusterPrefix, filters[clusterGroup], (filter) => {
+        if (graph && "object" === typeof graph) graph.filterClusterNodes(filter);
+      });
+      const filterPlayers = new Filter(detailName, detailPrefix, filters[detailGroup], (filter) => {
+        if (graph && "object" === typeof graph) graph.filterDetailNodes(filter);
+      });
 
-    const filters = extractFilters(data, outerGroup, clusterGroup, detailGroup, ["id", "name", "img", "logo", "count"]);
-
-    const filterNationalTeams = new Filter(capitalizeStringWords(outerGroup), outerGroup.replace(' ', '-'), filters[outerGroup], (filter) => graph.filterOuterNodes(filter));
-    const filterClubs = new Filter(capitalizeStringWords(clusterGroup), clusterGroup.replace(' ', '-'), filters[clusterGroup], (filter) => graph.filterClusterNodes(filter));
-    const filterPlayers = new Filter(capitalizeStringWords(detailGroup), detailGroup.replace(' ', '-'), filters[detailGroup], (filter) => graph.filterDetailNodes(filter));
-
-    document.getElementById("controls-filters").append(filterNationalTeams.render(), filterClubs.render(), filterPlayers.render());
-
+      document.getElementById("controls-sort").append(sortNationalTeams.render());
+      document.getElementById("controls-filters").append(filterNationalTeams.render(), filterClubs.render(), filterPlayers.render());
+    }
   </script>
-
 </body>

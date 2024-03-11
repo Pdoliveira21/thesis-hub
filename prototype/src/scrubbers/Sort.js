@@ -43,4 +43,19 @@ class Sort {
       this.changeCallback(document.querySelector(`#sort-${this.prefix}`).value);
     }
   }
+
+  static extractSortFields(data, exclude = []) {
+    let fields = new Set();
+
+    for (let time in data) {
+      data[time].forEach((item) => {
+        for (let key in item) {
+          if (exclude.includes(key) || "object" === typeof item[key]) continue;
+          fields.add(key);
+        };
+      });
+    }
+
+    return Array.from(fields).sort();
+  }
 }

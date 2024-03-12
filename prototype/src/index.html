@@ -78884,7 +78884,7 @@
       const filters = Filter.extractFilters(data, outerGroup, clusterGroup, detailGroup, ["id", "name", "img", "logo", "count"]);
       const search = Search.extractSearchNames(data, "players");
 
-      const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, (sort) => {
+      const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, "name", (sort) => {
         if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
       });
       const filterNationalTeams = new Filter(outerName, outerPrefix, filters[outerGroup], (filter) => {

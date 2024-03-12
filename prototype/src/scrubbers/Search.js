@@ -7,6 +7,7 @@ class Search {
     this.changeCallback = changeCallback;
 
     this.search = null;
+    this.previousSearchValue = null;
     this.initialize();
   }
 
@@ -20,31 +21,40 @@ class Search {
     const title = document.createElement("span");
     title.textContent = `Find/Follow ${this.name}:`;
 
-    const select = document.createElement("select");
-    select.id = `search-${this.prefix}`;
-    select.addEventListener("change", this.onChange.bind(this));
+    const input = document.createElement("input");
+    input.id = `search-${this.prefix}`;
+    input.type = "search";
+    input.setAttribute("list", `search-${this.prefix}-values`);
+    input.addEventListener("input", this.onChange.bind(this));
 
-    // TODO: change by inpput box with autocomplete for now just selecting the first 10
-    for (const value of this.values.slice(0, 10)) {
+    const datalist = document.createElement("datalist");
+    datalist.id = `search-${this.prefix}-values`;
+
+    for (const value of this.values) {
       const option = document.createElement("option");
       option.value = value;
-      option.textContent = value;
-      select.appendChild(option);
+      datalist.appendChild(option);
     }
 
-    this.search.append(title, select);
+    this.search.append(title, input, datalist);
   }
 
   onChange(_) {
     if ("function" === typeof this.changeCallback) {
-      this.changeCallback(document.querySelector(`#search-${this.prefix}`).value);
+      const inputValue = document.querySelector(`#search-${this.prefix}`).value;
+      const searchValue = inputValue !== "" && this.values.includes(inputValue) ? inputValue : null;
+      
+      if (searchValue !== this.previousSearchValue) {
+        this.changeCallback(searchValue);
+        this.previousSearchValue = searchValue;
+      }
     }
   }
 
   static extractSearchNames(data, from = "players") {
     let names = new Set();
 
-    // TODO: go throug data till from object is found and and to the values set their name
+    // TODO (review): go throug data till from object is found and and to the values set their name
     // iterate data recursevel and add to the set the names of the objects that correspond to the from object
     function extract(object) {
       if ("object" !== typeof object || object === null) return;

@@ -18,6 +18,10 @@
   column-gap: 5em;
 }
 
+.view-controls-search {
+  margin: 1em 0;
+}
+
 #timeline-container {
   width: 100%;
   display: flex;

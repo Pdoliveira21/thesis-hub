@@ -159,6 +159,12 @@ class TemporalGraph {
     this.#updateGraphs();
   }
 
+  searchDetailNodes(name) {
+    // TODO: get the id of the node with the name and call something on the graphs to highlight the 
+    // nodes where that player is present
+    // links with that player and both ends should be highlighted
+  }
+
   #updateGraphs(time = this.timeline.getValue()) {
     this.drawClusterGraph(this.graphContainer, time);
     if (this.detailedNode !== null) {

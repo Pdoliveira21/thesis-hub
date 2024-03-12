@@ -23,7 +23,7 @@
       <div class="view-controls">
         <div id="controls-sort"></div>
         <div id="controls-filters" class="view-controls-filters"></div>
-        <div id="controls-search"></div>
+        <div id="controls-search" class="view-controls-search"></div>
       </div>
       
       <span id="graph-container"></span>
@@ -78882,8 +78882,7 @@
       
       const sortFields = Sort.extractSortFields(data, ["id", "img", "teams"]);
       const filters = Filter.extractFilters(data, outerGroup, clusterGroup, detailGroup, ["id", "name", "img", "logo", "count"]);
-      const search = Search.extractSearchNames(data, "teams");
-      console.log(search);
+      const search = Search.extractSearchNames(data, "players");
 
       const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, (sort) => {
         if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
@@ -78897,9 +78896,13 @@
       const filterPlayers = new Filter(detailName, detailPrefix, filters[detailGroup], (filter) => {
         if (graph && "object" === typeof graph) graph.filterDetailNodes(filter);
       });
+      const searchPlayers = new Search(detailName, detailPrefix, search, (name) => {
+        if (graph && "object" === typeof graph) graph.searchDetailNodes(name);
+      });
 
       document.getElementById("controls-sort").append(sortNationalTeams.render());
       document.getElementById("controls-filters").append(filterNationalTeams.render(), filterClubs.render(), filterPlayers.render());
+      document.getElementById("controls-search").append(searchPlayers.render());
     }
   </script>
 </body>

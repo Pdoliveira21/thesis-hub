@@ -118,7 +118,7 @@ class DetailGraph extends Graph {
     return d.img !== undefined && (d.group === this.outerGroup);
   }
 
-  update(nodes, links, focus) {
+  update(nodes, links, highlights, focus) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
     const oldClusterCenter = this.clusterPosition();
     
@@ -151,6 +151,7 @@ class DetailGraph extends Graph {
             const color = self.nodeColor(d);
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
+            const highlighted = highlights && highlights.has(d.id);
 
             if (displayImg) {
               const imgRadius = radius + 1;
@@ -159,7 +160,9 @@ class DetailGraph extends Graph {
                 .attr("x", -imgRadius)
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
-                .attr("height", imgRadius * 2);
+                .attr("height", imgRadius * 2)
+                .style("outline", highlighted ? "5px solid blue" : "none")
+                .style("border-radius", highlighted ? "50%" : "none");
               
               if (d.group === self.innerGroup) {
                 g.select("image")
@@ -172,7 +175,8 @@ class DetailGraph extends Graph {
                 .attr("r", 0)
                 .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
                 .attr("r", radius)
-                .attr("fill", color);
+                .attr("fill", color).style("stroke", highlighted ? "blue" : "none")
+                .style("stroke-width", highlighted ? "5px" : 0);
               g.append("text")
                 .classed("node-text", true)
                 .attr("display", displayText ? "block" : "none")
@@ -191,6 +195,7 @@ class DetailGraph extends Graph {
             const color = self.nodeColor(d);
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
+            const highlighted = highlights && highlights.has(d.id);
 
             if (displayImg) {
               g.select("circle").remove();
@@ -203,7 +208,9 @@ class DetailGraph extends Graph {
                 .attr("x", -imgRadius)
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
-                .attr("height", imgRadius * 2);
+                .attr("height", imgRadius * 2)
+                .style("outline", highlighted ? "5px solid blue" : "none")
+                .style("border-radius", highlighted ? "50%" : "none");
               
               // TODO: (future, some color filter for the image to still mantain the club identification??)
             } else {
@@ -213,7 +220,9 @@ class DetailGraph extends Graph {
               circle
                 .attr("r", radius)
                 .transition().duration(self.animationDuration).ease(self.animationEase)
-                .attr("fill", color);
+                .attr("fill", color)
+                .style("stroke", highlighted ? "blue" : "none")
+                .style("stroke-width", highlighted ? "5px" : 0);
 
               const text = g.select("text").empty() ? g.append("text") : g.select("text");
               text
@@ -243,9 +252,13 @@ class DetailGraph extends Graph {
         enter => enter.append("line")
           .attr("stroke-width", 0)
           .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
-          .attr("stroke-width", 0.75),
+          .attr("stroke-width", 0.75)
+          .attr("stroke", d => highlights && highlights.has(d.id) ? "blue" : "unset")
+          .attr("stroke-opacity", d => highlights && highlights.has(d.id) ? 1 : "unset"),
         update => update
-          .attr("stroke-width", 0.75),
+          .attr("stroke-width", 0.75)
+          .attr("stroke", d => highlights && highlights.has(d.id) ? "blue" : "unset")
+          .attr("stroke-opacity", d => highlights && highlights.has(d.id) ? 1 : "unset"),
         exit => exit
           .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
           .attr("stroke-width", 0)

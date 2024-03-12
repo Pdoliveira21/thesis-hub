@@ -33,7 +33,8 @@ class TemporalGraph {
     this.graphContainer = graphContainer;
     this.detailsContainer = detailsContainer;
     this.parseData(data, displayAlwaysAllOuter, defaultOuterSortField);
-
+    
+    this.detailSearchIds = [];
     this.detailedNode = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup);
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, (node) => {
@@ -160,8 +161,10 @@ class TemporalGraph {
   }
 
   searchDetailNodes(name) {
-    // this.detailSearch = name
-    // this.#updateGraphs();
+    this.detailSearchIds = name !== null 
+      ? Object.values(this.data).flatMap(timeslice => timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id))
+      : [];
+    this.#updateGraphs();
   }
 
   #updateGraphs(time = this.timeline.getValue()) {
@@ -187,8 +190,13 @@ class TemporalGraph {
           .filter(d => groups.includes(d.id) && d.supergroups.some(s => supergroups.includes(s)) && d.elements.some(e => elements.includes(e)))
           .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
       .map(d => ({...d}));
+
+    const elementSearchIds = this.detailSearchIds.filter(id => elements.includes(id)); 
+    const highlights = elementSearchIds.length > 0
+      ? new Set(links.filter(l => l.elements.some(e => elementSearchIds.includes(e))).flatMap(l => [l.id, l.source, l.target]))
+      : new Set();
     
-    this.clusterGraph.update(nodes, links);
+    this.clusterGraph.update(nodes, links, highlights);
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
   }
 
@@ -212,18 +220,11 @@ class TemporalGraph {
           .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster) && elements.includes(d.id)))
       .map(d => ({...d}));
 
-    // (TODO)
-    // (1) GET ALL IDS in deatil nodes that match that name
-    const playerIds = ["E-1579", "E-74952"]; 
+    const highlights = this.detailSearchIds.length > 0
+      ? new Set(links.filter(l => this.detailSearchIds.includes(l.source)).flatMap(l => [l.id, l.source, l.target]))
+      : new Set();  
 
-    // (2) Get the ids of the links and nodes to highligt based on the links that have that id as source
-    // complete list of the ids of the links to highligth
-    const highlights = playerIds !== null && playerIds.length > 0
-      ? links.filter(l => playerIds.includes(l.source)).flatMap(l => [l.id, l.source, l.target])
-      : [];  
-    console.log(highlights);
-
-    this.detailsGraph.update(nodes, links, node);
+    this.detailsGraph.update(nodes, links, highlights, node);
     document.getElementById(container).replaceChildren(this.detailsGraph.render());
   }
 

@@ -160,9 +160,8 @@ class TemporalGraph {
   }
 
   searchDetailNodes(name) {
-    // TODO: get the id of the node with the name and call something on the graphs to highlight the 
-    // nodes where that player is present
-    // links with that player and both ends should be highlighted
+    // this.detailSearch = name
+    // this.#updateGraphs();
   }
 
   #updateGraphs(time = this.timeline.getValue()) {
@@ -212,6 +211,17 @@ class TemporalGraph {
         this.data[time].nodes.detail
           .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster) && elements.includes(d.id)))
       .map(d => ({...d}));
+
+    // (TODO)
+    // (1) GET ALL IDS in deatil nodes that match that name
+    const playerIds = ["E-1579", "E-74952"]; 
+
+    // (2) Get the ids of the links and nodes to highligt based on the links that have that id as source
+    // complete list of the ids of the links to highligth
+    const highlights = playerIds !== null && playerIds.length > 0
+      ? links.filter(l => playerIds.includes(l.source)).flatMap(l => [l.id, l.source, l.target])
+      : [];  
+    console.log(highlights);
 
     this.detailsGraph.update(nodes, links, node);
     document.getElementById(container).replaceChildren(this.detailsGraph.render());

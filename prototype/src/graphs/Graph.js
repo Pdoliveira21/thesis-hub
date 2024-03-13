@@ -104,6 +104,32 @@ class Graph {
     // simulation.alpha(0.3).restart();
   }
 
+  reveal(node, link, ids, color, width) {
+    node.call(g => {
+      this.#revealImage(g.select("image"), ids, color, width);
+      this.#revealCircle(g.select("circle"), ids, color, width);
+    });
+
+    link.call(line => this.#revealLine(line, ids, color));
+  }
+
+  #revealImage(image, ids, color, width) {
+    image
+      .style("outline", d => ids.has(d.id) ? `${width}px solid ${color}` : "none")
+      .style("border-radius", d => ids.has(d.id) ? "50%" : "none"); // TODO: circle or square?
+  }
+
+  #revealCircle(circle, ids, color, width) {
+    circle
+      .style("stroke", d => ids.has(d.id) ? color : "none")
+      .style("stroke-width", d => ids.has(d.id) ? `${width}px` : 0);
+  }
+
+  #revealLine(line, ids, color) {
+    line
+      .style("stroke", d => ids.has(d.id) ? color : "unset");
+  }
+
   circularLayout(nodes, group) {
     const nodesCount = nodes.filter(d => d.group === group).length;
 

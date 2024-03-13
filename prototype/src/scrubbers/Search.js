@@ -66,7 +66,12 @@ class Search {
 
       for (let key in object) {
         if (key === from) {
-          Object.values(object[key]).forEach((item) => names.add(item.name));
+          Object.values(object[key]).forEach((item) => {
+            if (item.name && item.name !== "") {
+              names.add(item.name);
+            }
+          });
+          return;
         } else {
           extract(object[key]);
         }

@@ -111,7 +111,7 @@ class ClusterGraph extends Graph {
   // TODO: (future) improve highlight style and transitions (appear and disappear)? really necessary?
   // make it more notorious, primarily in the circle nodes, maybe being a square is not a bad idea, to be more distinguisable
   // receive color and sizes as parameters
-  update(nodes, links, highlights) {
+  update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
     // (THINK) some sort heuristics to the national teams nodes....
@@ -140,7 +140,6 @@ class ClusterGraph extends Graph {
             const color = self.nodeColor(d);
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
-            const highlighted = highlights && highlights.has(d.id);
 
             if (displayImg) {
               const imgRadius = radius + 1;
@@ -149,9 +148,7 @@ class ClusterGraph extends Graph {
                 .attr("x", -imgRadius)
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
-                .attr("height", imgRadius * 2)
-                .style("outline", highlighted ? "5px solid blue" : "none")
-                .style("border-radius", highlighted ? "50%" : "none");
+                .attr("height", imgRadius * 2);
               
               if (d.group === self.innerGroup) {
                 g.select("image")
@@ -164,9 +161,7 @@ class ClusterGraph extends Graph {
                 .attr("r", 0)  
                 .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                 .attr("r", radius)
-                .attr("fill", color)
-                .style("stroke", highlighted ? "blue" : "none")
-                .style("stroke-width", highlighted ? "5px" : 0);
+                .attr("fill", color);
               g.append("text")
                 .classed("node-text", true)
                 .attr("display", displayText ? "block" : "none")
@@ -184,7 +179,6 @@ class ClusterGraph extends Graph {
             const color = self.nodeColor(d);
             const displayImg = self.displayNodeImg(d);
             const displayText = self.displayNodeText(d);
-            const highlighted = highlights && highlights.has(d.id);
 
             if (displayImg) {
               // Get the old size of the image/circle
@@ -203,9 +197,7 @@ class ClusterGraph extends Graph {
                 .attr("x", -imgRadius)
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
-                .attr("height", imgRadius * 2)
-                .style("outline", highlighted ? "5px solid blue" : "none")
-                .style("border-radius", highlighted ? "50%" : "none");
+                .attr("height", imgRadius * 2);
 
               if (d.group === self.innerGroup) {
                 g.select("image")
@@ -227,9 +219,7 @@ class ClusterGraph extends Graph {
                 .attr("r", oldRadius)
                 .transition().duration(self.animationDuration).ease(self.animationEase)
                 .attr("r", radius)
-                .attr("fill", color)
-                .style("stroke", highlighted ? "blue" : "none")
-                .style("stroke-width", highlighted ? "5px" : 0);
+                .attr("fill", color);
 
               const text = g.select("text").empty() ? g.append("text") : g.select("text");
               text
@@ -260,14 +250,10 @@ class ClusterGraph extends Graph {
         enter => enter.append("line")
           .attr("stroke-width", 0)
           .transition().duration(this.animationDuration * 0.6).ease(this.animationEase)
-          .attr("stroke-width", d => d.value * 0.75)
-          .attr("stroke", d => highlights && highlights.has(d.id) ? "blue" : "unset")
-          .attr("stroke-opacity", d => highlights && highlights.has(d.id) ? 1 : "unset"),
+          .attr("stroke-width", d => d.value * 0.75),
         update => update
           .transition().duration(this.animationDuration).ease(this.animationEase)
-          .attr("stroke-width", d => d.value * 0.75)
-          .attr("stroke", d => highlights && highlights.has(d.id) ? "blue" : "unset")
-          .attr("stroke-opacity", d => highlights && highlights.has(d.id) ? 1 : "unset"),
+          .attr("stroke-width", d => d.value * 0.75),
         exit => exit
           .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
           .attr("stroke-width", 0)
@@ -283,6 +269,10 @@ class ClusterGraph extends Graph {
         this.tickCallback(this.node.data(), this.link.data());
       }
     });
+  }
+
+  spotlight(ids) {
+    this.reveal(this.node, this.link, ids, "blue", 5);
   }
 
   clicked(event, d) {

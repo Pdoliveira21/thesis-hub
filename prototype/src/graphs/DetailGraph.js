@@ -246,7 +246,7 @@ class DetailGraph extends Graph {
 
     this.node
       .on("mouseenter", (_, d) => {
-        this.highlight(d, this.node, this.link, this.simulation);
+        this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
 
         if (this.dragging === true) return;
         if (focus.group === this.outerGroup) {

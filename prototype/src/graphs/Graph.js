@@ -9,6 +9,7 @@ class Graph {
     this.nodeSpace = nodeSpace;
 
     this.dragging = false;
+    this.separating = false;
     this.nodeOpacity = 1.0;
     this.linkOpacity = 0.3;
     this.nodeUnhighlightOpacity = 0.05;
@@ -58,7 +59,7 @@ class Graph {
     return links.some(l => l.source === d || l.target === d);
   }
 
-  highlight(d, node, link, simulation) {
+  highlight(d, node, link, simulation, separate = false) {
     if (!this.connected(d, link.data()) || this.dragging === true) return;
 
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
@@ -74,22 +75,23 @@ class Graph {
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
     link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
 
-    // Add a force to avoid text overlap.
-    // let sizes = {};
-    // node.each(function(d) {
-    //   const g = d3.select(this);
-    //   sizes[d.id] = {
-    //     width: g.node().getBBox().width,
-    //     height: g.node().getBBox().height,
-    //   };
-    // });
+    if (!separate) return;
+    this.separating = true;
 
-    // simulation.force("text", d3.forceCollide(d => {
-    //   if (neighbors.has(d)) {
-    //     return Math.max(sizes[d.id].width, sizes[d.id].height) / 2;
-    //   }
-    // }).iterations(1)); // (TODO): cahnge force to do not overlap the "g" elements of the highlighhted nodes
-    // simulation.alpha(0.05).restart();
+    // Add a force to avoid text overlap.
+    let sizes = {};
+    node.each(function(d) {
+      const g = d3.select(this);
+      sizes[d.id] = {
+        width: g.node().getBBox().width / 2,
+        height: g.node().getBBox().height / 2,
+      };
+    });
+
+    simulation.force("text", d3.bboxCollide(d => [[-sizes[d.id].width, -sizes[d.id].height], [sizes[d.id].width, sizes[d.id].height]]).strength(1).iterations(1));
+    simulation.nodes(node.data().filter(n => neighbors.has(n)));
+    simulation.force("link").links(link.data().filter(l => l.source !== d && l.target !== d));
+    simulation.alpha(0.01).restart();
   }
 
   unhighlight(node, link, simulation, showText = () => false) {
@@ -101,9 +103,14 @@ class Graph {
     });
     link.attr("stroke-opacity", this.linkOpacity);
 
-    // Remove the force to avoid text overlap.
-    // simulation.force("text", null);
-    // simulation.alpha(0.3).restart();
+    // Remove the force added to avoid text overlap. and go back to old positions.
+    if (this.separating) {
+      this.separating = false;
+      simulation.force("text", null);
+      simulation.nodes(node.data());
+      simulation.force("link").links(link.data());
+      simulation.alpha(0.3).restart();
+    }
   }
 
   reveal(node, link, ids) {
@@ -141,4 +148,13 @@ class Graph {
   }
 }
 
+// TRIES
 // https://lvngd.com/blog/rectangular-collision-detection-d3-force-layouts/
+
+// (CHATGPT) Custom force function for preventing overlapping rectangles
+
+// https://github.com/d3/d3-force/issues/38
+//    note - quadtree search before d3.polygonContains
+
+
+// https://github.com/emeeks/d3-bboxCollide

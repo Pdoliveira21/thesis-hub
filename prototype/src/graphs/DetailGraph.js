@@ -56,9 +56,20 @@ class DetailGraph extends Graph {
         .attr("opacity", 0.15);
 
     this.cluster = this.svg.append("g")
-        .attr("opacity", 0.3)
-      .selectAll("image");
-    
+        .attr("transform", `translate(${this.width / 2 - 20}, ${this.height / 2 - 40})`);
+        
+    const imgSize = this.nodeSize * 2;
+    this.cluster.append("image")
+        .attr("x", - imgSize)
+        .attr("y", - imgSize)
+        .attr("width", imgSize)
+        .attr("height", imgSize)
+        .attr("opacity", 0.8);
+    this.cluster.append("text")
+        .attr("x", -5)
+        .attr("y", 20)
+        .attr("text-anchor", "end");
+
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", this.linkOpacity)
@@ -137,40 +148,10 @@ class DetailGraph extends Graph {
       ...d,
     }));
     links = links.map(d => ({...d}));
-
-    
-    
     
     this.background.attr("href", focus ? focus.img || "" : "");
-    
 
-    
-    const clusters = focus && focus.group === this.outerGroup
-      ? [...new Map(nodes.filter(d => d.group === this.innerGroup).map(d => ([d.cluster, {id: d.cluster, img: d.clusterImg, x: d.x, y: d.y}]))).values()] : [];
-    
     const self = this;
-    this.cluster = this.cluster
-      .data(clusters, d => d.id)
-      .join(
-        enter => enter.append("image")
-          .attr("href", d => d.img)
-          .attr("x", d => d.x - 20)
-          .attr("y", d => d.y - 20)
-          .attr("width", 40)
-          .attr("height", 40)
-          .attr("opacity", 0)
-          .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
-          .attr("opacity", 1),
-        update => update
-          .attr("href", d => d.img)
-          .attr("x", d => d.x - 20)
-          .attr("y", d => d.y - 20),
-        exit => exit
-          .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
-          .attr("opacity", 0)
-          .remove()
-      );
-    
     this.node = this.node
       .data(nodes, d => d.id)
       .join(
@@ -264,8 +245,18 @@ class DetailGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
+      .on("mouseenter", (_, d) => {
+        this.highlight(d, this.node, this.link, this.simulation);
+        if (focus.group === this.outerGroup) {
+          this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
+          this.cluster.select("text").text(d.clusterInfo?.name || "");
+        }
+      })
+      .on("mouseleave", () => {
+        this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+        this.cluster.select("image").attr("href", "");
+        this.cluster.select("text").text("");
+      });
     
     this.link = this.link
       .data(links, d => d.id)
@@ -313,11 +304,6 @@ class DetailGraph extends Graph {
     } else {
       this.simulation.alphaTarget(0);
     }
-
-    // Update Cluster Images Positions
-    this.cluster
-      .attr("x", d => (Math.round(this.clusters.find(c => c.id === d.id)?.x) || 0) - 20)
-      .attr("y", d => (Math.round(this.clusters.find(c => c.id === d.id)?.y) || 0) - 20);
   }
 
   spotlight(ids) {

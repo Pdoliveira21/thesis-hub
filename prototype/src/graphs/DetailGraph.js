@@ -247,6 +247,8 @@ class DetailGraph extends Graph {
     this.node
       .on("mouseenter", (_, d) => {
         this.highlight(d, this.node, this.link, this.simulation);
+
+        if (this.dragging === true) return;
         if (focus.group === this.outerGroup) {
           this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
           this.cluster.select("text").text(d.clusterInfo?.name || "");
@@ -254,6 +256,8 @@ class DetailGraph extends Graph {
       })
       .on("mouseleave", () => {
         this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+
+        if (this.dragging === true) return;
         this.cluster.select("image").attr("href", "");
         this.cluster.select("text").text("");
       });

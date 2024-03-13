@@ -181,7 +181,7 @@ class TemporalGraph {
   drawClusterGraph(container, time) {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
     const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
-    const elements = this.data[time].nodes.detail.filter(this.detailFilter).map(d => d.id);
+    const elements = this.data[time].nodes.detail.filter(d => this.detailFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster)).map(d => d.id);
     
     const links = this.data[time].links.cluster
       .filter(d => supergroups.includes(d.target) && groups.includes(d.source) && d.elements.some(e => elements.includes(e)))

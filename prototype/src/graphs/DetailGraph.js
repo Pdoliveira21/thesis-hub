@@ -164,13 +164,13 @@ class DetailGraph extends Graph {
               if (d.group === self.innerGroup) {
                 g.select("image")
                   .attr("transform", "scale(0)")
-                  .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
+                  .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
             } else {
               g.append("circle")
                 .attr("r", 0)
-                .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
+                .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
               g.append("text")

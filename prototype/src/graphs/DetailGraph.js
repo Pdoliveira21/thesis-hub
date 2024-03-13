@@ -54,7 +54,22 @@ class DetailGraph extends Graph {
         .attr("width", this.width / 4)
         .attr("height", this.height / 4)
         .attr("opacity", 0.15);
-    
+
+    this.cluster = this.svg.append("g")
+        .attr("transform", `translate(${this.width / 2 - 20}, ${this.height / 2 - 40})`);
+        
+    const imgSize = this.nodeSize * 2;
+    this.cluster.append("image")
+        .attr("x", - imgSize)
+        .attr("y", - imgSize)
+        .attr("width", imgSize)
+        .attr("height", imgSize)
+        .attr("opacity", 0.8);
+    this.cluster.append("text")
+        .attr("x", -5)
+        .attr("y", 20)
+        .attr("text-anchor", "end");
+
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", this.linkOpacity)
@@ -133,10 +148,8 @@ class DetailGraph extends Graph {
       ...d,
     }));
     links = links.map(d => ({...d}));
-
-    if (focus) {
-      this.background.attr("href", focus.img || "");
-    }
+    
+    this.background.attr("href", focus ? focus.img || "" : "");
 
     const self = this;
     this.node = this.node
@@ -204,8 +217,6 @@ class DetailGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
-              
-              // TODO: (future, some color filter for the image to still mantain the club identification??)
             } else {
               g.select("image").remove();
 
@@ -234,8 +245,22 @@ class DetailGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
+      .on("mouseenter", (_, d) => {
+        this.highlight(d, this.node, this.link, this.simulation);
+
+        if (this.dragging === true) return;
+        if (focus.group === this.outerGroup) {
+          this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
+          this.cluster.select("text").text(d.clusterInfo?.name || "");
+        }
+      })
+      .on("mouseleave", () => {
+        this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+
+        if (this.dragging === true) return;
+        this.cluster.select("image").attr("href", "");
+        this.cluster.select("text").text("");
+      });
     
     this.link = this.link
       .data(links, d => d.id)

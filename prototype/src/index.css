@@ -42,5 +42,6 @@
   text-anchor: middle;
   dominant-baseline: central;
   fill: #000;
-  text-shadow: -1px -1px 0 #FFF, 0 -1px 0 #FFF, 1px -1px 0 #FFF, 1px 0 0 #FFF, 1px 1px 0 #FFF, 0 1px 0 #FFF, -1px 1px 0 #FFF, -1px 0 0 #FFF;;
+  text-shadow: -1px -1px 0 #FFF, 0 -1px 0 #FFF, 1px -1px 0 #FFF, 1px 0 0 #FFF, 1px 1px 0 #FFF, 0 1px 0 #FFF, -1px 1px 0 #FFF, -1px 0 0 #FFF;
+  pointer-events: none;
 }

@@ -14,6 +14,8 @@ class Graph {
     this.nodeUnhighlightOpacity = 0.05;
     this.linkUnhighlightOpacity = 0.01;
     this.linkHighlightOpacity = 0.8;
+    this.revealColor = "blue";
+    this.revealWidth = 5;
   }
 
   ticked(link, node) {
@@ -102,6 +104,21 @@ class Graph {
     // Remove the force to avoid text overlap.
     // simulation.force("text", null);
     // simulation.alpha(0.3).restart();
+  }
+
+  reveal(node, link, ids) {
+    node.call(g => {
+      g.select("image")
+        .style("outline", d => ids.has(d.id) ? `${this.revealWidth}px solid ${this.revealColor}` : "none")
+        .style("border-radius", d => ids.has(d.id) ? "50%" : "none"); // TODO: circle or square?
+      g.select("circle")
+        .style("stroke", d => ids.has(d.id) ? this.revealColor : "none")
+        .style("stroke-width", d => ids.has(d.id) ? `${this.revealWidth}px` : 0);
+    });
+
+    link.call(line => {
+        line.style("stroke", d => ids.has(d.id)  ? this.revealColor : "unset")
+    });
   }
 
   circularLayout(nodes, group) {

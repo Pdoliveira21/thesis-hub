@@ -245,6 +245,7 @@ class DetailGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
+      .classed("node-clickable", d => d.group === this.innerGroup && d.link !== "")
       .on("click", (event, d) => this.clicked(event, d))
       .on("mouseenter", (_, d) => {
         this.highlight(d, this.node, this.link, this.simulation);

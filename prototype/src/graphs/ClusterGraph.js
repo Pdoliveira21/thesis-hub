@@ -272,7 +272,7 @@ class ClusterGraph extends Graph {
   }
 
   spotlight(ids) {
-    this.reveal(this.node, this.link, ids, "blue", 5);
+    this.reveal(this.node, this.link, ids);
   }
 
   clicked(event, d) {

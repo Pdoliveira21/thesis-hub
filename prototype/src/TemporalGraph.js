@@ -162,7 +162,7 @@ class TemporalGraph {
 
   searchDetailNodes(name) {
     this.detailSearchIds = name !== null 
-      ? Object.values(this.data).flatMap(timeslice => timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id))
+      ? [...new Set(Object.values(this.data).flatMap(timeslice => timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id)))]
       : [];
 
     this.spotlightClusterGraph();

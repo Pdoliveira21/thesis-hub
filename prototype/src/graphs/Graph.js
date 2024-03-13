@@ -14,6 +14,8 @@ class Graph {
     this.nodeUnhighlightOpacity = 0.05;
     this.linkUnhighlightOpacity = 0.01;
     this.linkHighlightOpacity = 0.8;
+    this.revealColor = "blue";
+    this.revealWidth = 5;
   }
 
   ticked(link, node) {
@@ -104,30 +106,19 @@ class Graph {
     // simulation.alpha(0.3).restart();
   }
 
-  reveal(node, link, ids, color, width) {
+  reveal(node, link, ids) {
     node.call(g => {
-      this.#revealImage(g.select("image"), ids, color, width);
-      this.#revealCircle(g.select("circle"), ids, color, width);
+      g.select("image")
+        .style("outline", d => ids.has(d.id) ? `${this.revealWidth}px solid ${this.revealColor}` : "none")
+        .style("border-radius", d => ids.has(d.id) ? "50%" : "none"); // TODO: circle or square?
+      g.select("circle")
+        .style("stroke", d => ids.has(d.id) ? this.revealColor : "none")
+        .style("stroke-width", d => ids.has(d.id) ? `${this.revealWidth}px` : 0);
     });
 
-    link.call(line => this.#revealLine(line, ids, color));
-  }
-
-  #revealImage(image, ids, color, width) {
-    image
-      .style("outline", d => ids.has(d.id) ? `${width}px solid ${color}` : "none")
-      .style("border-radius", d => ids.has(d.id) ? "50%" : "none"); // TODO: circle or square?
-  }
-
-  #revealCircle(circle, ids, color, width) {
-    circle
-      .style("stroke", d => ids.has(d.id) ? color : "none")
-      .style("stroke-width", d => ids.has(d.id) ? `${width}px` : 0);
-  }
-
-  #revealLine(line, ids, color) {
-    line
-      .style("stroke", d => ids.has(d.id) ? color : "unset");
+    link.call(line => {
+        line.style("stroke", d => ids.has(d.id)  ? this.revealColor : "unset")
+    });
   }
 
   circularLayout(nodes, group) {

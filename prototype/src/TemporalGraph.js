@@ -33,7 +33,8 @@ class TemporalGraph {
     this.graphContainer = graphContainer;
     this.detailsContainer = detailsContainer;
     this.parseData(data, displayAlwaysAllOuter, defaultOuterSortField);
-
+    
+    this.detailSearchIds = [];
     this.detailedNode = null;
     this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup);
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, (node) => {
@@ -158,6 +159,17 @@ class TemporalGraph {
     this.#updateGraphs();
   }
 
+  searchDetailNodes(name) {
+    this.detailSearchIds = name !== null 
+      ? [...new Set(Object.values(this.data).flatMap(timeslice => timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id)))]
+      : [];
+
+    this.spotlightClusterGraph();
+    if (this.detailedNode !== null) {
+      this.spotlightDetailsGraph();
+    }
+  }
+
   #updateGraphs(time = this.timeline.getValue()) {
     this.drawClusterGraph(this.graphContainer, time);
     if (this.detailedNode !== null) {
@@ -168,7 +180,7 @@ class TemporalGraph {
   drawClusterGraph(container, time) {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
     const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
-    const elements = this.data[time].nodes.detail.filter(this.detailFilter).map(d => d.id);
+    const elements = this.data[time].nodes.detail.filter(d => this.detailFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster)).map(d => d.id);
     
     const links = this.data[time].links.cluster
       .filter(d => supergroups.includes(d.target) && groups.includes(d.source) && d.elements.some(e => elements.includes(e)))
@@ -183,7 +195,32 @@ class TemporalGraph {
       .map(d => ({...d}));
     
     this.clusterGraph.update(nodes, links);
+    this.spotlightClusterGraph(links, elements);
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
+  }
+
+  spotlightClusterGraph(links, elements) {
+    if (this.detailSearchIds.length === 0) {
+      this.clusterGraph.spotlight(new Set());
+      return;
+    }
+
+    if (elements === undefined) {
+      const time = this.timeline.getValue();
+      elements = this.data[time].nodes.detail.filter(this.detailFilter).map(d => d.id);
+    }
+
+    const elementSearchIds = this.detailSearchIds.filter(id => elements.includes(id));
+    if (elementSearchIds.length > 0) {
+      if (links === undefined) {
+        links = this.clusterGraph.link.data().map(d => ({...d, source: d.source.id, target: d.target.id}));
+      }
+    
+      const highlights = new Set(links.filter(l => l.elements.some(e => elementSearchIds.includes(e))).flatMap(l => [l.id, l.source, l.target]));
+      this.clusterGraph.spotlight(highlights);
+    } else {
+      this.clusterGraph.spotlight(new Set());
+    }
   }
 
   drawDetailsGraph(container, time, node) {
@@ -207,7 +244,21 @@ class TemporalGraph {
       .map(d => ({...d}));
 
     this.detailsGraph.update(nodes, links, node);
+    this.spotlightDetailsGraph(links);
     document.getElementById(container).replaceChildren(this.detailsGraph.render());
+  }
+
+  spotlightDetailsGraph(links) {
+    if (this.detailSearchIds.length > 0) {
+      if (links === undefined) {
+        links = this.detailsGraph.link.data().map(d => ({...d, source: d.source.id, target: d.target.id}));
+      }
+
+      const highlights = new Set(links.filter(l => this.detailSearchIds.includes(l.source)).flatMap(l => [l.id, l.source, l.target]));
+      this.detailsGraph.spotlight(highlights);
+    } else {
+      this.detailsGraph.spotlight(new Set());
+    }
   }
 
   updateClustersPositionsInDetailsGraph(nodes, links) {

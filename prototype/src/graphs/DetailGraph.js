@@ -196,13 +196,13 @@ class DetailGraph extends Graph {
               if (d.group === self.innerGroup) {
                 g.select("image")
                   .attr("transform", "scale(0)")
-                  .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
+                  .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
             } else {
               g.append("circle")
                 .attr("r", 0)
-                .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
+                .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
               g.append("text")
@@ -318,5 +318,9 @@ class DetailGraph extends Graph {
     this.cluster
       .attr("x", d => (Math.round(this.clusters.find(c => c.id === d.id)?.x) || 0) - 20)
       .attr("y", d => (Math.round(this.clusters.find(c => c.id === d.id)?.y) || 0) - 20);
+  }
+
+  spotlight(ids) {
+    this.reveal(this.node, this.link, ids);
   }
 }

@@ -108,6 +108,9 @@ class ClusterGraph extends Graph {
     return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4); // this.nodeRadius(d) >= this.nodeSize * 0.35);
   }
 
+  // TODO: (future) improve highlight style and transitions (appear and disappear)? really necessary?
+  // make it more notorious, primarily in the circle nodes, maybe being a square is not a bad idea, to be more distinguisable
+  // receive color and sizes as parameters
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
@@ -266,6 +269,10 @@ class ClusterGraph extends Graph {
         this.tickCallback(this.node.data(), this.link.data());
       }
     });
+  }
+
+  spotlight(ids) {
+    this.reveal(this.node, this.link, ids);
   }
 
   clicked(event, d) {

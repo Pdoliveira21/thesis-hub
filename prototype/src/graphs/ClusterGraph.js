@@ -252,6 +252,7 @@ class ClusterGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
+      .classed("node-clickable", true)
       .on("click", (event, d) => this.clicked(event, d))
       .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup))
       .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
@@ -282,11 +283,7 @@ class ClusterGraph extends Graph {
       }
     });
   }
-
-  spotlight(ids) {
-    this.reveal(this.node, this.link, ids);
-  }
-
+  
   clicked(event, d) {
     if (event && event.isTrusted && "function" === typeof this.clickNodeCallback) {
       this.clickNodeCallback(d);
@@ -297,5 +294,9 @@ class ClusterGraph extends Graph {
         // simulation.tick(??)
       }
     }
+  }
+
+  spotlight(ids) {
+    this.reveal(this.node, this.link, ids);
   }
 }

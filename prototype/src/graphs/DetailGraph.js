@@ -257,21 +257,15 @@ class DetailGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
+      .classed("node-clickable", d => d.group === this.innerGroup && d.link !== "")
+      .on("click", (event, d) => this.clicked(event, d))
       .on("mouseenter", (_, d) => {
         this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
-
-        if (this.dragging === true) return;
-        if (focus.group === this.outerGroup) {
-          this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
-          this.cluster.select("text").text(d.clusterInfo?.name || "");
-        }
+        this.mouseEnter(d, focus);
       })
       .on("mouseleave", () => {
         this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
-
-        if (this.dragging === true) return;
-        this.cluster.select("image").attr("href", "");
-        this.cluster.select("text").text("");
+        this.mouseLeave();
       });
     
     this.link = this.link
@@ -320,6 +314,26 @@ class DetailGraph extends Graph {
     } else {
       this.simulation.alphaTarget(0);
     }
+  }
+
+  clicked(event, d) {
+    if (event && event.isTrusted) {
+      if (d.group === this.innerGroup && d.link !== "") {
+        window.open(`https://www.zerozero.pt${d.link}`, "_blank");
+      }
+    }
+  }
+
+  mouseEnter(d, focus) {
+    if (focus.group !== this.outerGroup || this.dragging === true) return;
+    this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
+    this.cluster.select("text").text(d.clusterInfo?.name || "");
+  }
+
+  mouseLeave() {
+    if (this.dragging === true) return;
+    this.cluster.select("image").attr("href", "");
+    this.cluster.select("text").text("");
   }
 
   spotlight(ids) {

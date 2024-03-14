@@ -21,9 +21,10 @@ class DetailGraph extends Graph {
       .force("charge", d3.forceManyBody().strength(-1))
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(0.0))
-      .force("x", d3.forceX().x(0).strength(0.1))
-      .force("y", d3.forceY().y(0).strength(0.1))
-      .force("outerXY", this.outerXY.bind(this));
+      .force("x", d3.forceX().x(0).strength(0.3))
+      .force("y", d3.forceY().y(0).strength(0.3))
+      .force("outerXY", this.outerXY.bind(this))
+      .force("withinCircleBounds", this.withinCircleBounds.bind(this));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -98,6 +99,17 @@ class DetailGraph extends Graph {
           d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
           d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
         }
+      }
+    });
+  }
+
+  withinCircleBounds() {
+    this.node.filter(d => d.group === this.innerGroup).each(d => {
+      const distance = Math.sqrt(d.x * d.x + d.y * d.y);
+      if (distance > this.outerRadius) {
+        const target = distance - this.outerRadius + (this.nodeSize * 2);
+        d.x -= d.x * target / distance;
+        d.y -= d.y * target / distance;
       }
     });
   }
@@ -248,7 +260,7 @@ class DetailGraph extends Graph {
       .classed("node-clickable", d => d.group === this.innerGroup && d.link !== "")
       .on("click", (event, d) => this.clicked(event, d))
       .on("mouseenter", (_, d) => {
-        this.highlight(d, this.node, this.link, this.simulation);
+        this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
         this.mouseEnter(d, focus);
       })
       .on("mouseleave", () => {
@@ -272,7 +284,7 @@ class DetailGraph extends Graph {
       );
 
     this.simulation.nodes(nodes);
-    this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.05);
+    this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.2);
     this.simulation.alpha(1).restart();
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }

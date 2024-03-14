@@ -32,33 +32,40 @@ class Graph {
 
   drag(simulation, radius) {
     const self = this;
-    return d3.drag()
-      .on("start", function(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-        self.dragging = true;
-      })
-      .on("drag", function(event, d) {
-        const distance = Math.sqrt(event.x * event.x + event.y * event.y);
-        const selfSize = d3.select(this).node().getBBox().height / 2;
-        const maxDistance = radius + self.nodeSize - selfSize;
+    
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+      self.dragging = true;
+    }
 
-        if (distance > maxDistance) {
-          // Manually trigger mouseup event to stop dragging.
-          const syntheticEvent = new MouseEvent("mouseup", { bubbles: true, view: window });
-          d3.select(this).node().dispatchEvent(syntheticEvent);
-        } else {
-          d.fx = event.x;
-          d.fy = event.y;
-        }
-      })
-      .on("end", function(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-        self.dragging = false;
-      });
+    function dragged(event, d) {
+      const distance = Math.sqrt(event.x * event.x + event.y * event.y);
+      const nodeSize = d3.select(this).node().getBBox().height / 2;
+      const maxDistance = radius + self.nodeSize - nodeSize;
+
+      if (distance > maxDistance) {
+        // Manually trigger mouseup event to stop dragging.
+        const syntheticEvent = new MouseEvent("mouseup", { bubbles: true, view: window });
+        d3.select(this).node().dispatchEvent(syntheticEvent);
+      } else {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+      self.dragging = false;
+    }
+
+    return d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
   }
 
   connected(d, links) {

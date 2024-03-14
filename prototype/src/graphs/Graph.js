@@ -30,30 +30,44 @@ class Graph {
       .attr("transform", d => `translate(${d.x},${d.y})`);
   }
 
-  #dragstarted(event, d, simulation) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-    this.dragging = true;
-  }
-  
-  #dragged(event, d) {
-    d.fx = Math.sign(event.x) * Math.min(Math.abs(event.x), this.width / 2 - this.nodeSize);
-    d.fy = Math.sign(event.y) * Math.min(Math.abs(event.y), this.height/ 2 - this.nodeSize);
-  }
-  
-  #dragended(event, d, simulation) {
-    if (!event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
-    this.dragging = false;
-  }
-
-  drag(simulation) {
+  drag(simulation, radius) {
+    const self = this;
     return d3.drag()
-        .on("start", (event, d) => this.#dragstarted(event, d, simulation))
-        .on("drag", (event, d) => this.#dragged(event, d))
-        .on("end", (event, d) => this.#dragended(event, d, simulation));
+      .on("start", function(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+        self.dragging = true;
+      })
+      .on("drag", function(event, d) {
+        const distance = Math.sqrt(event.x * event.x + event.y * event.y);
+        const selfSize = d3.select(this).node().getBBox().height / 2;
+        const maxDistance = radius - self.nodeSize - selfSize;
+
+        if (distance > maxDistance) {
+          const factor = maxDistance / distance;
+          d.fx = event.x * factor;
+          d.fy = event.y * factor;
+        } else {
+          d.fx = event.x;
+          d.fy = event.y;
+        }
+      })
+      .on("end", function(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+        self.dragging = false;
+
+        if (event.sourceEvent.type === "mouseup") {
+          const mouse = d3.pointer(event.sourceEvent);
+          const bbox = d3.select(this).node().getBBox();
+          const size = bbox.height / 2;
+          if (bbox.x - size > mouse[0] || bbox.x + size < mouse[0] || bbox.y - size > mouse[1] || bbox.y + size < mouse[1]) {
+            d3.select(this).dispatch("mouseleave");
+          }
+        }
+      });
   }
 
   connected(d, links) {

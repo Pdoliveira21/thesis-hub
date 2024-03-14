@@ -249,7 +249,7 @@ class ClusterGraph extends Graph {
     );
     
     this.node.filter(d => d.group === this.innerGroup)
-      .call(this.drag(this.simulation));
+      .call(this.drag(this.simulation, this.outerRadius));
 
     this.node
       .classed("node-clickable", true)

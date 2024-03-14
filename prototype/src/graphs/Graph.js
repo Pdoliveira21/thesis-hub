@@ -30,30 +30,42 @@ class Graph {
       .attr("transform", d => `translate(${d.x},${d.y})`);
   }
 
-  #dragstarted(event, d, simulation) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-    this.dragging = true;
-  }
-  
-  #dragged(event, d) {
-    d.fx = Math.sign(event.x) * Math.min(Math.abs(event.x), this.width / 2 - this.nodeSize);
-    d.fy = Math.sign(event.y) * Math.min(Math.abs(event.y), this.height/ 2 - this.nodeSize);
-  }
-  
-  #dragended(event, d, simulation) {
-    if (!event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
-    this.dragging = false;
-  }
+  drag(simulation, radius) {
+    const self = this;
+    
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+      self.dragging = true;
+    }
 
-  drag(simulation) {
+    function dragged(event, d) {
+      const distance = Math.sqrt(event.x * event.x + event.y * event.y);
+      const nodeSize = d3.select(this).node().getBBox().height / 2;
+      const maxDistance = radius + self.nodeSize - nodeSize;
+
+      if (distance > maxDistance) {
+        // Manually trigger mouseup event to stop dragging.
+        const syntheticEvent = new MouseEvent("mouseup", { bubbles: true, view: window });
+        d3.select(this).node().dispatchEvent(syntheticEvent);
+      } else {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+      self.dragging = false;
+    }
+
     return d3.drag()
-        .on("start", (event, d) => this.#dragstarted(event, d, simulation))
-        .on("drag", (event, d) => this.#dragged(event, d))
-        .on("end", (event, d) => this.#dragended(event, d, simulation));
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
   }
 
   connected(d, links) {

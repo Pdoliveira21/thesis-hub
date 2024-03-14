@@ -189,13 +189,13 @@ class DetailGraph extends Graph {
               if (d.group === self.innerGroup) {
                 g.select("image")
                   .attr("transform", "scale(0)")
-                  .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
+                  .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
             } else {
               g.append("circle")
                 .attr("r", 0)
-                .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
+                .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
               g.append("text")
@@ -254,7 +254,7 @@ class DetailGraph extends Graph {
     );
     
     this.node.filter(d => d.group === this.innerGroup)
-      .call(this.drag(this.simulation));
+      .call(this.drag(this.simulation, this.outerRadius));
 
     this.node
       .classed("node-clickable", d => d.group === this.innerGroup && d.link !== "")
@@ -273,7 +273,7 @@ class DetailGraph extends Graph {
       .join(
         enter => enter.append("line")
           .attr("stroke-width", 0)
-          .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
+          .transition().duration(this.animationDuration * 0.6).ease(this.animationEase)
           .attr("stroke-width", 0.75),
         update => update
           .attr("stroke-width", 0.75),

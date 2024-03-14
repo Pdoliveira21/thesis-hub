@@ -42,12 +42,12 @@ class Graph {
       .on("drag", function(event, d) {
         const distance = Math.sqrt(event.x * event.x + event.y * event.y);
         const selfSize = d3.select(this).node().getBBox().height / 2;
-        const maxDistance = radius - self.nodeSize - selfSize;
+        const maxDistance = radius + self.nodeSize - selfSize;
 
         if (distance > maxDistance) {
-          const factor = maxDistance / distance;
-          d.fx = event.x * factor;
-          d.fy = event.y * factor;
+          // Manually trigger mouseup event to stop dragging.
+          const syntheticEvent = new MouseEvent("mouseup", { bubbles: true, view: window });
+          d3.select(this).node().dispatchEvent(syntheticEvent);
         } else {
           d.fx = event.x;
           d.fy = event.y;
@@ -58,15 +58,6 @@ class Graph {
         d.fx = null;
         d.fy = null;
         self.dragging = false;
-
-        if (event.sourceEvent.type === "mouseup") {
-          const mouse = d3.pointer(event.sourceEvent);
-          const bbox = d3.select(this).node().getBBox();
-          const size = bbox.height / 2;
-          if (bbox.x - size > mouse[0] || bbox.x + size < mouse[0] || bbox.y - size > mouse[1] || bbox.y + size < mouse[1]) {
-            d3.select(this).dispatch("mouseleave");
-          }
-        }
       });
   }
 

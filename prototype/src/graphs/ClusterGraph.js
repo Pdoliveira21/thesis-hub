@@ -31,7 +31,8 @@ class ClusterGraph extends Graph {
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
       .force("x", d3.forceX().x(0).strength(0.01))
       .force("y", d3.forceY().y(0).strength(0.01))
-      .force("outerXY", this.outerXY.bind(this));
+      .force("outerXY", this.outerXY.bind(this))
+      .force("withinCircleBounds", this.withinCircleBounds.bind(this));
 
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -84,6 +85,17 @@ class ClusterGraph extends Graph {
           d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
           d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
         }
+      }
+    });
+  }
+
+  withinCircleBounds() {
+    this.node.filter(d => d.group === this.innerGroup).each(d => {
+      const distance = Math.sqrt(d.x * d.x + d.y * d.y);
+      if (distance > this.outerRadius) {
+        const target = distance - this.outerRadius + (this.nodeSize * 2);
+        d.x -= d.x * target / distance;
+        d.y -= d.y * target / distance;
       }
     });
   }

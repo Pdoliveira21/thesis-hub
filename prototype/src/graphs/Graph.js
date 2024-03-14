@@ -94,7 +94,7 @@ class Graph {
       };
     });
 
-    // ADD a force to avoid text overlap.
+    // ADD a force to avoid text overlap. (rectangular collision d3-plugin: https://github.com/emeeks/d3-bboxCollide)
     simulation.force("text", d3.bboxCollide(d => {
       const dx = this.backupInfo[d.id].width / 2;
       const dy = this.backupInfo[d.id].height / 2;
@@ -160,14 +160,3 @@ class Graph {
     return (diameter * scale) / 2;
   }
 }
-
-// TRIES
-// https://lvngd.com/blog/rectangular-collision-detection-d3-force-layouts/
-
-// (CHATGPT) Custom force function for preventing overlapping rectangles
-
-// https://github.com/d3/d3-force/issues/38
-//    note - quadtree search before d3.polygonContains
-
-
-// https://github.com/emeeks/d3-bboxCollide

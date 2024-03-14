@@ -18,6 +18,10 @@
   column-gap: 5em;
 }
 
+.view-controls-search {
+  margin: 1em 0;
+}
+
 #timeline-container {
   width: 100%;
   display: flex;
@@ -37,6 +41,12 @@
 .node-text {
   text-anchor: middle;
   dominant-baseline: central;
+  font-size: 0.875em;
   fill: #000;
-  text-shadow: -1px -1px 0 #FFF, 0 -1px 0 #FFF, 1px -1px 0 #FFF, 1px 0 0 #FFF, 1px 1px 0 #FFF, 0 1px 0 #FFF, -1px 1px 0 #FFF, -1px 0 0 #FFF;;
+  text-shadow: -1px -1px 0 #FFF, 0 -1px 0 #FFF, 1px -1px 0 #FFF, 1px 0 0 #FFF, 1px 1px 0 #FFF, 0 1px 0 #FFF, -1px 1px 0 #FFF, -1px 0 0 #FFF;
+  pointer-events: none;
+}
+
+.node-clickable:hover {
+  cursor: pointer;
 }

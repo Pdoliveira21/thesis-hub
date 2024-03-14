@@ -9,11 +9,15 @@ class Graph {
     this.nodeSpace = nodeSpace;
 
     this.dragging = false;
+    this.separating = false;
     this.nodeOpacity = 1.0;
     this.linkOpacity = 0.3;
     this.nodeUnhighlightOpacity = 0.05;
     this.linkUnhighlightOpacity = 0.01;
     this.linkHighlightOpacity = 0.8;
+    this.revealColor = "blue";
+    this.revealWidth = 5;
+    this.backupInfo = {};
   }
 
   ticked(link, node) {
@@ -34,8 +38,8 @@ class Graph {
   }
   
   #dragged(event, d) {
-    d.fx = event.x;
-    d.fy = event.y;
+    d.fx = Math.sign(event.x) * Math.min(Math.abs(event.x), this.width / 2 - this.nodeSize);
+    d.fy = Math.sign(event.y) * Math.min(Math.abs(event.y), this.height/ 2 - this.nodeSize);
   }
   
   #dragended(event, d, simulation) {
@@ -56,7 +60,7 @@ class Graph {
     return links.some(l => l.source === d || l.target === d);
   }
 
-  highlight(d, node, link, simulation) {
+  highlight(d, node, link, simulation, separate = false) {
     if (!this.connected(d, link.data()) || this.dragging === true) return;
 
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
@@ -72,22 +76,33 @@ class Graph {
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
     link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
 
-    // Add a force to avoid text overlap.
-    // let sizes = {};
-    // node.each(function(d) {
-    //   const g = d3.select(this);
-    //   sizes[d.id] = {
-    //     width: g.node().getBBox().width,
-    //     height: g.node().getBBox().height,
-    //   };
-    // });
+    if (!separate) return;
+    this.separating = true;
+    this.backupInfo = {};
 
-    // simulation.force("text", d3.forceCollide(d => {
-    //   if (neighbors.has(d)) {
-    //     return Math.max(sizes[d.id].width, sizes[d.id].height) / 2;
-    //   }
-    // }).iterations(1)); // (TODO): cahnge force to do not overlap the "g" elements of the highlighhted nodes
-    // simulation.alpha(0.05).restart();
+    // STOP Current Simulation and save the alpha.
+    simulation.stop();
+    this.backupInfo["alpha"] = simulation.alpha();
+
+    // SAVE nodes sizes.
+    const self = this;
+    node.each(function(d) {
+      const g = d3.select(this);
+      self.backupInfo[d.id] = {
+        width: g.node().getBBox().width,
+        height: g.node().getBBox().height,
+      };
+    });
+
+    // ADD a force to avoid text overlap. (rectangular collision d3-plugin: https://github.com/emeeks/d3-bboxCollide)
+    simulation.force("text", d3.bboxCollide(d => {
+      const dx = this.backupInfo[d.id].width / 2;
+      const dy = this.backupInfo[d.id].height / 2;
+      return [[-dx, -dy], [dx, dy]];
+    }).strength(0.1).iterations(1));
+
+    // CONTINUE Simulation just to rearrange highligthed nodes.
+    simulation.alpha(0.01).restart();
   }
 
   unhighlight(node, link, simulation, showText = () => false) {
@@ -99,9 +114,31 @@ class Graph {
     });
     link.attr("stroke-opacity", this.linkOpacity);
 
-    // Remove the force to avoid text overlap.
-    // simulation.force("text", null);
-    // simulation.alpha(0.3).restart();
+    // Remove the force added to avoid text overlap. and go back to old positions.
+    if (!this.separating) return;
+    this.separating = false;
+
+    // STOP Current Simulation.
+    simulation.stop();
+    // REMOVE the force added to avoid text overlap.
+    simulation.force("text", null);
+    // CONTINUE Simulation from where it previous where.
+    simulation.alpha(Math.max(this.backupInfo["alpha"], 0.3)).restart();
+  }
+
+  reveal(node, link, ids) {
+    node.call(g => {
+      g.select("image")
+        .style("outline", d => ids.has(d.id) ? `${this.revealWidth}px solid ${this.revealColor}` : "none")
+        .style("border-radius", d => ids.has(d.id) ? "50%" : "none"); // TODO: circle or square?
+      g.select("circle")
+        .style("stroke", d => ids.has(d.id) ? this.revealColor : "none")
+        .style("stroke-width", d => ids.has(d.id) ? `${this.revealWidth}px` : 0);
+    });
+
+    link.call(line => {
+        line.style("stroke", d => ids.has(d.id)  ? this.revealColor : "unset")
+    });
   }
 
   circularLayout(nodes, group) {
@@ -123,5 +160,3 @@ class Graph {
     return (diameter * scale) / 2;
   }
 }
-
-// https://lvngd.com/blog/rectangular-collision-detection-d3-force-layouts/

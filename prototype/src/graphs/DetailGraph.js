@@ -21,9 +21,10 @@ class DetailGraph extends Graph {
       .force("charge", d3.forceManyBody().strength(-1))
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(0.0))
-      .force("x", d3.forceX().x(0).strength(0.1))
-      .force("y", d3.forceY().y(0).strength(0.1))
-      .force("outerXY", this.outerXY.bind(this));
+      .force("x", d3.forceX().x(0).strength(0.3))
+      .force("y", d3.forceY().y(0).strength(0.3))
+      .force("outerXY", this.outerXY.bind(this))
+      .force("withinCircleBounds", this.withinCircleBounds.bind(this));
   
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -54,7 +55,22 @@ class DetailGraph extends Graph {
         .attr("width", this.width / 4)
         .attr("height", this.height / 4)
         .attr("opacity", 0.15);
-    
+
+    this.cluster = this.svg.append("g")
+        .attr("transform", `translate(${this.width / 2 - 20}, ${this.height / 2 - 40})`);
+        
+    const imgSize = this.nodeSize * 2;
+    this.cluster.append("image")
+        .attr("x", - imgSize)
+        .attr("y", - imgSize)
+        .attr("width", imgSize)
+        .attr("height", imgSize)
+        .attr("opacity", 0.8);
+    this.cluster.append("text")
+        .attr("x", -5)
+        .attr("y", 20)
+        .attr("text-anchor", "end");
+
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", this.linkOpacity)
@@ -83,6 +99,17 @@ class DetailGraph extends Graph {
           d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
           d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
         }
+      }
+    });
+  }
+
+  withinCircleBounds() {
+    this.node.filter(d => d.group === this.innerGroup).each(d => {
+      const distance = Math.sqrt(d.x * d.x + d.y * d.y);
+      if (distance > this.outerRadius) {
+        const target = distance - this.outerRadius + (this.nodeSize * 2);
+        d.x -= d.x * target / distance;
+        d.y -= d.y * target / distance;
       }
     });
   }
@@ -133,10 +160,8 @@ class DetailGraph extends Graph {
       ...d,
     }));
     links = links.map(d => ({...d}));
-
-    if (focus) {
-      this.background.attr("href", focus.img || "");
-    }
+    
+    this.background.attr("href", focus ? focus.img || "" : "");
 
     const self = this;
     this.node = this.node
@@ -164,13 +189,13 @@ class DetailGraph extends Graph {
               if (d.group === self.innerGroup) {
                 g.select("image")
                   .attr("transform", "scale(0)")
-                  .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
+                  .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
             } else {
               g.append("circle")
                 .attr("r", 0)
-                .transition().duration(self.animationDuration * 0.4).ease(self.animationEase)
+                .transition().delay(100).duration(self.animationDuration * 0.4).ease(self.animationEase)
                 .attr("r", radius)
                 .attr("fill", color);
               g.append("text")
@@ -204,8 +229,6 @@ class DetailGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
-              
-              // TODO: (future, some color filter for the image to still mantain the club identification??)
             } else {
               g.select("image").remove();
 
@@ -234,8 +257,16 @@ class DetailGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
+      .classed("node-clickable", d => d.group === this.innerGroup && d.link !== "")
+      .on("click", (event, d) => this.clicked(event, d))
+      .on("mouseenter", (_, d) => {
+        this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
+        this.mouseEnter(d, focus);
+      })
+      .on("mouseleave", () => {
+        this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+        this.mouseLeave();
+      });
     
     this.link = this.link
       .data(links, d => d.id)
@@ -253,7 +284,7 @@ class DetailGraph extends Graph {
       );
 
     this.simulation.nodes(nodes);
-    this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.05);
+    this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.2);
     this.simulation.alpha(1).restart();
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }
@@ -283,5 +314,29 @@ class DetailGraph extends Graph {
     } else {
       this.simulation.alphaTarget(0);
     }
+  }
+
+  clicked(event, d) {
+    if (event && event.isTrusted) {
+      if (d.group === this.innerGroup && d.link !== "") {
+        window.open(`https://www.zerozero.pt${d.link}`, "_blank");
+      }
+    }
+  }
+
+  mouseEnter(d, focus) {
+    if (focus.group !== this.outerGroup || this.dragging === true) return;
+    this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
+    this.cluster.select("text").text(d.clusterInfo?.name || "");
+  }
+
+  mouseLeave() {
+    if (this.dragging === true) return;
+    this.cluster.select("image").attr("href", "");
+    this.cluster.select("text").text("");
+  }
+
+  spotlight(ids) {
+    this.reveal(this.node, this.link, ids);
   }
 }

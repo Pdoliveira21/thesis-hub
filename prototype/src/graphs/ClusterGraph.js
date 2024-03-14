@@ -31,7 +31,8 @@ class ClusterGraph extends Graph {
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
       .force("x", d3.forceX().x(0).strength(0.01))
       .force("y", d3.forceY().y(0).strength(0.01))
-      .force("outerXY", this.outerXY.bind(this));
+      .force("outerXY", this.outerXY.bind(this))
+      .force("withinCircleBounds", this.withinCircleBounds.bind(this));
 
     this.svg = d3.create("svg")
         .attr("width", this.width)
@@ -88,6 +89,17 @@ class ClusterGraph extends Graph {
     });
   }
 
+  withinCircleBounds() {
+    this.node.filter(d => d.group === this.innerGroup).each(d => {
+      const distance = Math.sqrt(d.x * d.x + d.y * d.y);
+      if (distance > this.outerRadius) {
+        const target = distance - this.outerRadius + (this.nodeSize * 2);
+        d.x -= d.x * target / distance;
+        d.y -= d.y * target / distance;
+      }
+    });
+  }
+
   nodeRadius(d) {
     return d.group === this.innerGroup ? d.value * 2 + 0.5 : this.nodeSize;
   }
@@ -108,6 +120,9 @@ class ClusterGraph extends Graph {
     return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4); // this.nodeRadius(d) >= this.nodeSize * 0.35);
   }
 
+  // TODO: (future) improve highlight style and transitions (appear and disappear)? really necessary?
+  // make it more notorious, primarily in the circle nodes, maybe being a square is not a bad idea, to be more distinguisable
+  // receive color and sizes as parameters
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
@@ -237,9 +252,10 @@ class ClusterGraph extends Graph {
       .call(this.drag(this.simulation));
 
     this.node
+      .classed("node-clickable", true)
       .on("click", (event, d) => this.clicked(event, d))
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this), this.simulation));
+      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup))
+      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
 
     this.link = this.link
       .data(links, d => d.id)
@@ -267,7 +283,7 @@ class ClusterGraph extends Graph {
       }
     });
   }
-
+  
   clicked(event, d) {
     if (event && event.isTrusted && "function" === typeof this.clickNodeCallback) {
       this.clickNodeCallback(d);
@@ -278,5 +294,9 @@ class ClusterGraph extends Graph {
         // simulation.tick(??)
       }
     }
+  }
+
+  spotlight(ids) {
+    this.reveal(this.node, this.link, ids);
   }
 }

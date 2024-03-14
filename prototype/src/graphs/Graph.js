@@ -17,6 +17,7 @@ class Graph {
     this.linkHighlightOpacity = 0.8;
     this.revealColor = "blue";
     this.revealWidth = 5;
+    this.backupInfo = {};
   }
 
   ticked(link, node) {
@@ -77,20 +78,30 @@ class Graph {
 
     if (!separate) return;
     this.separating = true;
+    this.backupInfo = {};
 
-    // Add a force to avoid text overlap.
-    let sizes = {};
+    // STOP Current Simulation and save the alpha.
+    simulation.stop();
+    this.backupInfo["alpha"] = simulation.alpha();
+
+    // SAVE nodes sizes.
+    const self = this;
     node.each(function(d) {
       const g = d3.select(this);
-      sizes[d.id] = {
-        width: g.node().getBBox().width / 2,
-        height: g.node().getBBox().height / 2,
+      self.backupInfo[d.id] = {
+        width: g.node().getBBox().width,
+        height: g.node().getBBox().height,
       };
     });
 
-    simulation.force("text", d3.bboxCollide(d => [[-sizes[d.id].width, -sizes[d.id].height], [sizes[d.id].width, sizes[d.id].height]]).strength(1).iterations(1));
-    simulation.nodes(node.data().filter(n => neighbors.has(n)));
-    simulation.force("link").links(link.data().filter(l => l.source !== d && l.target !== d));
+    // ADD a force to avoid text overlap.
+    simulation.force("text", d3.bboxCollide(d => {
+      const dx = this.backupInfo[d.id].width / 2;
+      const dy = this.backupInfo[d.id].height / 2;
+      return [[-dx, -dy], [dx, dy]];
+    }).strength(0.05).iterations(1));
+
+    // CONTINUE Simulation just to rearrange highligthed nodes.
     simulation.alpha(0.01).restart();
   }
 
@@ -104,13 +115,15 @@ class Graph {
     link.attr("stroke-opacity", this.linkOpacity);
 
     // Remove the force added to avoid text overlap. and go back to old positions.
-    if (this.separating) {
-      this.separating = false;
-      simulation.force("text", null);
-      simulation.nodes(node.data());
-      simulation.force("link").links(link.data());
-      simulation.alpha(0.3).restart();
-    }
+    if (!this.separating) return;
+    this.separating = false;
+
+    // STOP Current Simulation.
+    simulation.stop();
+    // REMOVE the force added to avoid text overlap.
+    simulation.force("text", null);
+    // CONTINUE Simulation from where it previous where.
+    simulation.alpha(this.backupInfo["alpha"] < 0.3 ? 0.3 : this.backupInfo["alpha"]).restart();
   }
 
   reveal(node, link, ids) {

@@ -45,6 +45,7 @@
     const outerGroup = "national teams";
     const clusterGroup = "teams";
     const detailGroup = "players";
+    const defaultSort = "name";
     const graphConfigs = {
       clusterGroup: "teams",
       noClusterLegend: "No Team",
@@ -110534,28 +110535,34 @@
       const detailPrefix = detailGroup.replace(' ', '-');
       
       const sortFields = Sort.extractSortFields(data, ["id", "img", "teams"]);
-      const filters = Filter.extractFilters(data, outerGroup, clusterGroup, detailGroup, ["id", "name", "img", "logo", "count", "link"]);
+      if (sortFields.length > 0) {
+        const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, defaultSort, (sort) => {
+          if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
+        });
+        document.getElementById("controls-sort").append(sortNationalTeams.render());
+      }
+
+      const filters = Filter.extractFilters(data, outerGroup, clusterGroup, detailGroup, ["id", "name", "img", "logo", "color", "count", "link"]);
+      function initFilter(group, name, prefix, callback) {
+        if (filters[group]) {
+          const filterGroup = new Filter(name, prefix, filters[group], (filter) => {
+            if (graph && "object" === typeof graph) callback(filter);
+          });
+          document.getElementById("controls-filters").append(filterGroup.render());
+        }
+      }
+
+      initFilter(outerGroup, outerName, outerPrefix, (filter) => graph.filterOuterNodes(filter));
+      initFilter(clusterGroup, clusterName, clusterPrefix, (filter) => graph.filterClusterNodes(filter));
+      initFilter(detailGroup, detailName, detailPrefix, (filter) => graph.filterDetailNodes(filter));
+      
       const search = Search.extractSearchNames(data, "players");
-
-      const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, "name", (sort) => {
-        if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
-      });
-      const filterNationalTeams = new Filter(outerName, outerPrefix, filters[outerGroup], (filter) => {
-        if (graph && "object" === typeof graph) graph.filterOuterNodes(filter);
-      });
-      const filterClubs = new Filter(clusterName, clusterPrefix, filters[clusterGroup], (filter) => {
-        if (graph && "object" === typeof graph) graph.filterClusterNodes(filter);
-      });
-      const filterPlayers = new Filter(detailName, detailPrefix, filters[detailGroup], (filter) => {
-        if (graph && "object" === typeof graph) graph.filterDetailNodes(filter);
-      });
-      const searchPlayers = new Search(detailName, detailPrefix, search, (name) => {
-        if (graph && "object" === typeof graph) graph.searchDetailNodes(name);
-      });
-
-      document.getElementById("controls-sort").append(sortNationalTeams.render());
-      document.getElementById("controls-filters").append(filterNationalTeams.render(), filterClubs.render(), filterPlayers.render());
-      document.getElementById("controls-search").append(searchPlayers.render());
+      if (search.length > 0) {
+        const searchPlayers = new Search(detailName, detailPrefix, search, (name) => {
+          if (graph && "object" === typeof graph) graph.searchDetailNodes(name);
+        });
+        document.getElementById("controls-search").append(searchPlayers.render());
+      }
     }
   </script>
 </body>

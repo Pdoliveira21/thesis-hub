@@ -21,8 +21,8 @@ class DetailGraph extends Graph {
       .force("charge", d3.forceManyBody().strength(-1))
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(0.0))
-      .force("x", d3.forceX().x(0).strength(0.1))
-      .force("y", d3.forceY().y(0).strength(0.1))
+      .force("x", d3.forceX().x(0).strength(0.3))
+      .force("y", d3.forceY().y(0).strength(0.3))
       .force("outerXY", this.outerXY.bind(this))
       .force("withinCircleBounds", this.withinCircleBounds.bind(this));
   
@@ -290,7 +290,7 @@ class DetailGraph extends Graph {
       );
 
     this.simulation.nodes(nodes);
-    this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.05);
+    this.simulation.force("link").links(links).strength(focus?.group === this.outerGroup ? 0.0 : 0.2);
     this.simulation.alpha(1).restart();
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }

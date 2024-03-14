@@ -38,8 +38,8 @@ class Graph {
   }
   
   #dragged(event, d) {
-    d.fx = event.x;
-    d.fy = event.y;
+    d.fx = Math.sign(event.x) * Math.min(Math.abs(event.x), this.width / 2 - this.nodeSize);
+    d.fy = Math.sign(event.y) * Math.min(Math.abs(event.y), this.height/ 2 - this.nodeSize);
   }
   
   #dragended(event, d, simulation) {
@@ -99,7 +99,7 @@ class Graph {
       const dx = this.backupInfo[d.id].width / 2;
       const dy = this.backupInfo[d.id].height / 2;
       return [[-dx, -dy], [dx, dy]];
-    }).strength(0.05).iterations(1));
+    }).strength(0.1).iterations(1));
 
     // CONTINUE Simulation just to rearrange highligthed nodes.
     simulation.alpha(0.01).restart();
@@ -123,7 +123,7 @@ class Graph {
     // REMOVE the force added to avoid text overlap.
     simulation.force("text", null);
     // CONTINUE Simulation from where it previous where.
-    simulation.alpha(this.backupInfo["alpha"] < 0.3 ? 0.3 : this.backupInfo["alpha"]).restart();
+    simulation.alpha(Math.max(this.backupInfo["alpha"], 0.3)).restart();
   }
 
   reveal(node, link, ids) {

@@ -23,9 +23,6 @@ class ClusterGraph extends Graph {
 
   initialize() {
     this.simulation = d3.forceSimulation()
-      // (TODO): investigate more how to "slow down" the simulation 
-      // .alphaDecay(0.01)
-      // .velocityDecay(0.8)
       .force("charge", d3.forceManyBody().strength(-1))
       .force("collide", d3.forceCollide(d => this.nodeRadius(d) + 2))
       .force("link", d3.forceLink().id(d => d.id).strength(d => d.value * 0.1))
@@ -183,6 +180,7 @@ class ClusterGraph extends Graph {
             g.append("title").text(d.name);
           }),
         update => update
+          .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
           .attr("opacity", d => this.connected(d.id, links) ? this.nodeOpacity : this.nodeUnhighlightOpacity)
           .each(function(d) {
             const g = d3.select(this);

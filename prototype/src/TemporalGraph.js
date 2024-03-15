@@ -265,6 +265,19 @@ class TemporalGraph {
     this.detailsGraph.update(nodes, links, node);
     this.spotlightDetailsGraph(links);
     document.getElementById(container).replaceChildren(this.detailsGraph.render());
+
+    // (TODO) add close button [just for a quick test]
+    const closeButton = document.createElement("button");
+    closeButton.textContent = "Close";
+    closeButton.classList.add("control-btn");
+    closeButton.classList.add("details-btn-close");
+    closeButton.addEventListener("click", () => {
+      this.detailedNode = null;
+      this.detailsGraph.update([], [], null);
+      this.detailsGraph.spotlight(new Set());
+      document.getElementById(container).replaceChildren();
+    });
+    document.getElementById(container).appendChild(closeButton);
   }
 
   // This method is used to spotlight specific components of the details graph.

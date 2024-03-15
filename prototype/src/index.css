@@ -31,10 +31,11 @@
   padding: 1rem;
 }
 
-.vis-detail-graph {
+.vis-detail-graph,
+.details-btn-close {
   position: absolute;
   top: 1rem;
-  left: 1rem;
+  right: 1rem;
   background-color: #FFF;
 }
 

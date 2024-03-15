@@ -178,6 +178,8 @@ class ClusterGraph extends Graph {
                   .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
+
+              g.append("title").text(d.name);
             } else {
               g.append("circle")
                 .attr("r", 0)  
@@ -189,8 +191,6 @@ class ClusterGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-
-            g.append("title").text(d.name);
           }),
         update => update
           .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
@@ -228,6 +228,9 @@ class ClusterGraph extends Graph {
                   .transition().duration(self.animationDuration).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
+
+              const title = g.select("title").empty() ? g.append("title") : g.select("title");
+              title.text(d.name);
             } else {
               // Get the old size of the image/circle.
               const oldRadius = g.select("image").empty() 
@@ -236,6 +239,7 @@ class ClusterGraph extends Graph {
 
               // Remove the old image and add or update the circle and text properties.
               g.select("image").remove();
+              g.select("title").remove();
 
               const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
               circle
@@ -250,8 +254,6 @@ class ClusterGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-              
-            g.select("title").text(d.name);
           }),
         exit => exit
           .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)

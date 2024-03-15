@@ -47,9 +47,9 @@
     const outerGroup = "national teams";
     const clusterGroup = "teams";
     const detailGroup = "players";
-    const outerName = "Seleções";
-    const clusterName = "Equipas";
-    const detailName = "Jogadores";
+    const outerLabel = "Seleções";
+    const clusterLabel = "Equipas";
+    const detailLabel = "Jogadores";
     const defaultSort = "name";
     const graphConfigs = {
       clusterGroup: "teams",
@@ -110533,16 +110533,13 @@
       const data = dataPath ? accessObjectByString(raw, dataPath) : raw;
       let graph = new TemporalGraph(data, graphConfigs);
       
-      // const outerName = capitalizeStringWords(outerGroup);
-      // const clusterName = capitalizeStringWords(clusterGroup);
-      // const detailName = capitalizeStringWords(detailGroup);
       const outerPrefix = outerGroup.replace(' ', '-');
       const clusterPrefix = clusterGroup.replace(' ', '-');
       const detailPrefix = detailGroup.replace(' ', '-');
       
       const sortFields = Sort.extractSortFields(data, ["id", "img", "teams"]);
       if (sortFields.length > 0) {
-        const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, defaultSort, (sort) => {
+        const sortNationalTeams = new Sort(outerLabel, outerPrefix, sortFields, defaultSort, (sort) => {
           if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
         });
         document.getElementById("controls-sort").append(sortNationalTeams.render());
@@ -110558,13 +110555,13 @@
         }
       }
 
-      initFilter(outerGroup, outerName, outerPrefix, (filter) => graph.filterOuterNodes(filter));
-      initFilter(clusterGroup, clusterName, clusterPrefix, (filter) => graph.filterClusterNodes(filter));
-      initFilter(detailGroup, detailName, detailPrefix, (filter) => graph.filterDetailNodes(filter));
+      initFilter(outerGroup, outerLabel, outerPrefix, (filter) => graph.filterOuterNodes(filter));
+      initFilter(clusterGroup, clusterLabel, clusterPrefix, (filter) => graph.filterClusterNodes(filter));
+      initFilter(detailGroup, detailLabel, detailPrefix, (filter) => graph.filterDetailNodes(filter));
       
       const search = Search.extractSearchNames(data, "players");
       if (search.length > 0) {
-        const searchPlayers = new Search(detailName, detailPrefix, search, (name) => {
+        const searchPlayers = new Search(detailLabel, detailPrefix, search, (name) => {
           if (graph && "object" === typeof graph) graph.searchDetailNodes(name);
         });
         document.getElementById("controls-search").append(searchPlayers.render());

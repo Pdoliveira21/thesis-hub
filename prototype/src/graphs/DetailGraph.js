@@ -209,6 +209,8 @@ class DetailGraph extends Graph {
                   .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
+
+              g.append("title").text(d.name);
             } else {
               g.append("circle")
                 .attr("r", 0)
@@ -220,8 +222,6 @@ class DetailGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-
-            g.append("title").text(d.name);
           }),
         update => update
           .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
@@ -246,8 +246,12 @@ class DetailGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
+              
+              const title = g.select("title").empty() ? g.append("title") : g.select("title");
+              title.text(d.name);
             } else {
               g.select("image").remove();
+              g.select("title").remove();
 
               const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
               circle
@@ -261,8 +265,6 @@ class DetailGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-
-            g.select("title").text(d.name);
           }),
         exit => exit
           .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)

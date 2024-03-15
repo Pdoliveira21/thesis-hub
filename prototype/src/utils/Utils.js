@@ -33,3 +33,8 @@ function accessObjectByString(obj, str) {
 function capitalizeStringWords(str) {
   return str.replace(/\b\w/g, (char) => char.toUpperCase());
 }
+
+function compareStringId(str, value) {
+  const parts = str.split('-');
+  return parts.length >= 2 && parts[1] === value;
+}

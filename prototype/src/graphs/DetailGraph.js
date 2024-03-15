@@ -130,7 +130,7 @@ class DetailGraph extends Graph {
   }
 
   nodeColor(d) {
-    if (d.group === this.innerGroup && d.cluster.split("-")[1] === "0") { // TODO: (future) review this condition
+    if (d.group === this.innerGroup && compareStringId(d.cluster, "0")) {
       return "url(#stripes)";
     }
 

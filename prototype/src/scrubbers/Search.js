@@ -54,8 +54,6 @@ class Search {
   static extractSearchNames(data, from = "players") {
     let names = new Set();
 
-    // TODO (review): go throug data till from object is found and and to the values set their name
-    // iterate data recursevel and add to the set the names of the objects that correspond to the from object
     function extract(object) {
       if ("object" !== typeof object || object === null) return;
 

@@ -102,7 +102,7 @@ class ClusterGraph extends Graph {
   }
 
   nodeColor(d) {
-    if (d.id.split("-")[1] === "0") { // TODO: (future) review this condition
+    if (d.group === this.innerGroup && compareStringId(d.id, "0")) {
       return "url(#stripes)";
     }
 
@@ -114,16 +114,12 @@ class ClusterGraph extends Graph {
   }
 
   displayNodeImg(d) {
-    return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4); // this.nodeRadius(d) >= this.nodeSize * 0.35);
+    return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4);
   }
 
-  // TODO: (future) improve highlight style and transitions (appear and disappear)? really necessary?
-  // make it more notorious, primarily in the circle nodes, maybe being a square is not a bad idea, to be more distinguisable
-  // receive color and sizes as parameters
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
-    // (THINK) some sort heuristics to the national teams nodes....
     this.outerRadius = this.circularLayout(nodes, this.outerGroup); 
     nodes = nodes.map(d => ({
       ...old.get(d.id) || {
@@ -289,7 +285,6 @@ class ClusterGraph extends Graph {
       if (d.group === this.outerGroup) {
         // Trigger the tick event of nodes not draggable
         this.simulation.alpha(0.05).restart();
-        // simulation.tick(??)
       }
     }
   }

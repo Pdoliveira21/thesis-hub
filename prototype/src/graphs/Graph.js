@@ -88,6 +88,7 @@ class Graph {
     link.filter(l => l.source !== d && l.target !== d).attr("stroke-opacity", this.linkUnhighlightOpacity);
     link.filter(l => l.source === d || l.target === d).attr("stroke-opacity", this.linkHighlightOpacity);
 
+    // Add a force to avoid text overlap (if is to separate - eg.: hover outer node).
     if (!separate) return;
     this.separating = true;
     this.backupInfo = {};
@@ -96,7 +97,7 @@ class Graph {
     simulation.stop();
     this.backupInfo["alpha"] = simulation.alpha();
 
-    // SAVE nodes sizes.
+    // ADD a force to avoid text overlap. (rectangular collision d3-plugin: https://github.com/emeeks/d3-bboxCollide)
     const self = this;
     node.each(function(d) {
       const g = d3.select(this);
@@ -106,7 +107,6 @@ class Graph {
       };
     });
 
-    // ADD a force to avoid text overlap. (rectangular collision d3-plugin: https://github.com/emeeks/d3-bboxCollide)
     simulation.force("text", d3.bboxCollide(d => {
       const dx = this.backupInfo[d.id].width / 2;
       const dy = this.backupInfo[d.id].height / 2;
@@ -126,7 +126,7 @@ class Graph {
     });
     link.attr("stroke-opacity", this.linkOpacity);
 
-    // Remove the force added to avoid text overlap. and go back to old positions.
+    // Remove the force added to avoid text overlap and restabilize the simulation (if nodes are separated).
     if (!this.separating) return;
     this.separating = false;
 
@@ -142,7 +142,7 @@ class Graph {
     node.call(g => {
       g.select("image")
         .style("outline", d => ids.has(d.id) ? `${this.revealWidth}px solid ${this.revealColor}` : "none")
-        .style("border-radius", d => ids.has(d.id) ? "50%" : "none"); // TODO: circle or square?
+        .style("border-radius", d => ids.has(d.id) ? "50%" : "none");
       g.select("circle")
         .style("stroke", d => ids.has(d.id) ? this.revealColor : "none")
         .style("stroke-width", d => ids.has(d.id) ? `${this.revealWidth}px` : 0);

@@ -13,7 +13,6 @@ class Timeline {
     this.interval = null;
     this.initialize();
     this.step(0);
-    // Inputs.disposal(form).then(stop);
   }
 
   render() {
@@ -108,12 +107,12 @@ class Timeline {
   }
 
   onPrev() {
-    if (this.running()) this.stop(); // (THINK fara sentido só parar e depois andar - add return here?)
+    if (this.running()) this.stop();
     this.step(-1);
   }
 
   onNext() {
-    if (this.running()) this.stop(); // (THINK fara sentido só parar e depois andar - add return here?)
+    if (this.running()) this.stop();
     this.step(1);
   }
 

@@ -1,6 +1,19 @@
 // (IMPORT) import { Graph } from './Graph.js';
 // import d3 from 'd3';
 
+/**
+ * @class ClusterGraph
+ * @extends Graph
+ * @description A class that represents a cluster graph component.
+ * @param {number} width - The width of the graph.
+ * @param {number} height - The height of the graph.
+ * @param {number} nodeSize - The size of the nodes.
+ * @param {number} nodeSpace - The space between nodes.
+ * @param {string} outerGroup - The outer group of nodes.
+ * @param {string} innerGroup - The inner group of nodes.
+ * @param {function} clickNodeCallback - Callback function to be called when a node is clicked.
+ * @param {function} tickCallback - Callback function to be called when the graph is updated.
+ */
 class ClusterGraph extends Graph {
 
   constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, clickNodeCallback = () => {}, tickCallback = () => {}) {
@@ -63,21 +76,22 @@ class ClusterGraph extends Graph {
       .selectAll("g");
   }
 
+  // Custom force to place the outer nodes in the circunference.
   outerXY(alpha) {
     this.node.filter(d => d.group === this.outerGroup && !d.inPlace).each(d => {
-      // Close enough to the new position - snap to it
+      // Close enough to the new position - snap to it.
       if (Math.abs(d.fx - d.cx) <= 1.0 && Math.abs(d.fy - d.cy) <= 1.0) {
         d.fx = d.cx;
         d.fy = d.cy;
         d.inPlace = true;
       } else {
         if (d.t === undefined) {
-          // does not have old theta - move new node linearly to the new position
+          // does not have old theta - move new node linearly to the new position.
           const factor = Math.max((1 - alpha) * 0.25, 0);
           d.fx = d.x + (d.cx - d.x) * factor;
           d.fy = d.y + (d.cy - d.y) * factor;
         } else {
-          // has old theta - move existing node along the circunference to the new position
+          // has old theta - move existing node along the circunference to the new position.
           const factor = Math.max(alpha * 2 - 1, 0);
           d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
           d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
@@ -86,6 +100,7 @@ class ClusterGraph extends Graph {
     });
   }
 
+  // Custom force to keep the inner nodes within the circunference.
   withinCircleBounds() {
     this.node.filter(d => d.group === this.innerGroup).each(d => {
       const distance = Math.sqrt(d.x * d.x + d.y * d.y);
@@ -117,6 +132,8 @@ class ClusterGraph extends Graph {
     return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4);
   }
 
+  // Update the graph with the new nodes and links reusing the old information when possible to keep visual consistency.
+  // Defines the transitions, the nodes interactions and updates and restarts the simulation.
   update(nodes, links) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
@@ -187,12 +204,12 @@ class ClusterGraph extends Graph {
             const displayText = self.displayNodeText(d);
 
             if (displayImg) {
-              // Get the old size of the image/circle
+              // Get the old size of the image/circle.
               const oldRadius = g.select("circle").empty() 
                 ? +g.select("image").attr("width") / 2 
                 : +g.select("circle").attr("r") + 4;
               
-              // Remove the old circle and text, if exist, and add or update the image properties 
+              // Remove the old circle and text, if exist, and add or update the image properties. 
               g.select("circle").remove();
               g.select("text").remove();
 
@@ -212,12 +229,12 @@ class ClusterGraph extends Graph {
                   .attr("transform", "scale(1)");
               }
             } else {
-              // Get the old size of the image/circle
+              // Get the old size of the image/circle.
               const oldRadius = g.select("image").empty() 
                 ? +g.select("circle").attr("r") 
                 : +g.select("image").attr("width") / 2 - 4;
 
-              // Remove the old image and add or update the circle and text properties
+              // Remove the old image and add or update the circle and text properties.
               g.select("image").remove();
 
               const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
@@ -278,17 +295,19 @@ class ClusterGraph extends Graph {
     });
   }
   
+  // Click event handler for the nodes.
   clicked(event, d) {
     if (event && event.isTrusted && "function" === typeof this.clickNodeCallback) {
       this.clickNodeCallback(d);
       
       if (d.group === this.outerGroup) {
-        // Trigger the tick event of nodes not draggable
+        // Trigger the tick event of nodes not draggable.
         this.simulation.alpha(0.05).restart();
       }
     }
   }
 
+  // Reveal the nodes and links with the given ids in the graph.
   spotlight(ids) {
     this.reveal(this.node, this.link, ids);
   }

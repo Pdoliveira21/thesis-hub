@@ -1,3 +1,14 @@
+/**
+ * @class DetailGraph
+ * @extends Graph
+ * @description A class to create a detail graph component.
+ * @param {number} width - The width of the graph.
+ * @param {number} height - The height of the graph.
+ * @param {number} nodeSize - The size of the nodes.
+ * @param {number} nodeSpace - The space between nodes.
+ * @param {string} outerGroup - The outer group of nodes.
+ * @param {string} innerGroup - The inner group of nodes.
+ */
 class DetailGraph extends Graph {
   constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup) {
     super(width, height, nodeSize, nodeSpace);
@@ -80,21 +91,22 @@ class DetailGraph extends Graph {
       .selectAll("g");
   }
 
+  // Custom force to place the outer nodes in the circunference.
   outerXY(alpha) {
     this.node.filter(d => d.group === this.outerGroup && !d.inPlace).each(d => {
-      // Close enough to the new position - snap to it
+      // Close enough to the new position - snap to it.
       if (Math.abs(d.fx - d.cx) <= 1.0 && Math.abs(d.fy - d.cy) <= 1.0) {
         d.fx = d.cx;
         d.fy = d.cy;
         d.inPlace = true;
       } else {
         if (d.t === undefined) {
-          // does not have old theta - move new node linearly to the new position
+          // does not have old theta - move new node linearly to the new position.
           const factor = Math.max((1 - alpha) * 0.25, 0);
           d.fx = d.x + (d.cx - d.x) * factor;
           d.fy = d.y + (d.cy - d.y) * factor;
         } else {
-          // has old theta - move existing node along the circunference to the new position
+          // has old theta - move existing node along the circunference to the new position.
           const factor = Math.max(alpha * 2 - 1, 0);
           d.fx = this.outerRadius * Math.cos(factor * d.t + (1 - factor) * d.theta);
           d.fy = this.outerRadius * Math.sin(factor * d.t + (1 - factor) * d.theta);
@@ -103,6 +115,7 @@ class DetailGraph extends Graph {
     });
   }
 
+  // Custom force to keep the inner nodes within the circunference.
   withinCircleBounds() {
     this.node.filter(d => d.group === this.innerGroup).each(d => {
       const distance = Math.sqrt(d.x * d.x + d.y * d.y);
@@ -114,6 +127,7 @@ class DetailGraph extends Graph {
     });
   }
 
+  // Calculate the average position of the clusters.
   clusterPosition() {
     if (this.clusters.length === 0) {
       return {x: 0, y: 0};
@@ -145,6 +159,9 @@ class DetailGraph extends Graph {
     return d.img !== undefined && (d.group === this.outerGroup);
   }
 
+  // Update the graph with the new nodes and links reusing the old information when possible to keep visual consistency.
+  // Updates the graph background based on the focus node.
+  // Defines the transitions, the nodes interactions and updates and restarts the simulation.
   update(nodes, links, focus) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
     const oldClusterCenter = this.clusterPosition();
@@ -289,6 +306,7 @@ class DetailGraph extends Graph {
     this.simulation.on("tick", () => this.ticked(this.link, this.node));
   }
 
+  // Check if the clusters position has changed beyond a certain threshold (10 pixels).
   #changedClusters(clusters) {
     if (clusters.length !== this.clusters.length) return true;
 
@@ -304,6 +322,7 @@ class DetailGraph extends Graph {
     return false;
   }
 
+  // Update the position of the clusters, if needed, and update the simulation accordingly.
   updateClusters(clusters) {
     if (this.#changedClusters(clusters)) {
       this.clusters = clusters.map(c => ({id: c.id, x: c.x, y: c.y}));
@@ -316,6 +335,7 @@ class DetailGraph extends Graph {
     }
   }
 
+  // Open the link of the inner node clicked in a new browser tab.
   clicked(event, d) {
     if (event && event.isTrusted) {
       if (d.group === this.innerGroup && d.link !== "") {
@@ -324,18 +344,21 @@ class DetailGraph extends Graph {
     }
   }
 
+  // Update the cluster corner image and text to match the node being hovered.
   mouseEnter(d, focus) {
     if (focus.group !== this.outerGroup || this.dragging === true) return;
     this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
     this.cluster.select("text").text(d.clusterInfo?.name || "");
   }
 
+  // Reset the cluster corner image and text when the mouse leaves the node.
   mouseLeave() {
     if (this.dragging === true) return;
     this.cluster.select("image").attr("href", "");
     this.cluster.select("text").text("");
   }
 
+  // Reveal the nodes and links with the given ids in the graph.
   spotlight(ids) {
     this.reveal(this.node, this.link, ids);
   }

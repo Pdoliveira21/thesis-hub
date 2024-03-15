@@ -27,11 +27,13 @@ class Sort {
   initialize() {
     this.sort = document.createElement("div");
     
-    const title = document.createElement("span");
+    const title = document.createElement("p");
     title.textContent = `${dictionary.sort} ${this.name} ${dictionary.by}:`;
+    title.classList.add("control-title");
 
     const select = document.createElement("select");
     select.id = `sort-${this.prefix}`;
+    select.classList.add("control-dropdown");
     select.addEventListener("change", this.onChange.bind(this));
 
     for (const field of this.fields) {

@@ -28,18 +28,22 @@ class Filter {
     
     const title = document.createElement("p");
     title.textContent = `${dictionary.filter} ${this.name} ${dictionary.by}:`;
+    title.classList.add("control-title");
     this.filter.appendChild(title);
 
     for (const field in this.values) {
       const fieldId = `filter-${this.prefix}-${field}`;
       const container = document.createElement("div");
+      container.classList.add("control-line");
 
       const label = document.createElement("span");
       label.textContent = dictionary[field].label;
+      label.classList.add("control-label");
 
       const select = document.createElement("select");
       select.id = fieldId;
       select.name = field;
+      select.classList.add("control-dropdown");
       select.addEventListener("change", this.onChange.bind(this));
 
       const allOption = document.createElement("option");

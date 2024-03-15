@@ -21,21 +21,26 @@
 </head>
 
 <body>
-  <div id="temporal-graph">
-    <div class="view-container">
-      <div class="view-controls">
+  <div id="vis-container">
+
+    <!-- NOTE: Display title received as argument -->
+    <p class="vis-title">Evolução de Jogadores em Seleções e Equipas ao Longo do Tempo</p>
+    
+    <div class="vis-content">
+      <div class="vis-controls">
         <div id="controls-sort"></div>
-        <div id="controls-filters" class="view-controls-filters"></div>
-        <div id="controls-search" class="view-controls-search"></div>
+        <div id="controls-filters"></div>
+        <div id="controls-search"></div>
       </div>
       
-      <span id="graph-container"></span>
-      <span id="timeline-container"></span>
+      <div class="vis-graphs">
+        <!-- NOTE: Define dimension as width and height received as arguments -->
+        <span id="graph-container" style="display: block; width: 800px; height: 800px;"></span>
+        <span id="details-container" class="vis-detail-graph"></span>
+        <span id="timeline-container" class="vis-timeline"></span>
+      </div>
     </div>
-    <div class="view-container">
-      <div style="height: 173px;"></div>
-      <span id="details-container"></span>
-    </div>
+
   </div>
 
 

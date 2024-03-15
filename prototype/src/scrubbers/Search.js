@@ -26,12 +26,14 @@ class Search {
   initialize() {
     this.search = document.createElement("div");
     
-    const title = document.createElement("span");
+    const title = document.createElement("p");
     title.textContent = `${dictionary.find} ${this.name}:`;
+    title.classList.add("control-title");
 
     const input = document.createElement("input");
     input.id = `search-${this.prefix}`;
     input.type = "search";
+    input.classList.add("control-input");
     input.setAttribute("list", `search-${this.prefix}-values`);
     input.addEventListener("input", this.onChange.bind(this));
 

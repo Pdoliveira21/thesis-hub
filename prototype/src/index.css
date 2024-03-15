@@ -1,38 +1,97 @@
-#temporal-graph {
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+#vis-container {
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 1rem;
+}
+
+.vis-title {
+  font-size: x-large;
+  font-weight: 500;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0.75rem 0;
+}
+
+.vis-content {
   display: flex;
   width: 100%;
   height: 100%;
   justify-content: center;
+  padding: 0.75rem 0;
 }
 
-.view-container {
-  border: 1px solid #000;
+.vis-controls {
+  padding: 0 1rem;
+  min-width: 250px;
 }
 
-.view-controls {
-  padding: 1em;
+.vis-graphs {
+  position: relative;
+  padding: 1rem;
 }
 
-.view-controls-filters {
-  display: flex;
-  column-gap: 5em;
+.vis-detail-graph {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #FFF;
 }
 
-.view-controls-search {
-  margin: 1em 0;
-}
-
-#timeline-container {
-  width: 100%;
+.vis-timeline {
   display: flex;
   justify-content: center;
-  margin: 1em 0.5em;
+  width: 100%;
 }
 
-#timeline-container > form {
+.vis-timeline > form {
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.control-title {
+  margin: 2rem 0 0.75rem 0;
+  font-size: large;
+}
+
+.control-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.control-label {
+  font-weight: 300;
+}
+
+.control-dropdown,
+.control-input {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: medium;
+  font-weight: 300;
+  width: 100%;
+}
+
+.control-line > .control-dropdown {
+  width: 50%;
+}
+
+.control-btn {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: medium;
+  font-weight: 300;
+  background-color: #FFF;
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 3px;
+  margin: 0.5rem 0.25rem;
+}
+
+.control-range {
+  margin: 0.5rem 0.25rem;
+  width: 300px;
 }
 
 
@@ -42,6 +101,7 @@
   text-anchor: middle;
   dominant-baseline: central;
   font-size: 0.875em;
+  font-weight: 300;
   fill: #000;
   text-shadow: -1px -1px 0 #FFF, 0 -1px 0 #FFF, 1px -1px 0 #FFF, 1px 0 0 #FFF, 1px 1px 0 #FFF, 0 1px 0 #FFF, -1px 1px 0 #FFF, -1px 0 0 #FFF;
   pointer-events: none;

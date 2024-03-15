@@ -37,21 +37,21 @@ class Timeline {
     this.btnPlay.id = "timeline-control";
     this.btnPlay.type = "button";
     this.btnPlay.textContent = dictionary.play;
-    this.btnPlay.classList.add("btn-timeline");
+    this.btnPlay.classList.add("control-btn");
     this.btnPlay.addEventListener("click", this.onPlay.bind(this));
 
     this.btnPrev = document.createElement("button");
     this.btnPrev.id = "timeline-prev";
     this.btnPrev.type = "button";
     this.btnPrev.textContent = dictionary.prev;
-    this.btnPrev.classList.add("btn-timeline");
+    this.btnPrev.classList.add("control-btn");
     this.btnPrev.addEventListener("click", this.onPrev.bind(this));
 
     this.btnNext = document.createElement("button");
     this.btnNext.id = "timeline-next";
     this.btnNext.type = "button";
     this.btnNext.textContent = dictionary.next;
-    this.btnNext.classList.add("btn-timeline");
+    this.btnNext.classList.add("control-btn");
     this.btnNext.addEventListener("click", this.onNext.bind(this));
 
     this.range = document.createElement("input");
@@ -61,13 +61,13 @@ class Timeline {
     this.range.max = this.values.length - 1;
     this.range.step = 1;
     this.range.value = 0;
-    this.range.classList.add("input-timeline");
+    this.range.classList.add("control-range");
     this.range.addEventListener("input", this.onUpdate.bind(this));
 
     this.output = document.createElement("output");
     this.output.id = "timeline-output";
-    this.output.value = `${dictionary.current}: ---`;
-    this.output.classList.add("output-timeline");
+    this.output.value = `---`;
+    this.output.classList.add("control-title");
 
     this.player = document.createElement("div");
     this.player.append(this.btnPlay, this.btnPrev, this.range, this.btnNext);
@@ -125,7 +125,7 @@ class Timeline {
   onUpdate(event) {
     if (event && event.isTrusted && this.running()) this.stop();
     this.timeline.value = this.values[this.range.valueAsNumber];
-    this.output.value = `${dictionary.current}: ${this.timeline.value}`;
+    this.output.value = `${this.timeline.value}`;
     if ("function" === typeof this.updateCallback) {
       this.updateCallback(this.timeline.value);
     }

@@ -1,8 +1,14 @@
-/*
-  COPYRIGHT 2020-2023 - D3 by observable (https://observablehq.com/@d3/temporal-force-directed-graph)
-  Used as a reference for our timeline scrubber component
-*/
-
+/**
+ * @class Timeline
+ * @description A class to create a timeline scrubber component. 
+ * @param {Array} values - An array of values to be used as the timeline.
+ * @param {number} delay - Delay between each step in the timeline.
+ * @param {function} updateCallback - Callback function to be called when the timeline value is updated.
+ * 
+ * @copyright 2020-2023
+ * @author D3 by observable
+ * @see https://observablehq.com/@d3/temporal-force-directed-graph - used as reference example that was adapted and simplified for the project purposes.
+ */
 class Timeline {
 
   constructor(values, delay, updateCallback = () => {}) { 

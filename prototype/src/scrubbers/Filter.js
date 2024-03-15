@@ -1,3 +1,11 @@
+/**
+ * @class Filter
+ * @description A class to create a filter component for a given dataset.
+ * @param {string} name - The name of the dataset to be filtered.
+ * @param {string} prefix - Prefix to be used in the id of the filter dropdowns.
+ * @param {Object} values - Object with the fields and their respective values to be used as filtering options.
+ * @param {function} changeCallback - Callback function to be called when the filter fields are changed.
+ */
 class Filter {
 
   constructor(name, prefix, values, changeCallback = () => {}) {
@@ -67,6 +75,16 @@ class Filter {
     }
   }
 
+  /**
+   * Extract the fields and values from the dataset to be used as filtering options for every group level.
+   * Designed according to the expected structure of the dataset provenient from the endpoint.
+   * @param {Object} data - The dataset to be used.
+   * @param {string} outerGroup - The name of the outer group in the dataset.
+   * @param {string} clusterGroup - The name of the cluster group in the dataset.
+   * @param {string} detailGroup - The name of the detail group in the dataset.
+   * @param {Array} exclude - Specific fields to be excluded from the filtering options.
+   * @returns {Object} Object with the fields and their respective values to be used as filtering options.
+   */
   static extractFilters(data, outerGroup, clusterGroup, detailGroup, exclude = []) {
     let filters = {}
 

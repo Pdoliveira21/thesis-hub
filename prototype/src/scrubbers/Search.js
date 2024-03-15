@@ -1,3 +1,11 @@
+/**
+ * @class Search
+ * @description A class to create a search input for a list of values.
+ * @param {string} name - The name of the dataset to be searched.
+ * @param {string} prefix - Prefix to be used in the id of the search input.
+ * @param {Array} values - Array of values to be used as search options.
+ * @param {function} changeCallback - Callback function to be called when the search value is changed.
+ */
 class Search {
 
   constructor(name, prefix, values, changeCallback = () => {}) {
@@ -51,6 +59,13 @@ class Search {
     }
   }
 
+  /**
+   * Extract the names from the dataset to be used as search options of a specific property.
+   * Designed according to the expected structure of the dataset provenient from the endpoint.
+   * @param {Object} data - The dataset to be used.
+   * @param {string} from - The property to be used as the source of the names.
+   * @returns {Array} Array of names to be used as search options.
+   */
   static extractSearchNames(data, from = "players") {
     let names = new Set();
 

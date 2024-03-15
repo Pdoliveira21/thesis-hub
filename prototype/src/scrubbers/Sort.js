@@ -1,3 +1,12 @@
+/**
+ * @class Sort
+ * @description A class to create a sort dropdown for a given dataset.
+ * @param {string} name - The name of the dataset to be sorted.
+ * @param {string} prefix - Prefix to be used in the id of the sort dropdown.
+ * @param {Array} fields - Array of fields to be used as sorting options.
+ * @param {string} selected - The default selected field.
+ * @param {function} changeCallback - Callback function to be called when the sort field is changed.
+ */
 class Sort {
 
   constructor(name, prefix, fields, selected, changeCallback = () => {}) {
@@ -44,6 +53,14 @@ class Sort {
     }
   }
 
+  /**
+   * Extract the fields from the dataset to be used as sorting options.
+   * Considers only the outer level of the dataset.
+   * Designed according to the expected structure of the dataset provenient from the endpoint.
+   * @param {Object} data - The dataset to be used.
+   * @param {Array} exclude - Specific fields to be excluded from the sorting options.
+   * @returns {Array} Array of fields to be used as sorting options.
+   */
   static extractSortFields(data, exclude = []) {
     let fields = new Set();
 

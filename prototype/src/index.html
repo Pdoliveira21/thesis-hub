@@ -110523,6 +110523,7 @@
 
     initInfoVis(raw);
     
+    // Initialize the graph and respective controls based on the data received.
     function initInfoVis(raw) {
       const data = dataPath ? accessObjectByString(raw, dataPath) : raw;
       let graph = new TemporalGraph(data, graphConfigs);

@@ -2,6 +2,12 @@
 // import d3 from 'd3';
 // import Timeline from './scrubbers/Timeline.js';
 
+/**
+ * @class TemporalGraph
+ * @description A class that contains the logic to create a temporal graph component.
+ * @param {Object} data - The data to be used in the graph.
+ * @param {Object} options - The options to be used in the graph configuration.
+ */
 class TemporalGraph {
 
   constructor(data, {
@@ -57,6 +63,7 @@ class TemporalGraph {
     return newObj;
   }
 
+  // This method is used to parse the data to be used in the graphs to a more suitable format.
   parseData(data, displayAlwaysAllOuter, outerSortField) {
     this.times = Object.keys(data);
     this.data = {};
@@ -137,6 +144,7 @@ class TemporalGraph {
     });
   }
 
+  // This method is used to sort the outer nodes by a specific field.
   sortOuterNodes(field = "name") {
     for (let time in this.data) {
       this.#sortNodes(this.data[time].nodes.outer, field);
@@ -144,21 +152,25 @@ class TemporalGraph {
     this.#updateGraphs();
   }
 
+  // This method is used to filter the outer nodes by a specific function.
   filterOuterNodes(filter) {
     this.outerFilter = "function" === typeof filter ? filter : (() => true);
     this.#updateGraphs();
   }
 
+  // This method is used to filter the cluster nodes by a specific function.
   filterClusterNodes(filter) {
     this.clusterFilter = "function" === typeof filter ? filter : (() => true);
     this.#updateGraphs();
   }
 
+  // This method is used to filter the detail nodes by a specific function.
   filterDetailNodes(filter) {
     this.detailFilter = "function" === typeof filter ? filter : (() => true);
     this.#updateGraphs();
   }
 
+  // This method is used to search for a specific detail node by its name.
   searchDetailNodes(name) {
     this.detailSearchIds = name !== null 
       ? [...new Set(Object.values(this.data).flatMap(timeslice => timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id)))]
@@ -170,6 +182,7 @@ class TemporalGraph {
     }
   }
 
+  // This method is used to update the graphs, cluster and detail, based on the time value.
   #updateGraphs(time = this.timeline.getValue()) {
     this.drawClusterGraph(this.graphContainer, time);
     if (this.detailedNode !== null) {
@@ -177,6 +190,8 @@ class TemporalGraph {
     }
   }
 
+  // This method is used to draw the cluster graph. 
+  // Selecting the nodes and links to be displayed according to the current time value and the filters.
   drawClusterGraph(container, time) {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
     const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
@@ -199,6 +214,8 @@ class TemporalGraph {
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
   }
 
+  // This method is used to spotlight specific components of the cluster graph. 
+  // Selecting the ids to be revealed according to the displayed data and the search.
   spotlightClusterGraph(links, elements) {
     if (this.detailSearchIds.length === 0) {
       this.clusterGraph.spotlight(new Set());
@@ -223,6 +240,8 @@ class TemporalGraph {
     }
   }
 
+  // This method is used to draw the details graph.
+  // Selecting the nodes and links to be displayed according to the current time value and the filters.
   drawDetailsGraph(container, time, node) {
     const nodeId = node.id;
     const nodeFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.supergroup === nodeId;
@@ -248,6 +267,8 @@ class TemporalGraph {
     document.getElementById(container).replaceChildren(this.detailsGraph.render());
   }
 
+  // This method is used to spotlight specific components of the details graph.
+  // Selecting the ids to be revealed according to the displayed data and the search.
   spotlightDetailsGraph(links) {
     if (this.detailSearchIds.length > 0) {
       if (links === undefined) {
@@ -261,6 +282,7 @@ class TemporalGraph {
     }
   }
 
+  // This method is used to update the positions of the clusters in the details graph based on their position in the cluster graph.
   updateClustersPositionsInDetailsGraph(nodes, links) {
     const clusters = this.detailedNode.group === this.clusterGroup
       ? nodes.filter(d => d.id === this.detailedNode.id)

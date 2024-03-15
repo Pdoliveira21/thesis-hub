@@ -8,13 +8,11 @@ function alphaToHex(alpha) {
 }
 
 /**
-  * Determine the position of a point on a circunference 
-  * (starting at the upmost point and moving in a clockwise direction).
+  * Determine the position of a point on a circunference (starting at the upmost point and moving in a clockwise direction).
   * @param {number} diameter - Diameter of the circunference.
   * @param {number} index - Index of the point.
   * @param {number} count - Total number of points.
-  * @return {Object} Cartesian position (x. y) of the point on the circunference 
-  * and the respective theta angle, in radians.
+  * @return {Object} Cartesian position (x. y) of the point on the circunference and the respective theta angle, in radians.
   */
 function circunferencePosition(diameter, index, count) {
   let angle = (2 * Math.PI * index) / count - (Math.PI / 2);

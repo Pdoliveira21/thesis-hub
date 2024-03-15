@@ -54,9 +54,10 @@ class Graph {
       const maxDistance = radius + self.nodeSize - nodeSize;
 
       if (distance > maxDistance) {
-        // Manually trigger mouseup event to stop dragging.
-        const syntheticEvent = new MouseEvent("mouseup", { bubbles: true, view: window });
-        d3.select(this).node().dispatchEvent(syntheticEvent);
+        // Manually trigger mouseup event to stop dragging and mouseleave to unhighlight nodes.
+        const node = d3.select(this).node();
+        node.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, view: window }));
+        node.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true, view: window }));
       } else {
         d.fx = event.x;
         d.fy = event.y;

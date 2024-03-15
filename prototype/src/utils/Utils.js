@@ -26,14 +26,31 @@ function circunferencePosition(diameter, index, count) {
   };
 }
 
+/**
+ * Retrieve the value of a property from an object using a string representation of the property.
+ * @param {Object} obj - Object from which to retrieve the property.
+ * @param {string} str - String representation of the property. (including nested properties separated by dots)
+ * @returns {any} Value of the property.
+ */
 function accessObjectByString(obj, str) {
   return str.split('.').reduce((acc, key) => acc && acc[key], obj);
 }
 
+/**
+ * Transform a string into its camel case representation - uppercase all string words.
+ * @param {string} str - String to transform.
+ * @returns {string} Camel case representation of the string.
+ */
 function capitalizeStringWords(str) {
   return str.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+/**
+ * Checks if the id represented by the string in the format <prefix>-<id> is equal to the value.
+ * @param {string} str - String representation of the id.
+ * @param {string} value - Value to compare with the id.
+ * @returns {boolean} True if the id is equal to the value, false otherwise.
+ */
 function compareStringId(str, value) {
   const parts = str.split('-');
   return parts.length >= 2 && parts[1] === value;

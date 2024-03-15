@@ -36,21 +36,21 @@ class Timeline {
     this.btnPlay = document.createElement("button");
     this.btnPlay.id = "timeline-control";
     this.btnPlay.type = "button";
-    this.btnPlay.textContent = "Play";
+    this.btnPlay.textContent = dictionary.play;
     this.btnPlay.classList.add("btn-timeline");
     this.btnPlay.addEventListener("click", this.onPlay.bind(this));
 
     this.btnPrev = document.createElement("button");
     this.btnPrev.id = "timeline-prev";
     this.btnPrev.type = "button";
-    this.btnPrev.textContent = "Prev";
+    this.btnPrev.textContent = dictionary.prev;
     this.btnPrev.classList.add("btn-timeline");
     this.btnPrev.addEventListener("click", this.onPrev.bind(this));
 
     this.btnNext = document.createElement("button");
     this.btnNext.id = "timeline-next";
     this.btnNext.type = "button";
-    this.btnNext.textContent = "Next";
+    this.btnNext.textContent = dictionary.next;
     this.btnNext.classList.add("btn-timeline");
     this.btnNext.addEventListener("click", this.onNext.bind(this));
 
@@ -66,7 +66,7 @@ class Timeline {
 
     this.output = document.createElement("output");
     this.output.id = "timeline-output";
-    this.output.value = "Current Timevalue: ---";
+    this.output.value = `${dictionary.current}: ---`;
     this.output.classList.add("output-timeline");
 
     this.player = document.createElement("div");
@@ -75,12 +75,12 @@ class Timeline {
   }
 
   start() {
-    this.btnPlay.textContent = "Pause";
+    this.btnPlay.textContent = dictionary.pause;
     this.interval = setInterval(this.tick.bind(this), this.delay !== null ? this.delay : 1000);
   }
 
   stop() {
-    this.btnPlay.textContent = "Play";
+    this.btnPlay.textContent = dictionary.play;
     
     if (this.interval !== null) {
       clearInterval(this.interval);
@@ -125,7 +125,7 @@ class Timeline {
   onUpdate(event) {
     if (event && event.isTrusted && this.running()) this.stop();
     this.timeline.value = this.values[this.range.valueAsNumber];
-    this.output.value = `Current Timevalue: ${this.timeline.value}`;
+    this.output.value = `${dictionary.current}: ${this.timeline.value}`;
     if ("function" === typeof this.updateCallback) {
       this.updateCallback(this.timeline.value);
     }

@@ -27,7 +27,7 @@ class Filter {
     this.filter = document.createElement("div");
     
     const title = document.createElement("p");
-    title.textContent = `Filter ${this.name} by:`;
+    title.textContent = `${dictionary.filter} ${this.name} ${dictionary.by}:`;
     this.filter.appendChild(title);
 
     for (const field in this.values) {
@@ -35,7 +35,7 @@ class Filter {
       const container = document.createElement("div");
 
       const label = document.createElement("span");
-      label.textContent = field;
+      label.textContent = dictionary[field].label;
 
       const select = document.createElement("select");
       select.id = fieldId;
@@ -44,13 +44,13 @@ class Filter {
 
       const allOption = document.createElement("option");
       allOption.value = "all";
-      allOption.textContent = "all";
+      allOption.textContent = dictionary.all;
       select.appendChild(allOption);
 
       for (const value of this.values[field]) {
         const option = document.createElement("option");
         option.value = value;
-        option.textContent = value;
+        option.textContent = dictionary[field].options[value] || value;
         select.appendChild(option);
       }
 

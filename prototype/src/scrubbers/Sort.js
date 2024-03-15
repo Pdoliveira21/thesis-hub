@@ -28,7 +28,7 @@ class Sort {
     this.sort = document.createElement("div");
     
     const title = document.createElement("span");
-    title.textContent = `Sort ${this.name} by:`;
+    title.textContent = `${dictionary.sort} ${this.name} ${dictionary.by}:`;
 
     const select = document.createElement("select");
     select.id = `sort-${this.prefix}`;
@@ -37,7 +37,7 @@ class Sort {
     for (const field of this.fields) {
       const option = document.createElement("option");
       option.value = field;
-      option.textContent = field;
+      option.textContent = "object" === typeof dictionary[field] ? dictionary[field].label : dictionary[field];
       if (field === this.selected) {
         option.selected = true;
       }

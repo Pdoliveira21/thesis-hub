@@ -27,7 +27,7 @@ class Search {
     this.search = document.createElement("div");
     
     const title = document.createElement("span");
-    title.textContent = `Find/Follow ${this.name}:`;
+    title.textContent = `${dictionary.find} ${this.name}:`;
 
     const input = document.createElement("input");
     input.id = `search-${this.prefix}`;

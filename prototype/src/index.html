@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 
 <head>
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="./index.css" ></style>
   
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-bboxCollide@1.0.4"></script>
 
   <!-- (TODO) fix imports -->
+  <script src="./utils/Dictionary.js"></script>
   <script src="./utils/Utils.js"></script>
   <script src="./graphs/Graph.js"></script>
   <script src="./graphs/ClusterGraph.js"></script>
@@ -45,6 +47,9 @@
     const outerGroup = "national teams";
     const clusterGroup = "teams";
     const detailGroup = "players";
+    const outerName = "Seleções";
+    const clusterName = "Equipas";
+    const detailName = "Jogadores";
     const defaultSort = "name";
     const graphConfigs = {
       clusterGroup: "teams",
@@ -110528,9 +110533,9 @@
       const data = dataPath ? accessObjectByString(raw, dataPath) : raw;
       let graph = new TemporalGraph(data, graphConfigs);
       
-      const outerName = capitalizeStringWords(outerGroup);
-      const clusterName = capitalizeStringWords(clusterGroup);
-      const detailName = capitalizeStringWords(detailGroup);
+      // const outerName = capitalizeStringWords(outerGroup);
+      // const clusterName = capitalizeStringWords(clusterGroup);
+      // const detailName = capitalizeStringWords(detailGroup);
       const outerPrefix = outerGroup.replace(' ', '-');
       const clusterPrefix = clusterGroup.replace(' ', '-');
       const detailPrefix = detailGroup.replace(' ', '-');

@@ -1,5 +1,13 @@
 // (IMPORT) d3 from 'd3';
 
+/**
+ * @class Graph
+ * @description A class that aggregates common methods of a graph component.
+ * @param {number} width - The width of the graph.
+ * @param {number} height - The height of the graph.
+ * @param {number} nodeSize - The size of the nodes.
+ * @param {number} nodeSpace - The space between nodes.
+ */
 class Graph {
 
   constructor(width, height, nodeSize, nodeSpace) {
@@ -75,6 +83,7 @@ class Graph {
   highlight(d, node, link, simulation, separate = false) {
     if (!this.connected(d, link.data()) || this.dragging === true) return;
 
+    // Highlight (change oppacity and display labels) of the node and its neighbors as well as corresponding links.
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
     node.filter(n => !neighbors.has(n)).call(g => {
       g.lower().attr("opacity", this.nodeUnhighlightOpacity);
@@ -93,11 +102,11 @@ class Graph {
     this.separating = true;
     this.backupInfo = {};
 
-    // STOP Current Simulation and save the alpha.
+    // (1) Stop Current Simulation and save the alpha.
     simulation.stop();
     this.backupInfo["alpha"] = simulation.alpha();
 
-    // ADD a force to avoid text overlap. (rectangular collision d3-plugin: https://github.com/emeeks/d3-bboxCollide)
+    // (2) Add a force to avoid text overlap. (used rectangular collision d3-plugin: https://github.com/emeeks/d3-bboxCollide)
     const self = this;
     node.each(function(d) {
       const g = d3.select(this);
@@ -113,13 +122,14 @@ class Graph {
       return [[-dx, -dy], [dx, dy]];
     }).strength(0.1).iterations(1));
 
-    // CONTINUE Simulation just to rearrange highligthed nodes.
+    // (3) Continue Simulation just to rearrange highligthed nodes.
     simulation.alpha(0.01).restart();
   }
 
   unhighlight(node, link, simulation, showText = () => false) {
     if (this.dragging === true) return;
     
+    // Unhighlight (change oppacity and display labels) of all nodes and links - reset network style.
     node.call(g => {
       g.attr("opacity", d => this.connected(d, link.data()) ? this.nodeOpacity : this.nodeUnhighlightOpacity);
       g.select("text").attr("display", d => showText(d) ? "block" : "none");
@@ -130,15 +140,16 @@ class Graph {
     if (!this.separating) return;
     this.separating = false;
 
-    // STOP Current Simulation.
+    // (1) Stop Current Simulation.
     simulation.stop();
-    // REMOVE the force added to avoid text overlap.
+    // (2) Remove the force added to avoid text overlap.
     simulation.force("text", null);
-    // CONTINUE Simulation from where it previous where.
+    // (3) Continue Simulation from where it previous where.
     simulation.alpha(Math.max(this.backupInfo["alpha"], 0.3)).restart();
   }
 
   reveal(node, link, ids) {
+    // Reveal (change outline or stoke) the nodes and links with the given ids.
     node.call(g => {
       g.select("image")
         .style("outline", d => ids.has(d.id) ? `${this.revealWidth}px solid ${this.revealColor}` : "none")
@@ -160,6 +171,7 @@ class Graph {
     const diameter = Math.max((nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI, 200);
     const scale = Math.min(this.width, this.height) / (diameter + 2 * this.nodeSize);
 
+    // Calculate the position of the nodes on the circunference.
     nodes.filter(d => d.group === group).forEach((node, index) => {
       if (node.group === group) {
         const position = circunferencePosition(diameter * scale, index, nodesCount);

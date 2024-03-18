@@ -36,21 +36,21 @@ class Timeline {
     this.btnPlay = document.createElement("button");
     this.btnPlay.id = "timeline-control";
     this.btnPlay.type = "button";
-    this.btnPlay.textContent = dictionary.play;
+    this.btnPlay.innerHTML = `<i class="fas fa-play"></i>`;
     this.btnPlay.classList.add("control-btn");
     this.btnPlay.addEventListener("click", this.onPlay.bind(this));
 
     this.btnPrev = document.createElement("button");
     this.btnPrev.id = "timeline-prev";
     this.btnPrev.type = "button";
-    this.btnPrev.textContent = dictionary.prev;
+    this.btnPrev.innerHTML = `<i class="fas fa-step-backward"></i>`;
     this.btnPrev.classList.add("control-btn");
     this.btnPrev.addEventListener("click", this.onPrev.bind(this));
 
     this.btnNext = document.createElement("button");
     this.btnNext.id = "timeline-next";
     this.btnNext.type = "button";
-    this.btnNext.textContent = dictionary.next;
+    this.btnNext.innerHTML = `<i class="fas fa-step-forward"></i>`;
     this.btnNext.classList.add("control-btn");
     this.btnNext.addEventListener("click", this.onNext.bind(this));
 
@@ -75,12 +75,12 @@ class Timeline {
   }
 
   start() {
-    this.btnPlay.textContent = dictionary.pause;
+    this.btnPlay.innerHTML = `<i class="fas fa-pause"></i>`;
     this.interval = setInterval(this.tick.bind(this), this.delay !== null ? this.delay : 1000);
   }
 
   stop() {
-    this.btnPlay.textContent = dictionary.play;
+    this.btnPlay.innerHTML = `<i class="fas fa-play"></i>`;
     
     if (this.interval !== null) {
       clearInterval(this.interval);

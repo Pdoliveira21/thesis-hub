@@ -60,6 +60,7 @@
   top: 1rem;
   right: 1rem;
   width: calc((100% - 4 * 1rem) * 2/3);
+  text-align: center;
 }
 
 .vis-timeline {
@@ -129,6 +130,13 @@
   font-weight: 300;
   fill: #000;
   text-shadow: -1px -1px 0 #FFF, 0 -1px 0 #FFF, 1px -1px 0 #FFF, 1px 0 0 #FFF, 1px 1px 0 #FFF, 0 1px 0 #FFF, -1px 1px 0 #FFF, -1px 0 0 #FFF;
+  pointer-events: none;
+  user-select: none;
+}
+
+.arc-text {
+  dominant-baseline: text-after-edge;
+  font-size: 0.875em;
   pointer-events: none;
   user-select: none;
 }

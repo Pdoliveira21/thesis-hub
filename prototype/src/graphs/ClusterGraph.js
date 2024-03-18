@@ -66,6 +66,9 @@ class ClusterGraph extends Graph {
         .attr("stroke", "#fff")
         .attr("stroke-width", 3)
         .attr("stroke-opacity", 0.3);
+    
+    this.section = this.svg.append("g")
+      .selectAll("path");
 
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
@@ -134,7 +137,7 @@ class ClusterGraph extends Graph {
 
   // Update the graph with the new nodes and links reusing the old information when possible to keep visual consistency.
   // Defines the transitions, the nodes interactions and updates and restarts the simulation.
-  update(nodes, links) {
+  update(nodes, links, outerSort) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
     this.outerRadius = this.circularLayout(nodes, this.outerGroup); 
@@ -148,6 +151,38 @@ class ClusterGraph extends Graph {
       ...d, 
     }));
     links = links.map(d => ({...d}));
+
+    const outerSections = outerSort !== "name" // && not filtering by this sort field... (TODO)
+      ? this.circularSections(nodes.filter(d => d.group === this.outerGroup), outerSort)
+      : [];
+
+    this.section = this.section
+      .data(outerSections, d => d.id)
+      .join(
+        enter => enter.append("g")
+          .call(g => g.append("path")
+              .attr("id", d => `arc-section-${d.id}`)
+              .attr("fill", d => dictionary[outerSort].options[d.id]?.color || "#e6e6e6")
+              .call(this.applySectionArc, this.outerRadius + this.nodeSize + 2, this.outerRadius + this.nodeSize + 7)
+          )
+          .call(g => g.append("text")
+              .append("textPath")
+                .attr("xlink:href", d => `#arc-section-${d.id}`)
+                .classed("arc-text", true)
+                .text(d => dictionary[outerSort].options[d.id]?.label || d.id)
+          ),
+        update => update
+          .call(g => g.select("path")
+              .attr("fill", d => dictionary[outerSort].options[d.id]?.color || "#e6e6e6")
+              .call(this.applySectionArc, this.outerRadius + this.nodeSize + 2, this.outerRadius + this.nodeSize + 7)
+          )
+          .call(g => g.select("text")
+              .select("textPath")
+                .text(d => dictionary[outerSort].options[d.id]?.label || d.id)
+          ),
+        exit => exit
+          .remove()
+    );
 
     const self = this;
     this.node = this.node

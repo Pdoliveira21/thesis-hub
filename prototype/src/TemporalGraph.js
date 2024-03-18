@@ -29,7 +29,7 @@ class TemporalGraph {
     timelineContainer = "timeline-container",
     graphClickCallback = () => {},
   }) {
-    // this.outerSortField = defaultOuterSortField;
+    this.outerSortField = defaultOuterSortField;
     this.outerFilter = defaultOuterFilter;
     this.clusterFilter = defaultClusterFilter;
     this.detailFilter = defaultDetailFilter;
@@ -148,7 +148,7 @@ class TemporalGraph {
 
   // This method is used to sort the outer nodes by a specific field.
   sortOuterNodes(field = "name") {
-    // this.outerSortField = field;
+    this.outerSortField = field;
 
     for (let time in this.data) {
       this.#sortNodes(this.data[time].nodes.outer, field);
@@ -225,7 +225,7 @@ class TemporalGraph {
           .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
       .map(d => ({...d}));
     
-    this.clusterGraph.update(nodes, links);
+    this.clusterGraph.update(nodes, links, this.outerSortField);
     this.spotlightClusterGraph(links, elements);
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
   }

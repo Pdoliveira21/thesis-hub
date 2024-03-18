@@ -54,7 +54,7 @@ class Filter {
       for (const value of this.values[field]) {
         const option = document.createElement("option");
         option.value = value;
-        option.textContent = dictionary[field].options[value] || value;
+        option.textContent = dictionary[field].options[value]?.label || value;
         select.appendChild(option);
       }
 

@@ -170,7 +170,7 @@ class Graph {
 
     // Calculate the diameter of the circunference based on a heuristic distance between nodes.
     const diameter = Math.max((nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI, 200);
-    const scale = Math.min(this.width, this.height) / (diameter + 2 * this.nodeSize);
+    const scale = Math.min(this.width, this.height) / (diameter + 3.5 * this.nodeSize); // TODO: chnage factor according if it is to display sector or not?
 
     // Calculate the position of the nodes on the circunference.
     nodes.filter(d => d.group === group).forEach((node, index) => {
@@ -183,5 +183,31 @@ class Graph {
     });
 
     return (diameter * scale) / 2;
+  }
+
+  circularSections(nodes, field) {
+    // Calculate the start and end theta of each section based on the field that defines separation criteria.
+    return nodes.reduce((acc, d) => {
+      const obj = acc.find(obj => obj.id === d[field]);
+      if (obj === undefined) {
+        acc.push({
+          id: d[field],
+          startTheta: d.theta - 0.07,
+          endTheta: d.theta + 0.07, 
+        });
+      } else {
+        obj.endTheta = d.theta + 0.07;
+      }
+      return acc;
+    }, []);
+  }
+
+  applySectionArc(selection, outerRadius, innerRadius) {
+    selection.attr("d", d3.arc()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius)
+      .startAngle(d => d.startTheta + Math.PI / 2)
+      .endAngle(d => d.endTheta + Math.PI / 2)
+    );
   }
 }

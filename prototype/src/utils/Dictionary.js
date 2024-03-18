@@ -19,12 +19,12 @@ var dictionary = {
   fk_continente: {
     label: "Continente",
     options: {
-      1: "Europa",
-      2: "Ásia",
-      3: "América do Norte",
-      4: "América do Sul",
-      5: "África",
-      6: "Oceânia",
+      1: { label: "Europa", color: "#0a52a4" },
+      2: { label: "Ásia", color: "#fdc00a" },
+      3: { label: "América do Norte", color: "#128631" },
+      4: { label: "América do Sul", color: "#a6006c" },
+      5: { label: "África", color: "#ea6607" },
+      6: { label: "Oceânia", color: "#da0012" },
     },
   },
   posicao: {

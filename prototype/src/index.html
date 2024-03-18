@@ -31,6 +31,9 @@
       <div class="vis-content-container">
         <div class="vis-controls">
           <div class="vis-preview">
+            <button id="controls-expand" class="control-btn" style="position: absolute; visibility: hidden;" onclick="expandGraphInPreview()">
+              <i class="fas fa-expand"></i>
+            </button>
             <span id="graph-container" class="vis-main-graph"></span>
             <span id="details-container"></span>
           </div>
@@ -43,7 +46,6 @@
         </div>
 
         <div class="vis-graph">
-          <button id="toggle-graphs" class="control-btn" style="position: absolute;" onclick="toggleGraphs()">Trocar</button>
           <span class="vis-graph-space"></span>
           <span id="timeline-container" class="vis-timeline"></span>
         </div>
@@ -69,6 +71,9 @@
       clusterGroup: "teams",
       noClusterLegend: "No Team",
       defaultOuterSortField: "fk_continente",
+      graphClickCallback: () => {
+        document.getElementById("controls-expand").style.visibility = "visible";
+      }
     };
     
     // fetch(endpoint)
@@ -110583,7 +110588,7 @@
       }
     }
 
-    function toggleGraphs() {
+    function expandGraphInPreview() {
       const clusterGraph = document.getElementById("graph-container");
       const detailsGraph = document.getElementById("details-container");
       if (clusterGraph && clusterGraph.classList.contains("vis-main-graph")) {

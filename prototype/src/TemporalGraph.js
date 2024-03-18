@@ -26,7 +26,8 @@ class TemporalGraph {
     detailGroup = "players",
     graphContainer = "graph-container",
     detailsContainer = "details-container",
-    timelineContainer = "timeline-container"
+    timelineContainer = "timeline-container",
+    graphClickCallback = () => {},
   }) {
     // this.outerSortField = defaultOuterSortField;
     this.outerFilter = defaultOuterFilter;
@@ -46,6 +47,7 @@ class TemporalGraph {
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, (node) => {
       this.detailedNode = node;
       this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
+      if ("function" === typeof graphClickCallback) graphClickCallback();
     }, (nodes, links) => {
       if (this.detailedNode === null) return;
       this.updateClustersPositionsInDetailsGraph(nodes, links);

@@ -27,17 +27,25 @@
     <p class="vis-title">Evolução de Jogadores em Seleções e Equipas ao Longo do Tempo</p>
     
     <div class="vis-content">
-      <div class="vis-controls">
-        <div id="controls-sort"></div>
-        <div id="controls-filters"></div>
-        <div id="controls-search"></div>
-      </div>
-      
-      <div class="vis-graphs">
-        <!-- NOTE: Define dimension as width and height received as arguments -->
-        <span id="graph-container" style="display: block; width: 800px; height: 800px;"></span>
-        <span id="details-container" class="vis-detail-graph"></span>
-        <span id="timeline-container" class="vis-timeline"></span>
+      <div class="vis-content-container">
+        <div class="vis-controls">
+          <div class="vis-preview">
+            <span id="graph-container" class="vis-main-graph"></span>
+            <span id="details-container"></span>
+          </div>
+
+          <div class="vis-controls-container">
+            <div id="controls-sort"></div>
+            <div id="controls-filters"></div>
+            <div id="controls-search"></div>
+          </div>
+        </div>
+
+        <div class="vis-graph">
+          <button id="toggle-graphs" class="control-btn" style="position: absolute;" onclick="toggleGraphs()">Trocar</button>
+          <span class="vis-graph-space"></span>
+          <span id="timeline-container" class="vis-timeline"></span>
+        </div>
       </div>
     </div>
 
@@ -55,10 +63,11 @@
     const outerLabel = "Seleções";
     const clusterLabel = "Equipas";
     const detailLabel = "Jogadores";
-    const defaultSort = "name";
+    const defaultSort = "fk_continente";
     const graphConfigs = {
       clusterGroup: "teams",
       noClusterLegend: "No Team",
+      defaultOuterSortField: "fk_continente",
     };
     
     // fetch(endpoint)
@@ -110570,6 +110579,18 @@
           if (graph && "object" === typeof graph) graph.searchDetailNodes(name, searchPlayers.result());
         });
         document.getElementById("controls-search").append(searchPlayers.render());
+      }
+    }
+
+    function toggleGraphs() {
+      const clusterGraph = document.getElementById("graph-container");
+      const detailsGraph = document.getElementById("details-container");
+      if (clusterGraph && clusterGraph.classList.contains("vis-main-graph")) {
+        clusterGraph.classList.remove("vis-main-graph");
+        detailsGraph.classList.add("vis-main-graph");
+      } else if (detailsGraph && detailsGraph.classList.contains("vis-main-graph")) {
+        detailsGraph.classList.remove("vis-main-graph");
+        clusterGraph.classList.add("vis-main-graph");
       }
     }
   </script>

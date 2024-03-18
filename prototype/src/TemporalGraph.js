@@ -28,7 +28,7 @@ class TemporalGraph {
     detailsContainer = "details-container",
     timelineContainer = "timeline-container"
   }) {
-
+    // this.outerSortField = defaultOuterSortField;
     this.outerFilter = defaultOuterFilter;
     this.clusterFilter = defaultClusterFilter;
     this.detailFilter = defaultDetailFilter;
@@ -146,6 +146,8 @@ class TemporalGraph {
 
   // This method is used to sort the outer nodes by a specific field.
   sortOuterNodes(field = "name") {
+    // this.outerSortField = field;
+
     for (let time in this.data) {
       this.#sortNodes(this.data[time].nodes.outer, field);
     };
@@ -277,19 +279,6 @@ class TemporalGraph {
     this.detailsGraph.update(nodes, links, node);
     this.spotlightDetailsGraph(links);
     document.getElementById(container).replaceChildren(this.detailsGraph.render());
-
-    // (TODO) add close button [just for a quick test]
-    const closeButton = document.createElement("button");
-    closeButton.textContent = "Close";
-    closeButton.classList.add("control-btn");
-    closeButton.classList.add("details-btn-close");
-    closeButton.addEventListener("click", () => {
-      this.detailedNode = null;
-      this.detailsGraph.update([], [], null);
-      this.detailsGraph.spotlight(new Set());
-      document.getElementById(container).replaceChildren();
-    });
-    document.getElementById(container).appendChild(closeButton);
   }
 
   // This method is used to spotlight specific components of the details graph.

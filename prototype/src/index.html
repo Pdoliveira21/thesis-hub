@@ -110567,7 +110567,7 @@
       const search = Search.extractSearchNames(data, "players");
       if (search.length > 0) {
         const searchPlayers = new Search(detailLabel, detailPrefix, search, (name) => {
-          if (graph && "object" === typeof graph) graph.searchDetailNodes(name);
+          if (graph && "object" === typeof graph) graph.searchDetailNodes(name, searchPlayers.result());
         });
         document.getElementById("controls-search").append(searchPlayers.render());
       }

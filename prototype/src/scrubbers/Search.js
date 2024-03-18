@@ -23,6 +23,10 @@ class Search {
     return this.search;
   }
 
+  result() {
+    return `search-${this.prefix}-result`;
+  }
+
   initialize() {
     this.search = document.createElement("div");
     
@@ -46,7 +50,11 @@ class Search {
       datalist.appendChild(option);
     }
 
-    this.search.append(title, input, datalist);
+    const result = document.createElement("span");
+    result.id = `search-${this.prefix}-result`;
+    result.classList.add("control-label");
+
+    this.search.append(title, input, datalist, result);
   }
 
   onChange(_) {

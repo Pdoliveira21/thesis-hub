@@ -171,10 +171,22 @@ class TemporalGraph {
   }
 
   // This method is used to search for a specific detail node by its name.
-  searchDetailNodes(name) {
-    this.detailSearchIds = name !== null 
-      ? [...new Set(Object.values(this.data).flatMap(timeslice => timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id)))]
+  // It updates the text of the result container with the times where the node was found (whitout considering the filters).
+  searchDetailNodes(name, resultContainer) {
+    const detailSearchTimes = new Set();
+    this.detailSearchIds = name !== null
+      ? [...new Set(Object.entries(this.data).flatMap(([time, timeslice]) => {
+          const foundIds = timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id)
+          if (foundIds.length > 0) detailSearchTimes.add(time);
+          return foundIds;
+        }))]
       : [];
+    
+    const resultElement = document.getElementById(resultContainer);
+    if (resultElement) {
+      resultElement.textContent = (detailSearchTimes.size > 0)
+        ? Array.from(detailSearchTimes).join(" - ") : "";
+    }
 
     this.spotlightClusterGraph();
     if (this.detailedNode !== null) {

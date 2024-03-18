@@ -23,7 +23,7 @@
 
 .vis-controls {
   padding: 0 1rem;
-  min-width: 250px;
+  width: 260px;
 }
 
 .vis-graphs {
@@ -74,6 +74,7 @@
   font-size: medium;
   font-weight: 300;
   width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .control-line > .control-dropdown {

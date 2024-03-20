@@ -60,7 +60,7 @@ class TemporalGraph {
   #parseObject(obj, exclude = []) {
     const newObj = {};
     Object.keys(obj).filter(key => !exclude.includes(key)).forEach(key => {
-      newObj[key] = obj[key];
+      newObj[key] = key === "name" ? decodeHtmlEntities(obj[key]) : obj[key];
     });
     return newObj;
   }
@@ -90,7 +90,7 @@ class TemporalGraph {
 
         // Process the groups
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
-          const groupName  = group.name && group.name !== "" ? group.name : this.noClusterLegend;           
+          const groupName  = group.name && group.name !== "" ? decodeHtmlEntities(group.name) : this.noClusterLegend;           
           const groupColor = group.color && group.color !== "" ? group.color : undefined;
           const groupLogo  = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
           const elementsId = Object.keys(group[this.detailGroup]).map(id => `E-${id}`);

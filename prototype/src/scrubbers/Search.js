@@ -92,7 +92,7 @@ class Search {
         if (key === from) {
           Object.values(object[key]).forEach((item) => {
             if (item.name && item.name !== "") {
-              names.add(item.name);
+              names.add(decodeHtmlEntities(item.name));
             }
           });
           return;

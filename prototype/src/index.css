@@ -76,8 +76,12 @@
   width: 100%;
 }
 
+.control-container {
+  position: relative;
+}
+
 .control-title {
-  margin: 2rem 0 0.75rem 0;
+  margin: 1.25rem 0 0.5rem 0;
   font-size: large;
 }
 
@@ -85,7 +89,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .control-label {
@@ -98,11 +102,17 @@
   font-size: medium;
   font-weight: 300;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .control-line > .control-dropdown {
   width: 50%;
+}
+
+.control-result {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.25rem);
 }
 
 .control-btn {
@@ -113,6 +123,16 @@
   border: 1px solid rgb(118, 118, 118);
   border-radius: 3px;
   margin: 0.5rem 0.25rem;
+}
+
+.control-btn:hover {
+  cursor: pointer;
+}
+
+.control-btn-exchange {
+  position: absolute;
+  right: calc((100% - 4 * 1rem) * 2/3);
+  z-index: 10;
 }
 
 .control-range {

@@ -29,6 +29,7 @@ class Search {
 
   initialize() {
     this.search = document.createElement("div");
+    this.search.classList.add("control-container");
     
     const title = document.createElement("p");
     title.textContent = `${dictionary.find} ${this.name}:`;
@@ -52,7 +53,7 @@ class Search {
 
     const result = document.createElement("span");
     result.id = `search-${this.prefix}-result`;
-    result.classList.add("control-label");
+    result.classList.add("control-label", "control-result");
 
     this.search.append(title, input, datalist, result);
   }

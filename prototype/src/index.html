@@ -25,14 +25,14 @@
   <div id="vis-container">
 
     <!-- NOTE: Display title received as argument -->
-    <p class="vis-title">Evolução de Jogadores em Seleções e Equipas ao Longo do Tempo</p>
+    <p class="vis-title">Percurso de Jogadores em Seleções e Equipas ao Longo do Tempo</p>
     
     <div class="vis-content">
       <div class="vis-content-container">
         <div class="vis-controls">
           <div class="vis-preview">
-            <button id="controls-expand" class="control-btn" style="position: absolute; visibility: hidden;" onclick="expandGraphInPreview()">
-              <i class="fas fa-expand"></i>
+            <button id="controls-exchange" class="control-btn control-btn-exchange" style="visibility: hidden;" onclick="exchangeGraphs()">
+              <i class="fas fa-exchange-alt"></i>
             </button>
             <span id="graph-container" class="vis-main-graph"></span>
             <span id="details-container"></span>
@@ -72,7 +72,7 @@
       noClusterLegend: "No Team",
       defaultOuterSortField: "fk_continente",
       graphClickCallback: () => {
-        document.getElementById("controls-expand").style.visibility = "visible";
+        document.getElementById("controls-exchange").style.visibility = "visible";
       }
     };
     
@@ -110588,7 +110588,7 @@
       }
     }
 
-    function expandGraphInPreview() {
+    function exchangeGraphs() {
       const clusterGraph = document.getElementById("graph-container");
       const detailsGraph = document.getElementById("details-container");
       if (clusterGraph && clusterGraph.classList.contains("vis-main-graph")) {

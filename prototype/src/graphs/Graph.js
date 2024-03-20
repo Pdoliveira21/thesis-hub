@@ -187,27 +187,29 @@ class Graph {
 
   circularSections(nodes, field) {
     // Calculate the start and end theta of each section based on the field that defines separation criteria.
+    const offset = (2 * Math.PI) / (nodes.length * 2) - 0.02;
+    
     return nodes.reduce((acc, d) => {
       const obj = acc.find(obj => obj.id === d[field]);
       if (obj === undefined) {
         acc.push({
           id: d[field],
-          startTheta: d.theta - 0.07,
-          endTheta: d.theta + 0.07, 
+          startTheta: d.theta - offset,
+          endTheta: d.theta + offset, 
         });
       } else {
-        obj.endTheta = d.theta + 0.07;
+        obj.endTheta = d.theta + offset;
       }
       return acc;
     }, []);
   }
 
-  applySectionArc(selection, outerRadius, innerRadius) {
+  applySectionArc(selection, outerRadius, innerRadius, full = false) {
     selection.attr("d", d3.arc()
       .innerRadius(innerRadius)
       .outerRadius(outerRadius)
-      .startAngle(d => d.startTheta + Math.PI / 2)
-      .endAngle(d => d.endTheta + Math.PI / 2)
+      .startAngle(d => full ? - Math.PI / 4 : d.startTheta + Math.PI / 2)
+      .endAngle(d => full ? (2 * Math.PI) - (Math.PI / 4) - 0.04 : d.endTheta + Math.PI / 2)
     );
   }
 }

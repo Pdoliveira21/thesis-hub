@@ -135,6 +135,14 @@ class ClusterGraph extends Graph {
     return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4);
   }
 
+  sectionColor(d, field) {
+    return dictionary[field].options[d.id]?.color || "#898989";
+  }
+
+  sectionLabel(d, field) {
+    return dictionary[field].options[d.id]?.label || d.id;
+  }
+
   // Update the graph with the new nodes and links reusing the old information when possible to keep visual consistency.
   // Defines the transitions, the nodes interactions and updates and restarts the simulation.
   update(nodes, links, outerSort) {
@@ -152,9 +160,10 @@ class ClusterGraph extends Graph {
     }));
     links = links.map(d => ({...d}));
 
-    const outerSections = outerSort !== "name" // && not filtering by this sort field... (TODO)
-      ? this.circularSections(nodes.filter(d => d.group === this.outerGroup), outerSort)
-      : [];
+    const outerSections = outerSort !== "name" ? this.circularSections(nodes.filter(d => d.group === this.outerGroup), outerSort) : [];
+    const arcOuterRadius = this.outerRadius + this.nodeSize + 5;
+    const arcInnerRadius = this.outerRadius + this.nodeSize + 7;
+    const isFullArc = outerSections.length === 1;
 
     this.section = this.section
       .data(outerSections, d => d.id)
@@ -162,23 +171,23 @@ class ClusterGraph extends Graph {
         enter => enter.append("g")
           .call(g => g.append("path")
               .attr("id", d => `arc-section-${d.id}`)
-              .attr("fill", d => dictionary[outerSort].options[d.id]?.color || "#e6e6e6")
-              .call(this.applySectionArc, this.outerRadius + this.nodeSize + 2, this.outerRadius + this.nodeSize + 7)
+              .attr("fill", d => this.sectionColor(d, outerSort))
+              .call(this.applySectionArc, arcOuterRadius, arcInnerRadius, isFullArc)
           )
           .call(g => g.append("text")
               .append("textPath")
                 .attr("xlink:href", d => `#arc-section-${d.id}`)
                 .classed("arc-text", true)
-                .text(d => dictionary[outerSort].options[d.id]?.label || d.id)
+                .text(d => this.sectionLabel(d, outerSort))
           ),
         update => update
           .call(g => g.select("path")
-              .attr("fill", d => dictionary[outerSort].options[d.id]?.color || "#e6e6e6")
-              .call(this.applySectionArc, this.outerRadius + this.nodeSize + 2, this.outerRadius + this.nodeSize + 7)
+              .attr("fill", d => this.sectionColor(d, outerSort))
+              .call(this.applySectionArc, arcOuterRadius, arcInnerRadius, isFullArc)
           )
           .call(g => g.select("text")
               .select("textPath")
-                .text(d => dictionary[outerSort].options[d.id]?.label || d.id)
+                .text(d => this.sectionLabel(d, outerSort))
           ),
         exit => exit
           .remove()

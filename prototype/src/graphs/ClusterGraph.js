@@ -136,11 +136,11 @@ class ClusterGraph extends Graph {
   }
 
   sectionColor(d, field) {
-    return dictionary[field].options[d.id]?.color || "#898989";
+    return dictionary.dataset_fields[field]?.options[d.id]?.color || "#898989";
   }
 
   sectionLabel(d, field) {
-    return dictionary[field].options[d.id]?.label || d.id;
+    return dictionary.dataset_fields[field]?.options[d.id]?.label || d.id;
   }
 
   // Update the graph with the new nodes and links reusing the old information when possible to keep visual consistency.

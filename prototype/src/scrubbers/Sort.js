@@ -39,7 +39,8 @@ class Sort {
     for (const field of this.fields) {
       const option = document.createElement("option");
       option.value = field;
-      option.textContent = "object" === typeof dictionary[field] ? dictionary[field].label : dictionary[field];
+      option.textContent = dictionary.dataset_fields[field] 
+        ? (dictionary.dataset_fields[field]?.label || dictionary.dataset_fields[field]) : field;
       if (field === this.selected) {
         option.selected = true;
       }

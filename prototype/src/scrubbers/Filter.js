@@ -37,7 +37,7 @@ class Filter {
       container.classList.add("control-line");
 
       const label = document.createElement("span");
-      label.textContent = dictionary[field].label;
+      label.textContent = dictionary.dataset_fields[field]?.label || field;
       label.classList.add("control-label");
 
       const select = document.createElement("select");
@@ -54,7 +54,7 @@ class Filter {
       for (const value of this.values[field]) {
         const option = document.createElement("option");
         option.value = value;
-        option.textContent = dictionary[field].options[value]?.label || value;
+        option.textContent = dictionary.dataset_fields[field]?.options[value]?.label || value;
         select.appendChild(option);
       }
 

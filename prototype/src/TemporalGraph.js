@@ -189,7 +189,7 @@ class TemporalGraph {
     const resultElement = document.getElementById(resultContainer);
     if (resultElement) {
       resultElement.textContent = (detailSearchTimes.size > 0)
-        ? Array.from(detailSearchTimes).join(" - ") : "";
+        ? `${Array.from(detailSearchTimes).join(" - ")} (${dictionary.discarding_filters})` : "";
     }
 
     this.spotlightClusterGraph();

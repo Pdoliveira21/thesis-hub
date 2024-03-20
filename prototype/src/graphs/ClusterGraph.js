@@ -161,8 +161,7 @@ class ClusterGraph extends Graph {
     links = links.map(d => ({...d}));
 
     const outerSections = outerSort !== "name" ? this.circularSections(nodes.filter(d => d.group === this.outerGroup), outerSort) : [];
-    const arcOuterRadius = this.outerRadius + this.nodeSize + 5;
-    const arcInnerRadius = this.outerRadius + this.nodeSize + 7;
+    const arcRadius = this.outerRadius + this.nodeSize + 5;
     const isFullArc = outerSections.length === 1;
 
     this.section = this.section
@@ -172,7 +171,7 @@ class ClusterGraph extends Graph {
           .call(g => g.append("path")
               .attr("id", d => `arc-section-${d.id}`)
               .attr("fill", d => this.sectionColor(d, outerSort))
-              .call(this.applySectionArc, arcOuterRadius, arcInnerRadius, isFullArc)
+              .call(this.applySectionArc, arcRadius, arcRadius + 2, isFullArc)
           )
           .call(g => g.append("text")
               .append("textPath")
@@ -183,7 +182,7 @@ class ClusterGraph extends Graph {
         update => update
           .call(g => g.select("path")
               .attr("fill", d => this.sectionColor(d, outerSort))
-              .call(this.applySectionArc, arcOuterRadius, arcInnerRadius, isFullArc)
+              .call(this.applySectionArc, arcRadius, arcRadius + 2, isFullArc)
           )
           .call(g => g.select("text")
               .select("textPath")

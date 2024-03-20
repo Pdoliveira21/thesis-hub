@@ -23,8 +23,10 @@ class Graph {
     this.nodeUnhighlightOpacity = 0.05;
     this.linkUnhighlightOpacity = 0.01;
     this.linkHighlightOpacity = 0.8;
-    this.revealColor = "blue";
+    this.revealColor = "#3fc1ff";
     this.revealWidth = 5;
+    this.revealOffset = -2;
+    this.revealRadius = 15;
     this.backupInfo = {};
   }
 
@@ -154,7 +156,8 @@ class Graph {
     node.call(g => {
       g.select("image")
         .style("outline", d => ids.has(d.id) ? `${this.revealWidth}px solid ${this.revealColor}` : "none")
-        .style("border-radius", d => ids.has(d.id) ? "50%" : "none");
+        .style("outline-offset", d => ids.has(d.id) ? `${this.revealOffset}px` : "none")
+        .style("border-radius", d => ids.has(d.id) ? `${this.revealRadius}%` : "none");
       g.select("circle")
         .style("stroke", d => ids.has(d.id) ? this.revealColor : "none")
         .style("stroke-width", d => ids.has(d.id) ? `${this.revealWidth}px` : 0);
@@ -205,6 +208,7 @@ class Graph {
   }
 
   applySectionArc(selection, outerRadius, innerRadius, full = false) {
+    // Apply the arc to the selection based on the given radius and full flag.
     selection.attr("d", d3.arc()
       .innerRadius(innerRadius)
       .outerRadius(outerRadius)

@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 
 <head>
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="./index.css" ></style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3-bboxCollide@1.0.4"></script>
 
   <!-- (TODO) fix imports -->
+  <script src="./utils/Dictionary.js"></script>
   <script src="./utils/Utils.js"></script>
   <script src="./graphs/Graph.js"></script>
   <script src="./graphs/ClusterGraph.js"></script>
@@ -19,21 +22,36 @@
 </head>
 
 <body>
-  <div id="temporal-graph">
-    <div class="view-container">
-      <div class="view-controls">
-        <div id="controls-sort"></div>
-        <div id="controls-filters" class="view-controls-filters"></div>
-        <div id="controls-search" class="view-controls-search"></div>
+  <div id="vis-container">
+
+    <!-- NOTE: Display title received as argument -->
+    <p class="vis-title">Percurso de Jogadores em Seleções e Equipas ao Longo do Tempo</p>
+    
+    <div class="vis-content">
+      <div class="vis-content-container">
+        <div class="vis-controls">
+          <div class="vis-preview">
+            <button id="controls-exchange" class="control-btn control-btn-exchange" style="visibility: hidden;" onclick="exchangeGraphs()">
+              <i class="fas fa-exchange-alt"></i>
+            </button>
+            <span id="graph-container" class="vis-main-graph"></span>
+            <span id="details-container"></span>
+          </div>
+
+          <div class="vis-controls-container">
+            <div id="controls-sort"></div>
+            <div id="controls-filters"></div>
+            <div id="controls-search"></div>
+          </div>
+        </div>
+
+        <div class="vis-graph">
+          <span class="vis-graph-space"></span>
+          <span id="timeline-container" class="vis-timeline"></span>
+        </div>
       </div>
-      
-      <span id="graph-container"></span>
-      <span id="timeline-container"></span>
     </div>
-    <div class="view-container">
-      <div style="height: 173px;"></div>
-      <span id="details-container"></span>
-    </div>
+
   </div>
 
 
@@ -45,10 +63,17 @@
     const outerGroup = "national teams";
     const clusterGroup = "teams";
     const detailGroup = "players";
-    const defaultSort = "name";
+    const outerLabel = "Seleções";
+    const clusterLabel = "Equipas";
+    const detailLabel = "Jogadores";
+    const defaultSort = "fk_continente";
     const graphConfigs = {
       clusterGroup: "teams",
       noClusterLegend: "No Team",
+      defaultOuterSortField: "fk_continente",
+      graphClickCallback: () => {
+        document.getElementById("controls-exchange").style.visibility = "visible";
+      }
     };
     
     // fetch(endpoint)
@@ -110528,16 +110553,13 @@
       const data = dataPath ? accessObjectByString(raw, dataPath) : raw;
       let graph = new TemporalGraph(data, graphConfigs);
       
-      const outerName = capitalizeStringWords(outerGroup);
-      const clusterName = capitalizeStringWords(clusterGroup);
-      const detailName = capitalizeStringWords(detailGroup);
       const outerPrefix = outerGroup.replace(' ', '-');
       const clusterPrefix = clusterGroup.replace(' ', '-');
       const detailPrefix = detailGroup.replace(' ', '-');
       
       const sortFields = Sort.extractSortFields(data, ["id", "img", "teams"]);
       if (sortFields.length > 0) {
-        const sortNationalTeams = new Sort(outerName, outerPrefix, sortFields, defaultSort, (sort) => {
+        const sortNationalTeams = new Sort(outerLabel, outerPrefix, sortFields, defaultSort, (sort) => {
           if (graph && "object" === typeof graph) graph.sortOuterNodes(sort);
         });
         document.getElementById("controls-sort").append(sortNationalTeams.render());
@@ -110553,16 +110575,28 @@
         }
       }
 
-      initFilter(outerGroup, outerName, outerPrefix, (filter) => graph.filterOuterNodes(filter));
-      initFilter(clusterGroup, clusterName, clusterPrefix, (filter) => graph.filterClusterNodes(filter));
-      initFilter(detailGroup, detailName, detailPrefix, (filter) => graph.filterDetailNodes(filter));
+      initFilter(outerGroup, outerLabel, outerPrefix, (filter) => graph.filterOuterNodes(filter));
+      initFilter(clusterGroup, clusterLabel, clusterPrefix, (filter) => graph.filterClusterNodes(filter));
+      initFilter(detailGroup, detailLabel, detailPrefix, (filter) => graph.filterDetailNodes(filter));
       
       const search = Search.extractSearchNames(data, "players");
       if (search.length > 0) {
-        const searchPlayers = new Search(detailName, detailPrefix, search, (name) => {
-          if (graph && "object" === typeof graph) graph.searchDetailNodes(name);
+        const searchPlayers = new Search(detailLabel, detailPrefix, search, (name) => {
+          if (graph && "object" === typeof graph) graph.searchDetailNodes(name, searchPlayers.result());
         });
         document.getElementById("controls-search").append(searchPlayers.render());
+      }
+    }
+
+    function exchangeGraphs() {
+      const clusterGraph = document.getElementById("graph-container");
+      const detailsGraph = document.getElementById("details-container");
+      if (clusterGraph && clusterGraph.classList.contains("vis-main-graph")) {
+        clusterGraph.classList.remove("vis-main-graph");
+        detailsGraph.classList.add("vis-main-graph");
+      } else if (detailsGraph && detailsGraph.classList.contains("vis-main-graph")) {
+        detailsGraph.classList.remove("vis-main-graph");
+        clusterGraph.classList.add("vis-main-graph");
       }
     }
   </script>

@@ -23,8 +23,10 @@ class Graph {
     this.nodeUnhighlightOpacity = 0.05;
     this.linkUnhighlightOpacity = 0.01;
     this.linkHighlightOpacity = 0.8;
-    this.revealColor = "blue";
+    this.revealColor = "#3fc1ff";
     this.revealWidth = 5;
+    this.revealOffset = -2;
+    this.revealRadius = 15;
     this.backupInfo = {};
   }
 
@@ -154,7 +156,8 @@ class Graph {
     node.call(g => {
       g.select("image")
         .style("outline", d => ids.has(d.id) ? `${this.revealWidth}px solid ${this.revealColor}` : "none")
-        .style("border-radius", d => ids.has(d.id) ? "50%" : "none");
+        .style("outline-offset", d => ids.has(d.id) ? `${this.revealOffset}px` : "none")
+        .style("border-radius", d => ids.has(d.id) ? `${this.revealRadius}%` : "none");
       g.select("circle")
         .style("stroke", d => ids.has(d.id) ? this.revealColor : "none")
         .style("stroke-width", d => ids.has(d.id) ? `${this.revealWidth}px` : 0);
@@ -169,8 +172,11 @@ class Graph {
     const nodesCount = nodes.filter(d => d.group === group).length;
 
     // Calculate the diameter of the circunference based on a heuristic distance between nodes.
-    const diameter = Math.max((nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI, 200);
-    const scale = Math.min(this.width, this.height) / (diameter + 2 * this.nodeSize);
+    const diameter = Math.max(
+      (nodesCount * (2.0 * this.nodeSize + this.nodeSpace)) / Math.PI, 
+      this.width - 4 * this.nodeSize - 4 * this.nodeSpace,
+    );
+    const scale = Math.min(this.width, this.height) / (diameter + 3.5 * this.nodeSize);
 
     // Calculate the position of the nodes on the circunference.
     nodes.filter(d => d.group === group).forEach((node, index) => {
@@ -183,5 +189,34 @@ class Graph {
     });
 
     return (diameter * scale) / 2;
+  }
+
+  circularSections(nodes, field) {
+    // Calculate the start and end theta of each section based on the field that defines separation criteria.
+    const offset = (2 * Math.PI) / (nodes.length * 2) - 0.02;
+    
+    return nodes.reduce((acc, d) => {
+      const obj = acc.find(obj => obj.id === d[field]);
+      if (obj === undefined) {
+        acc.push({
+          id: d[field],
+          startTheta: d.theta - offset,
+          endTheta: d.theta + offset, 
+        });
+      } else {
+        obj.endTheta = d.theta + offset;
+      }
+      return acc;
+    }, []);
+  }
+
+  applySectionArc(selection, outerRadius, innerRadius, full = false) {
+    // Apply the arc to the selection based on the given radius and full flag.
+    selection.attr("d", d3.arc()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius)
+      .startAngle(d => full ? - Math.PI / 4 : d.startTheta + Math.PI / 2)
+      .endAngle(d => full ? (2 * Math.PI) - (Math.PI / 4) - 0.04 : d.endTheta + Math.PI / 2)
+    );
   }
 }

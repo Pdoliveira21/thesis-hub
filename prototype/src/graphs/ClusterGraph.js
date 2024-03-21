@@ -48,7 +48,7 @@ class ClusterGraph extends Graph {
         .attr("width", this.width)
         .attr("height", this.height)
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
-        .attr("style", "max-width: 100%; height: auto;");
+        .attr("style", "width: 100%; height: auto;");
 
     let pattern = this.svg.append("defs").append("pattern")
         .attr("id", "stripes")
@@ -66,6 +66,9 @@ class ClusterGraph extends Graph {
         .attr("stroke", "#fff")
         .attr("stroke-width", 3)
         .attr("stroke-opacity", 0.3);
+    
+    this.section = this.svg.append("g")
+      .selectAll("path");
 
     this.link = this.svg.append("g")
         .attr("stroke", "#999")
@@ -132,9 +135,17 @@ class ClusterGraph extends Graph {
     return d.img !== undefined && (d.group === this.outerGroup || d.value >= 4);
   }
 
+  sectionColor(d, field) {
+    return dictionary.dataset_fields[field]?.options[d.id]?.color || "#898989";
+  }
+
+  sectionLabel(d, field) {
+    return dictionary.dataset_fields[field]?.options[d.id]?.label || d.id;
+  }
+
   // Update the graph with the new nodes and links reusing the old information when possible to keep visual consistency.
   // Defines the transitions, the nodes interactions and updates and restarts the simulation.
-  update(nodes, links) {
+  update(nodes, links, outerSort) {
     const old = new Map(this.node.data().map(d => [d.id, {x: d.x, y: d.y, t: d.theta}]));
 
     this.outerRadius = this.circularLayout(nodes, this.outerGroup); 
@@ -148,6 +159,38 @@ class ClusterGraph extends Graph {
       ...d, 
     }));
     links = links.map(d => ({...d}));
+
+    const outerSections = outerSort !== "name" ? this.circularSections(nodes.filter(d => d.group === this.outerGroup), outerSort) : [];
+    const arcRadius = this.outerRadius + this.nodeSize + 5;
+    const isFullArc = outerSections.length === 1;
+
+    this.section = this.section
+      .data(outerSections, d => d.id)
+      .join(
+        enter => enter.append("g")
+          .call(g => g.append("path")
+              .attr("id", d => `arc-section-${d.id}`)
+              .attr("fill", d => this.sectionColor(d, outerSort))
+              .call(this.applySectionArc, arcRadius, arcRadius + 2, isFullArc)
+          )
+          .call(g => g.append("text")
+              .append("textPath")
+                .attr("xlink:href", d => `#arc-section-${d.id}`)
+                .classed("arc-text", true)
+                .text(d => this.sectionLabel(d, outerSort))
+          ),
+        update => update
+          .call(g => g.select("path")
+              .attr("fill", d => this.sectionColor(d, outerSort))
+              .call(this.applySectionArc, arcRadius, arcRadius + 2, isFullArc)
+          )
+          .call(g => g.select("text")
+              .select("textPath")
+                .text(d => this.sectionLabel(d, outerSort))
+          ),
+        exit => exit
+          .remove()
+    );
 
     const self = this;
     this.node = this.node
@@ -178,6 +221,8 @@ class ClusterGraph extends Graph {
                   .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
+
+              g.append("title").text(d.name);
             } else {
               g.append("circle")
                 .attr("r", 0)  
@@ -189,8 +234,6 @@ class ClusterGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-
-            g.append("title").text(d.name);
           }),
         update => update
           .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
@@ -228,6 +271,9 @@ class ClusterGraph extends Graph {
                   .transition().duration(self.animationDuration).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
+
+              const title = g.select("title").empty() ? g.append("title") : g.select("title");
+              title.text(d.name);
             } else {
               // Get the old size of the image/circle.
               const oldRadius = g.select("image").empty() 
@@ -236,6 +282,7 @@ class ClusterGraph extends Graph {
 
               // Remove the old image and add or update the circle and text properties.
               g.select("image").remove();
+              g.select("title").remove();
 
               const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
               circle
@@ -250,8 +297,6 @@ class ClusterGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-              
-            g.select("title").text(d.name);
           }),
         exit => exit
           .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
@@ -297,13 +342,12 @@ class ClusterGraph extends Graph {
   
   // Click event handler for the nodes.
   clicked(event, d) {
-    if (event && event.isTrusted && "function" === typeof this.clickNodeCallback) {
-      this.clickNodeCallback(d);
-      
-      if (d.group === this.outerGroup) {
-        // Trigger the tick event of nodes not draggable.
-        this.simulation.alpha(0.05).restart();
-      }
+    if (!event || "function" !== typeof this.clickNodeCallback) return;
+    
+    this.clickNodeCallback(d);
+    // Trigger the tick event of nodes not draggable when simulation is already stoped.
+    if (d.group === this.outerGroup && this.simulation.alpha() < 0.05) {
+      this.simulation.alpha(0.05).restart();
     }
   }
 

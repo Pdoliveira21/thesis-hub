@@ -26,9 +26,10 @@ class TemporalGraph {
     detailGroup = "players",
     graphContainer = "graph-container",
     detailsContainer = "details-container",
-    timelineContainer = "timeline-container"
+    timelineContainer = "timeline-container",
+    graphClickCallback = () => {},
   }) {
-
+    this.outerSortField = defaultOuterSortField;
     this.outerFilter = defaultOuterFilter;
     this.clusterFilter = defaultClusterFilter;
     this.detailFilter = defaultDetailFilter;
@@ -42,10 +43,15 @@ class TemporalGraph {
     
     this.detailSearchIds = [];
     this.detailedNode = null;
-    this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup);
+    this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, (node) => {
+      // Provoke a click event on the corresponding cluster node to update the details graph.
+      const clusterNode = this.clusterGraph.node.filter(d => d.id === node.id).node();
+      if (clusterNode !== null) clusterNode.dispatchEvent(new PointerEvent("click"));
+    });
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, (node) => {
       this.detailedNode = node;
       this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);
+      if ("function" === typeof graphClickCallback) graphClickCallback();
     }, (nodes, links) => {
       if (this.detailedNode === null) return;
       this.updateClustersPositionsInDetailsGraph(nodes, links);
@@ -58,7 +64,7 @@ class TemporalGraph {
   #parseObject(obj, exclude = []) {
     const newObj = {};
     Object.keys(obj).filter(key => !exclude.includes(key)).forEach(key => {
-      newObj[key] = obj[key];
+      newObj[key] = key === "name" ? decodeHtmlEntities(obj[key]) : obj[key];
     });
     return newObj;
   }
@@ -88,7 +94,7 @@ class TemporalGraph {
 
         // Process the groups
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
-          const groupName  = group.name && group.name !== "" ? group.name : this.noClusterLegend;           
+          const groupName  = group.name && group.name !== "" ? decodeHtmlEntities(group.name) : this.noClusterLegend;           
           const groupColor = group.color && group.color !== "" ? group.color : undefined;
           const groupLogo  = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
           const elementsId = Object.keys(group[this.detailGroup]).map(id => `E-${id}`);
@@ -146,6 +152,8 @@ class TemporalGraph {
 
   // This method is used to sort the outer nodes by a specific field.
   sortOuterNodes(field = "name") {
+    this.outerSortField = field;
+
     for (let time in this.data) {
       this.#sortNodes(this.data[time].nodes.outer, field);
     };
@@ -171,10 +179,22 @@ class TemporalGraph {
   }
 
   // This method is used to search for a specific detail node by its name.
-  searchDetailNodes(name) {
-    this.detailSearchIds = name !== null 
-      ? [...new Set(Object.values(this.data).flatMap(timeslice => timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id)))]
+  // It updates the text of the result container with the times where the node was found (whitout considering the filters).
+  searchDetailNodes(name, resultContainer) {
+    const detailSearchTimes = new Set();
+    this.detailSearchIds = name !== null
+      ? [...new Set(Object.entries(this.data).flatMap(([time, timeslice]) => {
+          const foundIds = timeslice.nodes.detail.filter(d => d.name === name).flatMap(d => d.id)
+          if (foundIds.length > 0) detailSearchTimes.add(time);
+          return foundIds;
+        }))]
       : [];
+    
+    const resultElement = document.getElementById(resultContainer);
+    if (resultElement) {
+      resultElement.textContent = (detailSearchTimes.size > 0)
+        ? `${Array.from(detailSearchTimes).join(" - ")} (${dictionary.discarding_filters})` : "";
+    }
 
     this.spotlightClusterGraph();
     if (this.detailedNode !== null) {
@@ -209,7 +229,7 @@ class TemporalGraph {
           .map(d => ({...d, value: links.filter(l => l.source === d.id).reduce((acc, l) => acc + l.value, 0)})))
       .map(d => ({...d}));
     
-    this.clusterGraph.update(nodes, links);
+    this.clusterGraph.update(nodes, links, this.outerSortField);
     this.spotlightClusterGraph(links, elements);
     document.getElementById(container).replaceChildren(this.clusterGraph.render());
   }

@@ -10,7 +10,7 @@
  * @param {string} innerGroup - The inner group of nodes.
  */
 class DetailGraph extends Graph {
-  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup) {
+  constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, clickNodeCallback = () => {}) {
     super(width, height, nodeSize, nodeSpace);
 
     this.outerRadius = null;
@@ -19,6 +19,7 @@ class DetailGraph extends Graph {
     this.animationDuration = 2000;
     this.animationEase = d3.easeCubicInOut;
 
+    this.clickNodeCallback = clickNodeCallback;
     this.clusters = [];
     this.initialize();
   }
@@ -41,7 +42,7 @@ class DetailGraph extends Graph {
         .attr("width", this.width)
         .attr("height", this.height)
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
-        .attr("style", "max-width: 100%; height: auto;");
+        .attr("style", "width: 100%; height: auto;");
 
     let pattern = this.svg.append("defs").append("pattern")
         .attr("id", "stripes")
@@ -209,6 +210,8 @@ class DetailGraph extends Graph {
                   .transition().duration(self.animationDuration * 0.6).ease(self.animationEase)
                   .attr("transform", "scale(1)");
               }
+
+              g.append("title").text(d.name);
             } else {
               g.append("circle")
                 .attr("r", 0)
@@ -220,8 +223,6 @@ class DetailGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-
-            g.append("title").text(d.name);
           }),
         update => update
           .transition().duration(this.animationDuration * 0.4).ease(this.animationEase)
@@ -246,8 +247,12 @@ class DetailGraph extends Graph {
                 .attr("y", -imgRadius)
                 .attr("width", imgRadius * 2)
                 .attr("height", imgRadius * 2);
+              
+              const title = g.select("title").empty() ? g.append("title") : g.select("title");
+              title.text(d.name);
             } else {
               g.select("image").remove();
+              g.select("title").remove();
 
               const circle = g.select("circle").empty() ? g.append("circle") : g.select("circle");
               circle
@@ -261,8 +266,6 @@ class DetailGraph extends Graph {
                 .attr("display", displayText ? "block" : "none")
                 .text(d.name);
             }
-
-            g.select("title").text(d.name);
           }),
         exit => exit
           .transition().duration(this.animationDuration * 0.15).ease(this.animationEase)
@@ -274,8 +277,8 @@ class DetailGraph extends Graph {
       .call(this.drag(this.simulation, this.outerRadius));
 
     this.node
-      .classed("node-clickable", d => d.group === this.innerGroup && d.link !== "")
-      .on("click", (event, d) => this.clicked(event, d))
+      .classed("node-clickable", d => d.group === this.outerGroup || d.link !== "")
+      .on("click", (event, d) => this.clicked(event, d, focus))
       .on("mouseenter", (_, d) => {
         this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
         this.mouseEnter(d, focus);
@@ -336,11 +339,19 @@ class DetailGraph extends Graph {
   }
 
   // Open the link of the inner node clicked in a new browser tab.
-  clicked(event, d) {
-    if (event && event.isTrusted) {
-      if (d.group === this.innerGroup && d.link !== "") {
-        window.open(`https://www.zerozero.pt${d.link}`, "_blank");
+  clicked(event, d, focus) {
+    if (!event || !event.isTrusted) return;
+
+    if (d.group === this.outerGroup && "function" === typeof this.clickNodeCallback) {
+      if (d.id === focus?.id) return;
+
+      const clickedNode = this.node.filter(n => n.id === d.id).node();
+      if (clickedNode !== null) {
+        clickedNode.dispatchEvent(new MouseEvent("mouseleave"));
+        this.clickNodeCallback(d);
       }
+    } else if (d.group === this.innerGroup && d.link !== "") {
+      window.open(`https://www.zerozero.pt${d.link}`, "_blank");
     }
   }
 

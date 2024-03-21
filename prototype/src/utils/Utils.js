@@ -53,3 +53,12 @@ function compareStringId(str, value) {
   const parts = str.split('-');
   return parts.length >= 2 && parts[1] === value;
 }
+
+/**
+ * Decode the HTML entities present in a string.
+ * @param {string} str - String to decode.
+ * @returns {string} Decoded string.
+ */
+function decodeHtmlEntities(str) {
+  return str.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
+}

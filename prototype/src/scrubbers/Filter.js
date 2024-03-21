@@ -27,30 +27,34 @@ class Filter {
     this.filter = document.createElement("div");
     
     const title = document.createElement("p");
-    title.textContent = `Filter ${this.name} by:`;
+    title.textContent = `${dictionary.filter} ${this.name} ${dictionary.by}:`;
+    title.classList.add("control-title");
     this.filter.appendChild(title);
 
     for (const field in this.values) {
       const fieldId = `filter-${this.prefix}-${field}`;
       const container = document.createElement("div");
+      container.classList.add("control-line");
 
       const label = document.createElement("span");
-      label.textContent = field;
+      label.textContent = dictionary.dataset_fields[field]?.label || field;
+      label.classList.add("control-label");
 
       const select = document.createElement("select");
       select.id = fieldId;
       select.name = field;
+      select.classList.add("control-dropdown");
       select.addEventListener("change", this.onChange.bind(this));
 
       const allOption = document.createElement("option");
       allOption.value = "all";
-      allOption.textContent = "all";
+      allOption.textContent = dictionary.all;
       select.appendChild(allOption);
 
       for (const value of this.values[field]) {
         const option = document.createElement("option");
         option.value = value;
-        option.textContent = value;
+        option.textContent = dictionary.dataset_fields[field]?.options[value]?.label || value;
         select.appendChild(option);
       }
 

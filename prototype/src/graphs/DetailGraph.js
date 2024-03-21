@@ -282,7 +282,7 @@ export class DetailGraph extends Graph {
       .call(this.drag(this.simulation, this.outerRadius));
 
     this.node
-      .classed("node-clickable", d => d.group === this.outerGroup || d.link !== "")
+      .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))
       .on("click", (event, d) => this.clicked(event, d, focus))
       .on("mouseenter", (_, d) => {
         this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);

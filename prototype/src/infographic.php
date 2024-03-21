@@ -1,9 +1,7 @@
-<link rel="stylesheet" href="./src/infographic.css" ></style>
+<!-- Load Font Awesome and custom CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="<?php echo $includePath.'/infographic.css'; ?>" ></style>
 
-<!-- Load D3.js and d3-bboxCollide -->
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-bboxCollide@1.0.4"></script>
 
 <div id="vis-container">
   <p class="vis-title"><?php echo $title ?></p>
@@ -39,15 +37,20 @@
   </div>
 </div>
 
+
+<!-- Load D3.js and d3-bboxCollide -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-bboxCollide@1.0.4"></script>
+
 <script type="module">
   // Import Dependencies
-  import { TemporalGraph } from "./src/TemporalGraph.js";
-  import { Sort } from "./src/scrubbers/Sort.js";
-  import { Filter } from "./src/scrubbers/Filter.js";
-  import { Search } from "./src/scrubbers/Search.js";
+  import { TemporalGraph } from "<?php echo $includePath.'/TemporalGraph.js'; ?>";
+  import { Sort } from "<?php echo $includePath.'/scrubbers/Sort.js'; ?>";
+  import { Filter } from "<?php echo $includePath.'/scrubbers/Filter.js'; ?>";
+  import { Search } from "<?php echo $includePath.'/scrubbers/Search.js'; ?>";
 
-  import { accessObjectByString } from "./src/utils/Utils.js";
-  import { dictionary } from "./src/utils/Dictionary.js";
+  import { accessObjectByString } from "<?php echo $includePath.'/utils/Utils.js'; ?>";
+  import { dictionary } from "<?php echo $includePath.'/utils/Dictionary.js'; ?>";
 
   // Passes PHP variables to JavaScript
   const endpoint = "<?php echo $endpoint ?>";

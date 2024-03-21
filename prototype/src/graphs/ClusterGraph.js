@@ -48,7 +48,7 @@ class ClusterGraph extends Graph {
         .attr("width", this.width)
         .attr("height", this.height)
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
-        .attr("style", "max-width: 100%; height: auto;");
+        .attr("style", "width: 100%; height: auto;");
 
     let pattern = this.svg.append("defs").append("pattern")
         .attr("id", "stripes")

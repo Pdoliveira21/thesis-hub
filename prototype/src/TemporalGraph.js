@@ -43,7 +43,11 @@ class TemporalGraph {
     
     this.detailSearchIds = [];
     this.detailedNode = null;
-    this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup);
+    this.detailsGraph = new DetailGraph(width, height, nodeSize, nodeSpace, outerGroup, detailGroup, (node) => {
+      // Provoke a click event on the corresponding cluster node to update the details graph.
+      const clusterNode = this.clusterGraph.node.filter(d => d.id === node.id).node();
+      if (clusterNode !== null) clusterNode.dispatchEvent(new PointerEvent("click"));
+    });
     this.clusterGraph = new ClusterGraph(width, height, nodeSize, nodeSpace, outerGroup, clusterGroup, (node) => {
       this.detailedNode = node;
       this.drawDetailsGraph(this.detailsContainer, this.timeline.getValue(), this.detailedNode);

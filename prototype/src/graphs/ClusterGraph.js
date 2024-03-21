@@ -342,13 +342,12 @@ class ClusterGraph extends Graph {
   
   // Click event handler for the nodes.
   clicked(event, d) {
-    if (event && event.isTrusted && "function" === typeof this.clickNodeCallback) {
-      this.clickNodeCallback(d);
-      
-      if (d.group === this.outerGroup) {
-        // Trigger the tick event of nodes not draggable.
-        this.simulation.alpha(0.05).restart();
-      }
+    if (!event || "function" !== typeof this.clickNodeCallback) return;
+    
+    this.clickNodeCallback(d);
+    // Trigger the tick event of nodes not draggable when simulation is already stoped.
+    if (d.group === this.outerGroup && this.simulation.alpha() < 0.05) {
+      this.simulation.alpha(0.05).restart();
     }
   }
 

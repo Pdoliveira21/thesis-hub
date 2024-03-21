@@ -7,7 +7,7 @@
   <p class="vis-title"><?php echo $title ?></p>
   
   <div class="vis-content">
-    <div class="vis-content-container">
+    <div class="vis-content-container" style="width: min(100%, 1.5 * <?php echo json_decode($graphConfigs, true)['width'] ?? 800; ?>px + 4 * 1rem">
       <div class="vis-loading" id="controls-loading">
         <p class="vis-loading-text"></p>
         <i class="fas fa-spinner fa-spin"></i>

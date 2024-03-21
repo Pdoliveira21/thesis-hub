@@ -21,6 +21,11 @@
   
   <div class="vis-content">
     <div class="vis-content-container">
+      <div class="vis-loading" id="controls-loading">
+        <p class="vis-loading-text"></p>
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
+
       <div class="vis-controls">
         <div class="vis-preview">
           <button id="controls-exchange" class="control-btn control-btn-exchange" style="visibility: hidden;" onclick="exchangeGraphs()">
@@ -63,9 +68,13 @@
   }
 
   // Load data
+  document.querySelector("#controls-loading p").textContent = dictionary.loading_data;
   fetch(endpoint)
     .then(response => response.json())
-    .then(data => initInfoVis(data));
+    .then(data => {
+      initInfoVis(data);
+      document.querySelector("#controls-loading").style.display = "none";
+    });
 
   function initInfoVis(raw) {
     const data = dataPath ? accessObjectByString(raw, dataPath) : raw;

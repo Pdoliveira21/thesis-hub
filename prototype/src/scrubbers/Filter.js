@@ -1,3 +1,5 @@
+import { dictionary } from "./../utils/Dictionary.js";
+
 /**
  * @class Filter
  * @description A class to create a filter component for a given dataset.
@@ -6,7 +8,7 @@
  * @param {Object} values - Object with the fields and their respective values to be used as filtering options.
  * @param {function} changeCallback - Callback function to be called when the filter fields are changed.
  */
-class Filter {
+export class Filter {
 
   constructor(name, prefix, values, changeCallback = () => {}) {
     this.name = name;

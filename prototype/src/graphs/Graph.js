@@ -1,4 +1,4 @@
-// (IMPORT) d3 from 'd3';
+import { circunferencePosition } from "./../utils/Utils.js";
 
 /**
  * @class Graph
@@ -8,7 +8,7 @@
  * @param {number} nodeSize - The size of the nodes.
  * @param {number} nodeSpace - The space between nodes.
  */
-class Graph {
+export class Graph {
 
   constructor(width, height, nodeSize, nodeSpace) {
     this.width = width;

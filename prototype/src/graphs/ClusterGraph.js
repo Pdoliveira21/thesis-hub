@@ -1,5 +1,7 @@
-// (IMPORT) import { Graph } from './Graph.js';
-// import d3 from 'd3';
+import { Graph } from "./Graph.js";
+
+import { compareStringId } from "./../utils/Utils.js";
+import { dictionary } from "./../utils/Dictionary.js";
 
 /**
  * @class ClusterGraph
@@ -14,7 +16,7 @@
  * @param {function} clickNodeCallback - Callback function to be called when a node is clicked.
  * @param {function} tickCallback - Callback function to be called when the graph is updated.
  */
-class ClusterGraph extends Graph {
+export class ClusterGraph extends Graph {
 
   constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, clickNodeCallback = () => {}, tickCallback = () => {}) {
     super(width, height, nodeSize, nodeSpace);
@@ -160,6 +162,7 @@ class ClusterGraph extends Graph {
     }));
     links = links.map(d => ({...d}));
 
+    // Display the arc of each section in the outer group based on the sort field criteria.
     const outerSections = outerSort !== "name" ? this.circularSections(nodes.filter(d => d.group === this.outerGroup), outerSort) : [];
     const arcRadius = this.outerRadius + this.nodeSize + 5;
     const isFullArc = outerSections.length === 1;

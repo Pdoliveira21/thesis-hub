@@ -1,20 +1,9 @@
-<link rel="stylesheet" href="./src/index.css" ></style>
+<link rel="stylesheet" href="./src/infographic.css" ></style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+<!-- Load D3.js and d3-bboxCollide -->
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-bboxCollide@1.0.4"></script>
-
-<!-- (TODO) HERE fix imports -->
-<script src="./src/utils/Dictionary.js"></script>
-<script src="./src/utils/Utils.js"></script>
-<script src="./src/graphs/Graph.js"></script>
-<script src="./src/graphs/ClusterGraph.js"></script>
-<script src="./src/graphs/DetailGraph.js"></script>
-<script src="./src/scrubbers/Timeline.js"></script>
-<script src="./src/scrubbers/Filter.js"></script>
-<script src="./src/scrubbers/Sort.js"></script>
-<script src="./src/scrubbers/Search.js"></script>
-<script src="./src/TemporalGraph.js"></script>
 
 <div id="vis-container">
   <p class="vis-title"><?php echo $title ?></p>
@@ -50,7 +39,16 @@
   </div>
 </div>
 
-<script>
+<script type="module">
+  // Import Dependencies
+  import { TemporalGraph } from "./src/TemporalGraph.js";
+  import { Sort } from "./src/scrubbers/Sort.js";
+  import { Filter } from "./src/scrubbers/Filter.js";
+  import { Search } from "./src/scrubbers/Search.js";
+
+  import { accessObjectByString } from "./src/utils/Utils.js";
+  import { dictionary } from "./src/utils/Dictionary.js";
+
   // Passes PHP variables to JavaScript
   const endpoint = "<?php echo $endpoint ?>";
   const dataPath = "<?php echo $dataPath ?>";

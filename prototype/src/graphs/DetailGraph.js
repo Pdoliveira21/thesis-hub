@@ -1,3 +1,7 @@
+import { Graph } from "./Graph.js";
+
+import { compareStringId } from "./../utils/Utils.js";
+
 /**
  * @class DetailGraph
  * @extends Graph
@@ -8,8 +12,9 @@
  * @param {number} nodeSpace - The space between nodes.
  * @param {string} outerGroup - The outer group of nodes.
  * @param {string} innerGroup - The inner group of nodes.
+ * @param {function} clickNodeCallback - Callback function to be called when a node is clicked.
  */
-class DetailGraph extends Graph {
+export class DetailGraph extends Graph {
   constructor(width, height, nodeSize, nodeSpace, outerGroup, innerGroup, clickNodeCallback = () => {}) {
     super(width, height, nodeSize, nodeSpace);
 
@@ -338,7 +343,8 @@ class DetailGraph extends Graph {
     }
   }
 
-  // Open the link of the inner node clicked in a new browser tab.
+  // Call the clickNodeCallback function with the node data when an outer node is clicked.
+  // Open the link of the node in a new browser tab when an inner node is clicked.
   clicked(event, d, focus) {
     if (!event || !event.isTrusted) return;
 

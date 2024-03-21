@@ -1,4 +1,4 @@
-var dictionary = {
+export const dictionary = {
   // Timeline
   play: "Iniciar",
   pause: "Pausar",

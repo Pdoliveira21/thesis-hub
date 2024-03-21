@@ -1,6 +1,9 @@
-// (IMPORT) import { ClusterGraph } from './ClusterGraph.js';
-// import d3 from 'd3';
-// import Timeline from './scrubbers/Timeline.js';
+import { ClusterGraph } from './graphs/ClusterGraph.js';
+import { DetailGraph } from './graphs/DetailGraph.js';
+import { Timeline } from './scrubbers/Timeline.js';
+
+import { decodeHtmlEntities } from './utils/Utils.js';
+import { dictionary } from './utils/Dictionary.js';
 
 /**
  * @class TemporalGraph
@@ -8,7 +11,7 @@
  * @param {Object} data - The data to be used in the graph.
  * @param {Object} options - The options to be used in the graph configuration.
  */
-class TemporalGraph {
+export class TemporalGraph {
 
   constructor(data, {
     width = 800,

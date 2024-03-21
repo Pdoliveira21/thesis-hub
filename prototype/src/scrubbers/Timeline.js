@@ -9,7 +9,7 @@
  * @author D3 by observable
  * @see https://observablehq.com/@d3/temporal-force-directed-graph - used as reference example that was adapted and simplified for the project purposes.
  */
-class Timeline {
+export class Timeline {
 
   constructor(values, delay, updateCallback = () => {}) { 
     this.values = Array.from(values);

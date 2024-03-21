@@ -1,3 +1,6 @@
+import { decodeHtmlEntities } from "./../utils/Utils.js";
+import { dictionary } from "./../utils/Dictionary.js";
+
 /**
  * @class Search
  * @description A class to create a search input for a list of values.
@@ -6,7 +9,7 @@
  * @param {Array} values - Array of values to be used as search options.
  * @param {function} changeCallback - Callback function to be called when the search value is changed.
  */
-class Search {
+export class Search {
 
   constructor(name, prefix, values, changeCallback = () => {}) {
     this.name = name;

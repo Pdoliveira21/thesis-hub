@@ -1,3 +1,5 @@
+import { dictionary } from "./../utils/Dictionary.js";
+
 /**
  * @class Filter
  * @description A class to create a filter component for a given dataset.
@@ -6,7 +8,7 @@
  * @param {Object} values - Object with the fields and their respective values to be used as filtering options.
  * @param {function} changeCallback - Callback function to be called when the filter fields are changed.
  */
-class Filter {
+export class Filter {
 
   constructor(name, prefix, values, changeCallback = () => {}) {
     this.name = name;
@@ -20,10 +22,13 @@ class Filter {
   }
 
   render() {
-    return this.filter;
+    return this.filter || "";
   }
 
   initialize() {
+    const enoughOptions = Object.values(this.values).some((values) => values.length > 1);
+    if (!enoughOptions) return;
+
     this.filter = document.createElement("div");
     
     const title = document.createElement("p");
@@ -32,6 +37,8 @@ class Filter {
     this.filter.appendChild(title);
 
     for (const field in this.values) {
+      if (this.values[field].length <= 1) continue;
+
       const fieldId = `filter-${this.prefix}-${field}`;
       const container = document.createElement("div");
       container.classList.add("control-line");
@@ -50,7 +57,7 @@ class Filter {
       allOption.value = "all";
       allOption.textContent = dictionary.all;
       select.appendChild(allOption);
-
+      
       for (const value of this.values[field]) {
         const option = document.createElement("option");
         option.value = value;

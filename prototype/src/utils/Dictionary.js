@@ -1,4 +1,4 @@
-var dictionary = {
+export const dictionary = {
   // Timeline
   play: "Iniciar",
   pause: "Pausar",
@@ -15,6 +15,7 @@ var dictionary = {
   all: "Todos",
 
   // Messages
+  loading_data: "A carregar informações...",
   discarding_filters: "sem considerar os filtros",
 
   // Fields (translate dataset fields to human readable labels and options)

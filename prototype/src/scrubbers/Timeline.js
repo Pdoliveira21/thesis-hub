@@ -9,7 +9,7 @@
  * @author D3 by observable
  * @see https://observablehq.com/@d3/temporal-force-directed-graph - used as reference example that was adapted and simplified for the project purposes.
  */
-class Timeline {
+export class Timeline {
 
   constructor(values, delay, updateCallback = () => {}) { 
     this.values = Array.from(values);
@@ -70,6 +70,7 @@ class Timeline {
     this.output.classList.add("control-title");
 
     this.player = document.createElement("div");
+    this.player.classList.add("control-player");
     this.player.append(this.btnPlay, this.btnPrev, this.range, this.btnNext);
     this.timeline.append(this.output, this.player);
   }

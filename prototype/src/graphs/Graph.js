@@ -1,4 +1,4 @@
-// (IMPORT) d3 from 'd3';
+import { circunferencePosition } from "./../utils/Utils.js";
 
 /**
  * @class Graph
@@ -8,7 +8,7 @@
  * @param {number} nodeSize - The size of the nodes.
  * @param {number} nodeSpace - The space between nodes.
  */
-class Graph {
+export class Graph {
 
   constructor(width, height, nodeSize, nodeSpace) {
     this.width = width;
@@ -89,11 +89,11 @@ class Graph {
     // Highlight (change oppacity and display labels) of the node and its neighbors as well as corresponding links.
     let neighbors = new Set(link.data().filter(l => l.source === d || l.target === d).flatMap(l => [l.source, l.target]));
     node.filter(n => !neighbors.has(n)).call(g => {
-      g.lower().attr("opacity", this.nodeUnhighlightOpacity);
+      g.attr("opacity", this.nodeUnhighlightOpacity);
       g.select("text").attr("display", "none");
     });
     node.filter(n => neighbors.has(n)).call(g => {
-      g.raise().attr("opacity", this.nodeOpacity);
+      g.attr("opacity", this.nodeOpacity);
       g.select("text").attr("display", "block");
     });
 

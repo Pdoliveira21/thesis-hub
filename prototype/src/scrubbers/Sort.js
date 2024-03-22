@@ -1,3 +1,5 @@
+import { dictionary } from "./../utils/Dictionary.js";
+
 /**
  * @class Sort
  * @description A class to create a sort dropdown for a given dataset.
@@ -7,7 +9,7 @@
  * @param {string} selected - The default selected field.
  * @param {function} changeCallback - Callback function to be called when the sort field is changed.
  */
-class Sort {
+export class Sort {
 
   constructor(name, prefix, fields, selected, changeCallback = () => {}) {
     this.name = name;

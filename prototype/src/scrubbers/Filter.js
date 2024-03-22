@@ -22,10 +22,13 @@ export class Filter {
   }
 
   render() {
-    return this.filter;
+    return this.filter || "";
   }
 
   initialize() {
+    const enoughOptions = Object.values(this.values).some((values) => values.length > 1);
+    if (!enoughOptions) return;
+
     this.filter = document.createElement("div");
     
     const title = document.createElement("p");
@@ -34,6 +37,8 @@ export class Filter {
     this.filter.appendChild(title);
 
     for (const field in this.values) {
+      if (this.values[field].length <= 1) continue;
+
       const fieldId = `filter-${this.prefix}-${field}`;
       const container = document.createElement("div");
       container.classList.add("control-line");
@@ -52,7 +57,7 @@ export class Filter {
       allOption.value = "all";
       allOption.textContent = dictionary.all;
       select.appendChild(allOption);
-
+      
       for (const value of this.values[field]) {
         const option = document.createElement("option");
         option.value = value;

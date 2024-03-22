@@ -2,16 +2,15 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>World Cups</title>
+  <title>Campeonatos Europeus</title>
 </head>
 
 <body>
   <?php
     $includePath = "./src";
 
-    $title = "Percurso de Jogadores em Seleções e Equipas ao Longo do Tempo";
-    $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30";
-    // $endpoint = "data/asd.json";
+    $title = "Campeonatos da Europa";
+    $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/29";
     $dataPath = "data.seasons";
 
     $defaultSort = "fk_continente";

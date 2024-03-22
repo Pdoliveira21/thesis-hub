@@ -70,6 +70,7 @@ export class Timeline {
     this.output.classList.add("control-title");
 
     this.player = document.createElement("div");
+    this.player.classList.add("control-player");
     this.player.append(this.btnPlay, this.btnPrev, this.range, this.btnNext);
     this.timeline.append(this.output, this.player);
   }

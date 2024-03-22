@@ -6,12 +6,12 @@
 </head>
 
 <body>
-  <?php 
-    // TODO: see another solution to this
+  <?php
     $includePath = "./src";
 
     $title = "Percurso de Jogadores em Seleções e Equipas ao Longo do Tempo";
     $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30";
+    // $endpoint = "data/asd.json";
     $dataPath = "data.seasons";
 
     $defaultSort = "fk_continente";

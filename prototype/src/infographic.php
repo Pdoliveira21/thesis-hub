@@ -115,7 +115,9 @@
       document.getElementById("controls-search").append(searchPlayers.render());
     }
   }
+</script>
 
+<script>
   function exchangeGraphs() {
     const clusterGraph = document.getElementById("graph-container");
     const detailsGraph = document.getElementById("details-container");

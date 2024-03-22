@@ -2792,7 +2792,7 @@
               "count": "2",
               "players": {
                 "194593": {
-                  "name": "Virgil van Dijk",
+                  "name": "Virgil Van Dijk",
                   "posicao": "Defesa",
                   "link": "/jogador/virgil-van-dijk/194593"
                 },
@@ -7223,7 +7223,7 @@
                   "link": "/jogador/de-arrascaeta/270657"
                 },
                 "479899": {
-                  "name": "Nicolas de la Cruz",
+                  "name": "Nicol\u00e1s De La Cruz",
                   "posicao": "M\u00e9dio",
                   "link": "/jogador/nicolas-de-la-cruz/479899"
                 },
@@ -26420,8 +26420,8 @@
               }
             },
             "7851": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/51/7851_logo_20201118144831_cape_town_spurs.png",
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/51/7851_logo_cape_town_spurs_20240318152311.png",
               "name": "Cape Town Spurs",
               "count": "1",
               "players": {
@@ -42571,8 +42571,8 @@
               }
             },
             "7851": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/51/7851_logo_20201118144831_cape_town_spurs.png",
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/51/7851_logo_cape_town_spurs_20240318152311.png",
               "name": "Cape Town Spurs",
               "count": "1",
               "players": {
@@ -84611,7 +84611,7 @@
                   "link": "/jogador/leon-jeck/26530"
                 },
                 "26532": {
-                  "name": "Leon Semmeling",
+                  "name": "L\u00e9on Semmeling",
                   "posicao": "Jogador de Campo",
                   "link": "/jogador/leon-semmeling/26532"
                 },
@@ -107585,7 +107585,7 @@
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/2414_imgbank_1690792262.png",
               "name": "Zamalek SC",
-              "count": "9",
+              "count": "8",
               "players": {
                 "21252": {
                   "name": "Kamel Taha",
@@ -107621,11 +107621,6 @@
                   "name": "Mohamed Farid",
                   "posicao": "Jogador de Campo",
                   "link": "/jogador/mohamed-farid/21263"
-                },
-                "21272": {
-                  "name": "Mustafa Taha",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/mustafa-taha/21272"
                 },
                 "21354": {
                   "name": "Ali Shafi",
@@ -110459,5 +110454,5 @@
       ]
     }
   },
-  "timestamp": "1710348166"
+  "timestamp": "1711100951"
 }

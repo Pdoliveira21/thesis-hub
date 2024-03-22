@@ -62,3 +62,17 @@ export function compareStringId(str, value) {
 export function decodeHtmlEntities(str) {
   return str.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
 }
+
+/**
+ * Decode a string encoded in Windows-1252.
+ * @param {String} str - String to decode.
+ * @returns {String} Decoded string.
+ */
+export function decodeWindows1252(str) {
+  const buffer = new Uint8Array(str.length);
+  for (let i = 0; i < str.length; i++) {
+    buffer[i] = str.charCodeAt(i);
+  }
+
+  return new TextDecoder('windows-1252').decode(buffer);
+}

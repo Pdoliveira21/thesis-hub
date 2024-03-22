@@ -1,4 +1,4 @@
-import { decodeHtmlEntities } from "./../utils/Utils.js";
+import { decodeHtmlEntities, decodeWindows1252 } from "./../utils/Utils.js";
 import { dictionary } from "./../utils/Dictionary.js";
 
 /**
@@ -95,7 +95,7 @@ export class Search {
         if (key === from) {
           Object.values(object[key]).forEach((item) => {
             if (item.name && item.name !== "") {
-              names.add(decodeHtmlEntities(item.name));
+              names.add(decodeHtmlEntities(decodeWindows1252(item.name)));
             }
           });
           return;

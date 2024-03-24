@@ -74,10 +74,13 @@ export class TemporalGraph {
 
   // This method is used to parse the data to be used in the graphs to a more suitable format.
   parseData(data, displayAlwaysAllOuter, outerSortField) {
-    this.times = Object.keys(data);
+    this.times = [];
     this.data = {};
 
     for (let time in data) {
+      if (!Array.isArray(data[time]) || data[time].length === 0) continue;
+      this.times.push(time);
+
       const nodes = {outer: [], cluster: [], detail: []};
       const links = {cluster: [], detail: []};
 

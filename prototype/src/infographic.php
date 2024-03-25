@@ -68,13 +68,17 @@
     document.getElementById("controls-exchange").style.visibility = "visible";
   }
 
-  // Load data
+  // Fetch the data
   document.querySelector("#controls-loading p").textContent = dictionary.loading_data;
   fetch(endpoint)
     .then(response => response.json())
     .then(data => {
       initInfoVis(data);
       document.querySelector("#controls-loading").style.display = "none";
+    })
+    .catch(error => {
+      document.querySelector("#controls-loading p").textContent = dictionary.error_loading_data;
+      document.querySelector("#controls-loading i").style.display = "none";
     });
 
   function initInfoVis(raw) {

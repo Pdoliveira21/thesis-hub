@@ -16,6 +16,7 @@ export const dictionary = {
 
   // Messages
   loading_data: "A carregar informações...",
+  error_loading_data: "Erro ao carregar informações.",
   discarding_filters: "sem considerar os filtros",
 
   // Fields (translate dataset fields to human readable labels and options)

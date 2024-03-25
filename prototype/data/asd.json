@@ -4450,17 +4450,12 @@
               "color": "00703C",
               "logo": "https://www.zerozero.pt//img/logos/equipas/7815_imgbank.png",
               "name": "Jeonbuk Motors",
-              "count": "4",
+              "count": "3",
               "players": {
                 "324693": {
                   "name": "Kwon Chang-hoon",
                   "posicao": "M\u00e9dio",
                   "link": "/jogador/kwon-chang-hoon/324693"
-                },
-                "502607": {
-                  "name": "Paik Seung-ho",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/paik-seung-ho/502607"
                 },
                 "639574": {
                   "name": "Song Min-kyu",
@@ -4562,6 +4557,19 @@
                   "name": "Song Bum-keun",
                   "posicao": "Guarda Redes",
                   "link": "/jogador/song-bum-keun/566150"
+                }
+              }
+            },
+            "77": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/77_imgbank_1683906127.png",
+              "name": "Birmingham City",
+              "count": "1",
+              "players": {
+                "502607": {
+                  "name": "Paik Seung-ho",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/paik-seung-ho/502607"
                 }
               }
             },
@@ -4720,7 +4728,7 @@
               "color": "AD1814",
               "logo": "https://www.zerozero.pt//img/logos/equipas/8935_imgbank.png",
               "name": "Persepolis FC",
-              "count": "5",
+              "count": "4",
               "players": {
                 "181297": {
                   "name": "Morteza Pouraliganji",
@@ -4731,11 +4739,6 @@
                   "name": "Alireza Beiranvand",
                   "posicao": "Guarda Redes",
                   "link": "/jogador/alireza-beiranvand/322561"
-                },
-                "365272": {
-                  "name": "Vahid Amiri ",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/vahid-amiri-/365272"
                 },
                 "368123": {
                   "name": "Mehdi Torabi",
@@ -4870,6 +4873,19 @@
                   "name": "Ramin Rezaeian",
                   "posicao": "Defesa",
                   "link": "/jogador/ramin-rezaeian/125611"
+                }
+              }
+            },
+            "7790": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/90/7790_logo_foolad_fc.gif",
+              "name": "Foolad FC",
+              "count": "1",
+              "players": {
+                "365272": {
+                  "name": "Vahid Amiri ",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/vahid-amiri-/365272"
                 }
               }
             },
@@ -5094,10 +5110,10 @@
                 }
               }
             },
-            "5826": {
-              "color": "4682B4",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/5826_imgbank_1698153387.png",
-              "name": "Sydney FC",
+            "3932": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3932_imgbank_1700753826.png",
+              "name": "Al-Rayyan",
               "count": "1",
               "players": {
                 "394452": {
@@ -7102,10 +7118,10 @@
                 }
               }
             },
-            "2514": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2514_imgbank_1687519960.png",
-              "name": "Quer\u00e9taro ",
+            "68383": {
+              "color": "4682B4",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/68383_imgbank_1688132892.png",
+              "name": "Guayaquil City",
               "count": "1",
               "players": {
                 "323984": {
@@ -52180,7 +52196,7 @@
               "count": "1",
               "players": {
                 "1175": {
-                  "name": "Robert Pir\u00e8s",
+                  "name": "Robert Pires",
                   "posicao": "M\u00e9dio",
                   "link": "/jogador/robert-pires/1175"
                 }
@@ -88652,35 +88668,17 @@
                 }
               }
             },
-            "8963": {
-              "color": "",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/63/8963_logo_chaux_de_fonds.png",
-              "name": "Chaux-de-Fonds",
-              "count": "3",
+            "2144": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2144_imgbank_1690475319.png",
+              "name": "FC Zurich",
+              "count": "6",
               "players": {
                 "340343": {
                   "name": "Heinz B\u00e4ni",
                   "posicao": "M\u00e9dio",
                   "link": "/jogador/heinz-bani/340343"
                 },
-                "26313": {
-                  "name": "Leo Eichmann",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/leo-eichmann/26313"
-                },
-                "26320": {
-                  "name": "Georges Vuilleumier",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/georges-vuilleumier/26320"
-                }
-              }
-            },
-            "2144": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2144_imgbank_1690475319.png",
-              "name": "FC Zurich",
-              "count": "5",
-              "players": {
                 "26308": {
                   "name": "Ren\u00e9 Brodmann",
                   "posicao": "Defesa",
@@ -88741,6 +88739,24 @@
                   "name": "Mario Prosperi",
                   "posicao": "Guarda Redes",
                   "link": "/jogador/mario-prosperi/26321"
+                }
+              }
+            },
+            "8963": {
+              "color": "",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/63/8963_logo_chaux_de_fonds.png",
+              "name": "Chaux-de-Fonds",
+              "count": "2",
+              "players": {
+                "26313": {
+                  "name": "Leo Eichmann",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/leo-eichmann/26313"
+                },
+                "26320": {
+                  "name": "Georges Vuilleumier",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/georges-vuilleumier/26320"
                 }
               }
             },
@@ -103865,354 +103881,6 @@
           }
         },
         {
-          "id": "1004",
-          "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
-          "fk_continente": "1",
-          "name": "Hungria",
-          "teams": {
-            "157": {
-              "color": "2D4C97",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/157_imgbank_1687267494.png",
-              "name": "MTK",
-              "count": "7",
-              "players": {
-                "21585": {
-                  "name": "L\u00e1szl\u00f3 Cseh",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/laszlo-cseh/21585"
-                },
-                "21586": {
-                  "name": "Ferenc Sas",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/ferenc-sas/21586"
-                },
-                "21153": {
-                  "name": "J\u00f3zsef Turay",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/jozsef-turay/21153"
-                },
-                "21593": {
-                  "name": "S\u00e1ndor B\u00edr\u00f3",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/sandor-biro/21593"
-                },
-                "21143": {
-                  "name": "Antal Szab\u00f3",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/antal-szabo/21143"
-                },
-                "21594": {
-                  "name": "P\u00e1l Titkos",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/pal-titkos/21594"
-                },
-                "21146": {
-                  "name": "J\u00e1nos Dud\u00e1s",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/janos-dudas/21146"
-                }
-              }
-            },
-            "1943": {
-              "color": "3E2C64",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/1943_imgbank_1691141694.png",
-              "name": "\u00dajpest FC",
-              "count": "5",
-              "players": {
-                "21587": {
-                  "name": "Gyula Zsengell\u00e9r",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/gyula-zsengeller/21587"
-                },
-                "21139": {
-                  "name": "Antal Szalay",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/antal-szalay/21139"
-                },
-                "21148": {
-                  "name": "Gy\u00f6rgy Szucs",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/gyorgy-szucs/21148"
-                },
-                "21138": {
-                  "name": "Jeno Vincze",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/jeno-vincze/21138"
-                },
-                "21661": {
-                  "name": "Istv\u00e1n Balogh",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/istvan-balogh/21661"
-                }
-              }
-            },
-            "1063": {
-              "color": "00703C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/1063_imgbank_1688462358.png",
-              "name": "Ferencv\u00e1ros",
-              "count": "8",
-              "players": {
-                "21588": {
-                  "name": "Lajos Kor\u00e1nyi",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/lajos-koranyi/21588"
-                },
-                "21589": {
-                  "name": "Mih\u00e1ly B\u00edr\u00f3",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/mihaly-biro/21589"
-                },
-                "21590": {
-                  "name": "Gyula Polg\u00e1r",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/gyula-polgar/21590"
-                },
-                "21591": {
-                  "name": "B\u00e9la S\u00e1rosi",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/bela-sarosi/21591"
-                },
-                "21141": {
-                  "name": "Gyula L\u00e1z\u00e1r",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/gyula-lazar/21141"
-                },
-                "21156": {
-                  "name": "J\u00f3zsef H\u00e1da",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/jozsef-hada/21156"
-                },
-                "21151": {
-                  "name": "Gy\u00f6rgy S\u00e1rosi",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/gyorgy-sarosi/21151"
-                },
-                "21154": {
-                  "name": "G\u00e9za Toldi",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/geza-toldi/21154"
-                }
-              }
-            },
-            "122": {
-              "color": "71A6D2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/122_imgbank_1684488057.png",
-              "name": "Marseille",
-              "count": "1",
-              "players": {
-                "21592": {
-                  "name": "Vilmos Kohut",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/vilmos-kohut/21592"
-                }
-              }
-            },
-            "67854": {
-              "color": "",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/54/67854_logo_szegedi_szeol_sc.png",
-              "name": "Szegedi SzEOL SC",
-              "count": "1",
-              "players": {
-                "21595": {
-                  "name": "J\u00f3zsef P\u00e1link\u00e1s",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/jozsef-palinkas/21595"
-                }
-              }
-            }
-          }
-        },
-        {
-          "id": "828",
-          "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
-          "fk_continente": "1",
-          "name": "It\u00e1lia",
-          "teams": {
-            "72": {
-              "color": "660000",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/72_imgbank_1683890624.png",
-              "name": "Roma",
-              "count": "4",
-              "players": {
-                "21554": {
-                  "name": "Pietro Serantoni",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/pietro-serantoni/21554"
-                },
-                "21129": {
-                  "name": "Guido Masetti",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/guido-masetti/21129"
-                },
-                "21566": {
-                  "name": "Aldo Donati",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/aldo-donati/21566"
-                },
-                "21125": {
-                  "name": "Eraldo Monzeglio",
-                  "posicao": "Defesa",
-                  "link": "/jogador/eraldo-monzeglio/21125"
-                }
-              }
-            },
-            "3748": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3748_imgbank_1700750291.png",
-              "name": "Triestina",
-              "count": "3",
-              "players": {
-                "21555": {
-                  "name": "Bruno Chizzo",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/bruno-chizzo/21555"
-                },
-                "21561": {
-                  "name": "Piero Pasinati",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/piero-pasinati/21561"
-                },
-                "21564": {
-                  "name": "Gino Colaussi",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/gino-colaussi/21564"
-                }
-              }
-            },
-            "64": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
-              "name": "Juventus",
-              "count": "2",
-              "players": {
-                "21556": {
-                  "name": "Pietro Rava",
-                  "posicao": "Defesa",
-                  "link": "/jogador/pietro-rava/21556"
-                },
-                "21559": {
-                  "name": "Alfredo Foni",
-                  "posicao": "Defesa",
-                  "link": "/jogador/alfredo-foni/21559"
-                }
-              }
-            },
-            "58": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/58_imgbank_1683890729.png",
-              "name": "Bologna",
-              "count": "3",
-              "players": {
-                "21557": {
-                  "name": "Amedeo Biavati",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/amedeo-biavati/21557"
-                },
-                "21568": {
-                  "name": "Michele Andreolo",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/michele-andreolo/21568"
-                },
-                "21570": {
-                  "name": "Carlo Ceresoli",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/carlo-ceresoli/21570"
-                }
-              }
-            },
-            "63": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/63_imgbank_1683890698.png",
-              "name": "Internazionale",
-              "count": "5",
-              "players": {
-                "5759": {
-                  "name": "Giuseppe Meazza",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/giuseppe-meazza"
-                },
-                "21558": {
-                  "name": "Pietro Ferraris",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/pietro-ferraris/21558"
-                },
-                "21560": {
-                  "name": "Ugo Locatelli",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/ugo-locatelli/21560"
-                },
-                "21135": {
-                  "name": "Giovanni Ferrari",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/giovanni-ferrari/21135"
-                },
-                "21569": {
-                  "name": "Renato Olmi",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/renato-olmi/21569"
-                }
-              }
-            },
-            "3732": {
-              "color": "101010",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3732_imgbank_1700735097.png",
-              "name": "Lucchese",
-              "count": "1",
-              "players": {
-                "21562": {
-                  "name": "Aldo Olivieri",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/aldo-olivieri/21562"
-                }
-              }
-            },
-            "65": {
-              "color": "71A6D2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/65_imgbank_1683890661.png",
-              "name": "Lazio",
-              "count": "1",
-              "players": {
-                "21563": {
-                  "name": "Silvio Piola",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/silvio-piola/21563"
-                }
-              }
-            },
-            "3728": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3728_imgbank_1683903533.png",
-              "name": "Genoa",
-              "count": "2",
-              "players": {
-                "21565": {
-                  "name": "Mario Perazzolo",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/mario-perazzolo/21565"
-                },
-                "21662": {
-                  "name": "Mario Genta",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/mario-genta/21662"
-                }
-              }
-            },
-            "3740": {
-              "color": "",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3740_imgbank_1683903671.png",
-              "name": "Pisa",
-              "count": "1",
-              "players": {
-                "21567": {
-                  "name": "Sergio Bertoni",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/sergio-bertoni/21567"
-                }
-              }
-            }
-          }
-        },
-        {
           "id": "832",
           "img": "https://www.zerozero.pt/img/logos/equipas/832_imgbank_flag.png",
           "fk_continente": "1",
@@ -105061,6 +104729,354 @@
                   "name": "Van Den Burg",
                   "posicao": "M\u00e9dio",
                   "link": "/jogador/van-den-burg/21612"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "828",
+          "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
+          "name": "It\u00e1lia",
+          "teams": {
+            "72": {
+              "color": "660000",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/72_imgbank_1683890624.png",
+              "name": "Roma",
+              "count": "4",
+              "players": {
+                "21554": {
+                  "name": "Pietro Serantoni",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/pietro-serantoni/21554"
+                },
+                "21129": {
+                  "name": "Guido Masetti",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/guido-masetti/21129"
+                },
+                "21566": {
+                  "name": "Aldo Donati",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/aldo-donati/21566"
+                },
+                "21125": {
+                  "name": "Eraldo Monzeglio",
+                  "posicao": "Defesa",
+                  "link": "/jogador/eraldo-monzeglio/21125"
+                }
+              }
+            },
+            "3748": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3748_imgbank_1700750291.png",
+              "name": "Triestina",
+              "count": "3",
+              "players": {
+                "21555": {
+                  "name": "Bruno Chizzo",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/bruno-chizzo/21555"
+                },
+                "21561": {
+                  "name": "Piero Pasinati",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/piero-pasinati/21561"
+                },
+                "21564": {
+                  "name": "Gino Colaussi",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/gino-colaussi/21564"
+                }
+              }
+            },
+            "64": {
+              "color": "E5E4E2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
+              "name": "Juventus",
+              "count": "2",
+              "players": {
+                "21556": {
+                  "name": "Pietro Rava",
+                  "posicao": "Defesa",
+                  "link": "/jogador/pietro-rava/21556"
+                },
+                "21559": {
+                  "name": "Alfredo Foni",
+                  "posicao": "Defesa",
+                  "link": "/jogador/alfredo-foni/21559"
+                }
+              }
+            },
+            "58": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/58_imgbank_1683890729.png",
+              "name": "Bologna",
+              "count": "3",
+              "players": {
+                "21557": {
+                  "name": "Amedeo Biavati",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/amedeo-biavati/21557"
+                },
+                "21568": {
+                  "name": "Michele Andreolo",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/michele-andreolo/21568"
+                },
+                "21570": {
+                  "name": "Carlo Ceresoli",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/carlo-ceresoli/21570"
+                }
+              }
+            },
+            "63": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/63_imgbank_1683890698.png",
+              "name": "Internazionale",
+              "count": "5",
+              "players": {
+                "5759": {
+                  "name": "Giuseppe Meazza",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/giuseppe-meazza"
+                },
+                "21558": {
+                  "name": "Pietro Ferraris",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/pietro-ferraris/21558"
+                },
+                "21560": {
+                  "name": "Ugo Locatelli",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/ugo-locatelli/21560"
+                },
+                "21135": {
+                  "name": "Giovanni Ferrari",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/giovanni-ferrari/21135"
+                },
+                "21569": {
+                  "name": "Renato Olmi",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/renato-olmi/21569"
+                }
+              }
+            },
+            "3732": {
+              "color": "101010",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3732_imgbank_1700735097.png",
+              "name": "Lucchese",
+              "count": "1",
+              "players": {
+                "21562": {
+                  "name": "Aldo Olivieri",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/aldo-olivieri/21562"
+                }
+              }
+            },
+            "65": {
+              "color": "71A6D2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/65_imgbank_1683890661.png",
+              "name": "Lazio",
+              "count": "1",
+              "players": {
+                "21563": {
+                  "name": "Silvio Piola",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/silvio-piola/21563"
+                }
+              }
+            },
+            "3728": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3728_imgbank_1683903533.png",
+              "name": "Genoa",
+              "count": "2",
+              "players": {
+                "21565": {
+                  "name": "Mario Perazzolo",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/mario-perazzolo/21565"
+                },
+                "21662": {
+                  "name": "Mario Genta",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/mario-genta/21662"
+                }
+              }
+            },
+            "3740": {
+              "color": "",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3740_imgbank_1683903671.png",
+              "name": "Pisa",
+              "count": "1",
+              "players": {
+                "21567": {
+                  "name": "Sergio Bertoni",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/sergio-bertoni/21567"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "1004",
+          "img": "https://www.zerozero.pt/img/logos/equipas/1004_imgbank_flag.png",
+          "fk_continente": "1",
+          "name": "Hungria",
+          "teams": {
+            "157": {
+              "color": "2D4C97",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/157_imgbank_1687267494.png",
+              "name": "MTK",
+              "count": "7",
+              "players": {
+                "21585": {
+                  "name": "L\u00e1szl\u00f3 Cseh",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/laszlo-cseh/21585"
+                },
+                "21586": {
+                  "name": "Ferenc Sas",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/ferenc-sas/21586"
+                },
+                "21153": {
+                  "name": "J\u00f3zsef Turay",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/jozsef-turay/21153"
+                },
+                "21593": {
+                  "name": "S\u00e1ndor B\u00edr\u00f3",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/sandor-biro/21593"
+                },
+                "21143": {
+                  "name": "Antal Szab\u00f3",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/antal-szabo/21143"
+                },
+                "21594": {
+                  "name": "P\u00e1l Titkos",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/pal-titkos/21594"
+                },
+                "21146": {
+                  "name": "J\u00e1nos Dud\u00e1s",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/janos-dudas/21146"
+                }
+              }
+            },
+            "1943": {
+              "color": "3E2C64",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/1943_imgbank_1691141694.png",
+              "name": "\u00dajpest FC",
+              "count": "5",
+              "players": {
+                "21587": {
+                  "name": "Gyula Zsengell\u00e9r",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/gyula-zsengeller/21587"
+                },
+                "21139": {
+                  "name": "Antal Szalay",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/antal-szalay/21139"
+                },
+                "21148": {
+                  "name": "Gy\u00f6rgy Szucs",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/gyorgy-szucs/21148"
+                },
+                "21138": {
+                  "name": "Jeno Vincze",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/jeno-vincze/21138"
+                },
+                "21661": {
+                  "name": "Istv\u00e1n Balogh",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/istvan-balogh/21661"
+                }
+              }
+            },
+            "1063": {
+              "color": "00703C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/1063_imgbank_1688462358.png",
+              "name": "Ferencv\u00e1ros",
+              "count": "8",
+              "players": {
+                "21588": {
+                  "name": "Lajos Kor\u00e1nyi",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/lajos-koranyi/21588"
+                },
+                "21589": {
+                  "name": "Mih\u00e1ly B\u00edr\u00f3",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/mihaly-biro/21589"
+                },
+                "21590": {
+                  "name": "Gyula Polg\u00e1r",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/gyula-polgar/21590"
+                },
+                "21591": {
+                  "name": "B\u00e9la S\u00e1rosi",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/bela-sarosi/21591"
+                },
+                "21141": {
+                  "name": "Gyula L\u00e1z\u00e1r",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/gyula-lazar/21141"
+                },
+                "21156": {
+                  "name": "J\u00f3zsef H\u00e1da",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/jozsef-hada/21156"
+                },
+                "21151": {
+                  "name": "Gy\u00f6rgy S\u00e1rosi",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/gyorgy-sarosi/21151"
+                },
+                "21154": {
+                  "name": "G\u00e9za Toldi",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/geza-toldi/21154"
+                }
+              }
+            },
+            "122": {
+              "color": "71A6D2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/122_imgbank_1684488057.png",
+              "name": "Marseille",
+              "count": "1",
+              "players": {
+                "21592": {
+                  "name": "Vilmos Kohut",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/vilmos-kohut/21592"
+                }
+              }
+            },
+            "67854": {
+              "color": "",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/54/67854_logo_szegedi_szeol_sc.png",
+              "name": "Szegedi SzEOL SC",
+              "count": "1",
+              "players": {
+                "21595": {
+                  "name": "J\u00f3zsef P\u00e1link\u00e1s",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/jozsef-palinkas/21595"
                 }
               }
             }
@@ -106745,6 +106761,164 @@
           }
         },
         {
+          "id": "1145",
+          "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
+          "fk_continente": "1",
+          "name": "Checoslov\u00e1quia",
+          "teams": {
+            "151": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/151_imgbank_1687268354.png",
+              "name": "Slavia Praha",
+              "count": "12",
+              "players": {
+                "21076": {
+                  "name": "Rudolf Kr&#269;il",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/rudolf-krcil/21076"
+                },
+                "21077": {
+                  "name": "Ferdinand Dau&#269;\u00edk",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/ferdinand-daucik/21077"
+                },
+                "21081": {
+                  "name": "Anton\u00edn Vodicka",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/antonin-vodicka/21081"
+                },
+                "21083": {
+                  "name": "Ladislav \u008een\u00ed\u009aek",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/ladislav-zenisek/21083"
+                },
+                "21085": {
+                  "name": "Vlastimil Kopecky",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/vlastimil-kopecky/21085"
+                },
+                "21088": {
+                  "name": "Anton\u00edn Puc",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/antonin-puc/21088"
+                },
+                "21090": {
+                  "name": "Frantisek Svoboda",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/frantisek-svoboda/21090"
+                },
+                "21092": {
+                  "name": "Stefan Cambal",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/stefan-cambal/21092"
+                },
+                "21093": {
+                  "name": "Frantisek Pl\u00e1nicka",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/frantisek-planicka/21093"
+                },
+                "21095": {
+                  "name": "Adolf Simpersky",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/adolf-simpersky/21095"
+                },
+                "21096": {
+                  "name": "Frantisek Junek",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/frantisek-junek/21096"
+                },
+                "21097": {
+                  "name": "Jiri Sobotka",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/jiri-sobotka/21097"
+                }
+              }
+            },
+            "146": {
+              "color": "660000",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/146_imgbank_1687268491.png",
+              "name": "Sparta Praha",
+              "count": "7",
+              "players": {
+                "21078": {
+                  "name": "Jaroslav Burgr",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/jaroslav-burgr/21078"
+                },
+                "21079": {
+                  "name": "Oldrich Nejedly",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/oldrich-nejedly/21079"
+                },
+                "21080": {
+                  "name": "Erich Srbek",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/erich-srbek/21080"
+                },
+                "21082": {
+                  "name": "Jaroslav Boucek",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/jaroslav-boucek/21082"
+                },
+                "21086": {
+                  "name": "Gejza Kalocsay",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/gejza-kalocsay/21086"
+                },
+                "21091": {
+                  "name": "Josef Kost\u00e1lek",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/josef-kostalek/21091"
+                },
+                "21094": {
+                  "name": "Josef Ctyroky",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/josef-ctyroky/21094"
+                }
+              }
+            },
+            "70333": {
+              "color": "",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/33/70333_logo_teplitzer_fk.gif",
+              "name": "Teplitzer FK",
+              "count": "1",
+              "players": {
+                "21084": {
+                  "name": "Cestm\u00edr Patzel",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/cestmir-patzel/21084"
+                }
+              }
+            },
+            "3824": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3824_imgbank_1686818633.png",
+              "name": "Nimes",
+              "count": "1",
+              "players": {
+                "21087": {
+                  "name": "Josef Silny",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/josef-silny/21087"
+                }
+              }
+            },
+            "2064": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2064_imgbank_1691158051.png",
+              "name": "Zbrojovka Brno",
+              "count": "1",
+              "players": {
+                "21089": {
+                  "name": "Frantisek Sterc",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/frantisek-sterc/21089"
+                }
+              }
+            }
+          }
+        },
+        {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
           "fk_continente": "1",
@@ -106929,6 +107103,188 @@
                   "name": "Lazar Sfera",
                   "posicao": "Jogador de Campo",
                   "link": "/jogador/lazar-sfera/21196"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "828",
+          "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
+          "fk_continente": "1",
+          "name": "It\u00e1lia",
+          "teams": {
+            "63": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/63_imgbank_1683890698.png",
+              "name": "Internazionale",
+              "count": "4",
+              "players": {
+                "21115": {
+                  "name": "Armando Castellazzi",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/armando-castellazzi/21115"
+                },
+                "21122": {
+                  "name": "Luigi Allemandi",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/luigi-allemandi/21122"
+                },
+                "5759": {
+                  "name": "Giuseppe Meazza",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/giuseppe-meazza"
+                },
+                "21134": {
+                  "name": "Attilio Demar\u00eda",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/attilio-demaria/21134"
+                }
+              }
+            },
+            "64": {
+              "color": "E5E4E2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
+              "name": "Juventus",
+              "count": "9",
+              "players": {
+                "21116": {
+                  "name": "Virginio Rosetta",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/virginio-rosetta/21116"
+                },
+                "21117": {
+                  "name": "Gianpiero Combi",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/gianpiero-combi/21117"
+                },
+                "21118": {
+                  "name": "Luigi Bertolini",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/luigi-bertolini/21118"
+                },
+                "21120": {
+                  "name": "Umberto Caligaris",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/umberto-caligaris/21120"
+                },
+                "21121": {
+                  "name": "Felice Borel",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/felice-borel/21121"
+                },
+                "21124": {
+                  "name": "Raimundo Orsi",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/raimundo-orsi/21124"
+                },
+                "21130": {
+                  "name": "Mario Varglien",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/mario-varglien/21130"
+                },
+                "21135": {
+                  "name": "Giovanni Ferrari",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/giovanni-ferrari/21135"
+                },
+                "21136": {
+                  "name": "Luis Monti",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/luis-monti/21136"
+                }
+              }
+            },
+            "58": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/58_imgbank_1683890729.png",
+              "name": "Bologna",
+              "count": "2",
+              "players": {
+                "21119": {
+                  "name": "Angelo Schiavio",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/angelo-schiavio/21119"
+                },
+                "21125": {
+                  "name": "Eraldo Monzeglio",
+                  "posicao": "Defesa",
+                  "link": "/jogador/eraldo-monzeglio/21125"
+                }
+              }
+            },
+            "65": {
+              "color": "71A6D2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/65_imgbank_1683890661.png",
+              "name": "Lazio",
+              "count": "1",
+              "players": {
+                "21123": {
+                  "name": "Fil\u00f3 Guarisi",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/filo-guarisi/21123"
+                }
+              }
+            },
+            "3735": {
+              "color": "4682B4",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3735_imgbank_1683890509.png",
+              "name": "Napoli",
+              "count": "1",
+              "players": {
+                "21126": {
+                  "name": "Giuseppe Cavanna",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/giuseppe-cavanna/21126"
+                }
+              }
+            },
+            "66": {
+              "color": "990012",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/66_imgbank_1683890642.png",
+              "name": "Milan",
+              "count": "1",
+              "players": {
+                "21127": {
+                  "name": "Pietro Arcari",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/pietro-arcari/21127"
+                }
+              }
+            },
+            "72": {
+              "color": "660000",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/72_imgbank_1683890624.png",
+              "name": "Roma",
+              "count": "3",
+              "players": {
+                "21128": {
+                  "name": "Enrico Guaita",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/enrico-guaita/21128"
+                },
+                "21129": {
+                  "name": "Guido Masetti",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/guido-masetti/21129"
+                },
+                "21131": {
+                  "name": "Attilio Ferraris",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/attilio-ferraris/21131"
+                }
+              }
+            },
+            "3726": {
+              "color": "3E2C64",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/3726_imgbank_1683890525.png",
+              "name": "Fiorentina",
+              "count": "1",
+              "players": {
+                "21133": {
+                  "name": "Mario Pizziolo",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/mario-pizziolo/21133"
                 }
               }
             }
@@ -107814,563 +108170,9 @@
               }
             }
           }
-        },
-        {
-          "id": "828",
-          "img": "https://www.zerozero.pt/img/logos/equipas/828_imgbank_flag.png",
-          "fk_continente": "1",
-          "name": "It\u00e1lia",
-          "teams": {
-            "63": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/63_imgbank_1683890698.png",
-              "name": "Internazionale",
-              "count": "4",
-              "players": {
-                "21115": {
-                  "name": "Armando Castellazzi",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/armando-castellazzi/21115"
-                },
-                "21122": {
-                  "name": "Luigi Allemandi",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/luigi-allemandi/21122"
-                },
-                "5759": {
-                  "name": "Giuseppe Meazza",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/giuseppe-meazza"
-                },
-                "21134": {
-                  "name": "Attilio Demar\u00eda",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/attilio-demaria/21134"
-                }
-              }
-            },
-            "64": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/64_imgbank_1698231613.png",
-              "name": "Juventus",
-              "count": "9",
-              "players": {
-                "21116": {
-                  "name": "Virginio Rosetta",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/virginio-rosetta/21116"
-                },
-                "21117": {
-                  "name": "Gianpiero Combi",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/gianpiero-combi/21117"
-                },
-                "21118": {
-                  "name": "Luigi Bertolini",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/luigi-bertolini/21118"
-                },
-                "21120": {
-                  "name": "Umberto Caligaris",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/umberto-caligaris/21120"
-                },
-                "21121": {
-                  "name": "Felice Borel",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/felice-borel/21121"
-                },
-                "21124": {
-                  "name": "Raimundo Orsi",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/raimundo-orsi/21124"
-                },
-                "21130": {
-                  "name": "Mario Varglien",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/mario-varglien/21130"
-                },
-                "21135": {
-                  "name": "Giovanni Ferrari",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/giovanni-ferrari/21135"
-                },
-                "21136": {
-                  "name": "Luis Monti",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/luis-monti/21136"
-                }
-              }
-            },
-            "58": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/58_imgbank_1683890729.png",
-              "name": "Bologna",
-              "count": "2",
-              "players": {
-                "21119": {
-                  "name": "Angelo Schiavio",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/angelo-schiavio/21119"
-                },
-                "21125": {
-                  "name": "Eraldo Monzeglio",
-                  "posicao": "Defesa",
-                  "link": "/jogador/eraldo-monzeglio/21125"
-                }
-              }
-            },
-            "65": {
-              "color": "71A6D2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/65_imgbank_1683890661.png",
-              "name": "Lazio",
-              "count": "1",
-              "players": {
-                "21123": {
-                  "name": "Fil\u00f3 Guarisi",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/filo-guarisi/21123"
-                }
-              }
-            },
-            "3735": {
-              "color": "4682B4",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3735_imgbank_1683890509.png",
-              "name": "Napoli",
-              "count": "1",
-              "players": {
-                "21126": {
-                  "name": "Giuseppe Cavanna",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/giuseppe-cavanna/21126"
-                }
-              }
-            },
-            "66": {
-              "color": "990012",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/66_imgbank_1683890642.png",
-              "name": "Milan",
-              "count": "1",
-              "players": {
-                "21127": {
-                  "name": "Pietro Arcari",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/pietro-arcari/21127"
-                }
-              }
-            },
-            "72": {
-              "color": "660000",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/72_imgbank_1683890624.png",
-              "name": "Roma",
-              "count": "3",
-              "players": {
-                "21128": {
-                  "name": "Enrico Guaita",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/enrico-guaita/21128"
-                },
-                "21129": {
-                  "name": "Guido Masetti",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/guido-masetti/21129"
-                },
-                "21131": {
-                  "name": "Attilio Ferraris",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/attilio-ferraris/21131"
-                }
-              }
-            },
-            "3726": {
-              "color": "3E2C64",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3726_imgbank_1683890525.png",
-              "name": "Fiorentina",
-              "count": "1",
-              "players": {
-                "21133": {
-                  "name": "Mario Pizziolo",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/mario-pizziolo/21133"
-                }
-              }
-            }
-          }
-        },
-        {
-          "id": "1145",
-          "img": "https://www.zerozero.pt/img/logos/equipas/1145_imgbank_flag.png",
-          "fk_continente": "1",
-          "name": "Checoslov\u00e1quia",
-          "teams": {
-            "151": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/151_imgbank_1687268354.png",
-              "name": "Slavia Praha",
-              "count": "12",
-              "players": {
-                "21076": {
-                  "name": "Rudolf Kr&#269;il",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/rudolf-krcil/21076"
-                },
-                "21077": {
-                  "name": "Ferdinand Dau&#269;\u00edk",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/ferdinand-daucik/21077"
-                },
-                "21081": {
-                  "name": "Anton\u00edn Vodicka",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/antonin-vodicka/21081"
-                },
-                "21083": {
-                  "name": "Ladislav \u008een\u00ed\u009aek",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/ladislav-zenisek/21083"
-                },
-                "21085": {
-                  "name": "Vlastimil Kopecky",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/vlastimil-kopecky/21085"
-                },
-                "21088": {
-                  "name": "Anton\u00edn Puc",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/antonin-puc/21088"
-                },
-                "21090": {
-                  "name": "Frantisek Svoboda",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/frantisek-svoboda/21090"
-                },
-                "21092": {
-                  "name": "Stefan Cambal",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/stefan-cambal/21092"
-                },
-                "21093": {
-                  "name": "Frantisek Pl\u00e1nicka",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/frantisek-planicka/21093"
-                },
-                "21095": {
-                  "name": "Adolf Simpersky",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/adolf-simpersky/21095"
-                },
-                "21096": {
-                  "name": "Frantisek Junek",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/frantisek-junek/21096"
-                },
-                "21097": {
-                  "name": "Jiri Sobotka",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/jiri-sobotka/21097"
-                }
-              }
-            },
-            "146": {
-              "color": "660000",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/146_imgbank_1687268491.png",
-              "name": "Sparta Praha",
-              "count": "7",
-              "players": {
-                "21078": {
-                  "name": "Jaroslav Burgr",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/jaroslav-burgr/21078"
-                },
-                "21079": {
-                  "name": "Oldrich Nejedly",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/oldrich-nejedly/21079"
-                },
-                "21080": {
-                  "name": "Erich Srbek",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/erich-srbek/21080"
-                },
-                "21082": {
-                  "name": "Jaroslav Boucek",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/jaroslav-boucek/21082"
-                },
-                "21086": {
-                  "name": "Gejza Kalocsay",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/gejza-kalocsay/21086"
-                },
-                "21091": {
-                  "name": "Josef Kost\u00e1lek",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/josef-kostalek/21091"
-                },
-                "21094": {
-                  "name": "Josef Ctyroky",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/josef-ctyroky/21094"
-                }
-              }
-            },
-            "70333": {
-              "color": "",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/33/70333_logo_teplitzer_fk.gif",
-              "name": "Teplitzer FK",
-              "count": "1",
-              "players": {
-                "21084": {
-                  "name": "Cestm\u00edr Patzel",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/cestmir-patzel/21084"
-                }
-              }
-            },
-            "3824": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/3824_imgbank_1686818633.png",
-              "name": "Nimes",
-              "count": "1",
-              "players": {
-                "21087": {
-                  "name": "Josef Silny",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/josef-silny/21087"
-                }
-              }
-            },
-            "2064": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2064_imgbank_1691158051.png",
-              "name": "Zbrojovka Brno",
-              "count": "1",
-              "players": {
-                "21089": {
-                  "name": "Frantisek Sterc",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/frantisek-sterc/21089"
-                }
-              }
-            }
-          }
         }
       ],
       "Uruguai 1930": [
-        {
-          "id": "814",
-          "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
-          "fk_continente": "4",
-          "name": "Argentina",
-          "teams": {
-            "2217": {
-              "color": "4682B4",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2217_imgbank_1686734471.png",
-              "name": "Racing Club",
-              "count": "3",
-              "players": {
-                "20747": {
-                  "name": "Fernando Paternoster",
-                  "posicao": "Defesa",
-                  "link": "/jogador/fernando-paternoster/20747"
-                },
-                "20759": {
-                  "name": "Jos\u00e9 Della Torre",
-                  "posicao": "Defesa",
-                  "link": "/jogador/jose-della-torre/20759"
-                },
-                "20760": {
-                  "name": "Natalio Perinetti",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/natalio-perinetti/20760"
-                }
-              }
-            },
-            "2220": {
-              "color": "990012",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2220_imgbank_1686734424.png",
-              "name": "San Lorenzo",
-              "count": "2",
-              "players": {
-                "21136": {
-                  "name": "Luis Monti",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/luis-monti/21136"
-                },
-                "20749": {
-                  "name": "Alberto Chividini",
-                  "posicao": "Defesa",
-                  "link": "/jogador/alberto-chividini/20749"
-                }
-              }
-            },
-            "1179": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/1179_imgbank_1686668524.png",
-              "name": "Boca Juniors",
-              "count": "4",
-              "players": {
-                "20750": {
-                  "name": "Roberto Cherro",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/roberto-cherro/20750"
-                },
-                "20754": {
-                  "name": "Ramon Mutis",
-                  "posicao": "Defesa",
-                  "link": "/jogador/ramon-mutis/20754"
-                },
-                "20757": {
-                  "name": "Pedro Su\u00e1rez",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/pedro-suarez/20757"
-                },
-                "20763": {
-                  "name": "Mario Evaristo",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/mario-evaristo/20763"
-                }
-              }
-            },
-            "2212": {
-              "color": "660000",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2212_imgbank_1686734497.png",
-              "name": "Lan\u00fas",
-              "count": "1",
-              "players": {
-                "20751": {
-                  "name": "Edmundo Piaggio",
-                  "posicao": "Defesa",
-                  "link": "/jogador/edmundo-piaggio/20751"
-                }
-              }
-            },
-            "72437": {
-              "color": "2D4C97",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/37/72437_logo_sportivo_palermo.png",
-              "name": "Sportivo Palermo",
-              "count": "2",
-              "players": {
-                "20752": {
-                  "name": "Juan Evaristo",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/juan-evaristo/20752"
-                },
-                "20753": {
-                  "name": "Adolfo Zumelz\u00fa",
-                  "posicao": "Defesa",
-                  "link": "/jogador/adolfo-zumelzu/20753"
-                }
-              }
-            },
-            "68045": {
-              "color": "800020",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/45/68045_logo_20210707165451_estudiantil_porteno.png",
-              "name": "Estudiantil Porte\u00f1o",
-              "count": "3",
-              "players": {
-                "20755": {
-                  "name": "Carlos Spadaro",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/carlos-spadaro/20755"
-                },
-                "21134": {
-                  "name": "Attilio Demar\u00eda",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/attilio-demaria/21134"
-                },
-                "20768": {
-                  "name": "Rodolfo Orlandini",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/rodolfo-orlandini/20768"
-                }
-              }
-            },
-            "9532": {
-              "color": "71A6D2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/32/9532_logo_argentino_quilmes.jpg",
-              "name": "Argentino de Quilmes",
-              "count": "1",
-              "players": {
-                "20756": {
-                  "name": "Juan Botasso",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/juan-botasso/20756"
-                }
-              }
-            },
-            "31952": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/52/31952_logo_sportivo_barracas.png",
-              "name": "Sportivo Barracas",
-              "count": "1",
-              "players": {
-                "20758": {
-                  "name": "Carlos Peucelle",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/carlos-peucelle/20758"
-                }
-              }
-            },
-            "2210": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2210_imgbank_1686734512.png",
-              "name": "Hurac\u00e1n",
-              "count": "1",
-              "players": {
-                "20762": {
-                  "name": "Guillermo St\u00e1bile",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/guillermo-stabile"
-                }
-              }
-            },
-            "45581": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/81/45581_logo_talleres_r_e_.gif",
-              "name": "Talleres-RdE",
-              "count": "1",
-              "players": {
-                "20764": {
-                  "name": "Angel Bossio",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/angel-bossio/20764"
-                }
-              }
-            },
-            "2209": {
-              "color": "2B3856",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2209_imgbank_1686734525.png",
-              "name": "Gimnasia",
-              "count": "1",
-              "players": {
-                "20765": {
-                  "name": "Pancho Varallo",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/pancho-varallo/20765"
-                }
-              }
-            },
-            "2208": {
-              "color": "AD1814",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2208_imgbank_1683207248.png",
-              "name": "Estudiantes",
-              "count": "2",
-              "players": {
-                "20766": {
-                  "name": "Manuel Ferreira",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/manuel-ferreira/20766"
-                },
-                "20767": {
-                  "name": "Alejandro Scopelli",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/alejandro-scopelli/20767"
-                }
-              }
-            }
-          }
-        },
         {
           "id": "936",
           "img": "https://www.zerozero.pt/img/logos/equipas/936_imgbank_flag.png",
@@ -109335,188 +109137,6 @@
           }
         },
         {
-          "id": "940",
-          "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
-          "fk_continente": "4",
-          "name": "Uruguai",
-          "teams": {
-            "2393": {
-              "color": "273E7C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2393_imgbank_1688026890.png",
-              "name": "Nacional",
-              "count": "8",
-              "players": {
-                "20864": {
-                  "name": "Jos\u00e9 Andrade",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/jose-andrade"
-                },
-                "20865": {
-                  "name": "Pedro Cea",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/pedro-cea/20865"
-                },
-                "20866": {
-                  "name": "Conduelo P\u00edriz",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/conduelo-piriz/20866"
-                },
-                "20867": {
-                  "name": "H\u00e9ctor Scarone",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/hector-scarone/20867"
-                },
-                "20871": {
-                  "name": "Hector Castro",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/hector-castro/20871"
-                },
-                "20878": {
-                  "name": "Santos Urdinaran",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/santos-urdinaran/20878"
-                },
-                "20882": {
-                  "name": "Emilio Recoba",
-                  "posicao": "Defesa",
-                  "link": "/jogador/emilio-recoba/20882"
-                },
-                "20884": {
-                  "name": "Pedro Petrone",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/pedro-petrone/20884"
-                }
-              }
-            },
-            "2384": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2384_imgbank_1688140929.png",
-              "name": "Bella Vista",
-              "count": "3",
-              "players": {
-                "20868": {
-                  "name": "Pablo Dorado",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/pablo-dorado/20868"
-                },
-                "20873": {
-                  "name": "\u00c1ngel Melogno",
-                  "posicao": "M\u00e9dio",
-                  "link": "/jogador/angel-melogno/20873"
-                },
-                "20883": {
-                  "name": "Jos\u00e9 Nasazzi",
-                  "posicao": "Defesa",
-                  "link": "/jogador/jose-nasazzi/20883"
-                }
-              }
-            },
-            "2395": {
-              "color": "FBB82E",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2395_imgbank_1688026854.png",
-              "name": "Pe\u00f1arol",
-              "count": "5",
-              "players": {
-                "20869": {
-                  "name": "Carlos Riolfo",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/carlos-riolfo/20869"
-                },
-                "20872": {
-                  "name": "Miguel Cappuccini",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/miguel-cappuccini/20872"
-                },
-                "20876": {
-                  "name": "Lorenzo Fern\u00e1ndez",
-                  "posicao": "Defesa",
-                  "link": "/jogador/lorenzo-fernandez/20876"
-                },
-                "20877": {
-                  "name": "\u00c1lvaro Gestido",
-                  "posicao": "Jogador de Campo",
-                  "link": "/jogador/alvaro-gestido/20877"
-                },
-                "20881": {
-                  "name": "Peregrino Anselmo",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/peregrino-anselmo/20881"
-                }
-              }
-            },
-            "2390": {
-              "color": "E5E4E2",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2390_imgbank_1688027246.png",
-              "name": "Montevideo Wanderers",
-              "count": "2",
-              "players": {
-                "20870": {
-                  "name": "Zoilo Saldombide",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/zoilo-saldombide/20870"
-                },
-                "20885": {
-                  "name": "Domingo Tejera",
-                  "posicao": "Defesa",
-                  "link": "/jogador/domingo-tejera/20885"
-                }
-              }
-            },
-            "2396": {
-              "color": "00703C",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/2396_imgbank_1688026770.png",
-              "name": "Racing",
-              "count": "1",
-              "players": {
-                "20874": {
-                  "name": "Victoriano Santos Iriarte",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/victoriano-santos-iriarte/20874"
-                }
-              }
-            },
-            "67135": {
-              "color": "",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/35/67135_logo_20190606101409_olimpia_montevideo.png",
-              "name": "Olimpia Montevideo",
-              "count": "1",
-              "players": {
-                "20875": {
-                  "name": "Ernesto Mascheroni",
-                  "posicao": "Defesa",
-                  "link": "/jogador/ernesto-mascheroni/20875"
-                }
-              }
-            },
-            "5788": {
-              "color": "005000",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/5788_imgbank_1688141884.png",
-              "name": "Rampla Juniors",
-              "count": "1",
-              "players": {
-                "20879": {
-                  "name": "Enrique Ballesteros",
-                  "posicao": "Guarda Redes",
-                  "link": "/jogador/enrique-ballesteros/20879"
-                }
-              }
-            },
-            "5787": {
-              "color": "101010",
-              "logo": "https://www.zerozero.pt//img/logos/equipas/5787_imgbank_1688141796.png",
-              "name": "Miramar Misiones",
-              "count": "1",
-              "players": {
-                "20880": {
-                  "name": "Juan Carlos Calvo",
-                  "posicao": "Avan\u00e7ado",
-                  "link": "/jogador/juan-carlos-calvo/20880"
-                }
-              }
-            }
-          }
-        },
-        {
           "id": "837",
           "img": "https://www.zerozero.pt/img/logos/equipas/837_imgbank_flag.png",
           "fk_continente": "1",
@@ -110450,9 +110070,405 @@
               }
             }
           }
+        },
+        {
+          "id": "940",
+          "img": "https://www.zerozero.pt/img/logos/equipas/940_imgbank_flag.png",
+          "fk_continente": "4",
+          "name": "Uruguai",
+          "teams": {
+            "2393": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2393_imgbank_1688026890.png",
+              "name": "Nacional",
+              "count": "8",
+              "players": {
+                "20864": {
+                  "name": "Jos\u00e9 Andrade",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/jose-andrade"
+                },
+                "20865": {
+                  "name": "Pedro Cea",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/pedro-cea/20865"
+                },
+                "20866": {
+                  "name": "Conduelo P\u00edriz",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/conduelo-piriz/20866"
+                },
+                "20867": {
+                  "name": "H\u00e9ctor Scarone",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/hector-scarone/20867"
+                },
+                "20871": {
+                  "name": "Hector Castro",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/hector-castro/20871"
+                },
+                "20878": {
+                  "name": "Santos Urdinaran",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/santos-urdinaran/20878"
+                },
+                "20882": {
+                  "name": "Emilio Recoba",
+                  "posicao": "Defesa",
+                  "link": "/jogador/emilio-recoba/20882"
+                },
+                "20884": {
+                  "name": "Pedro Petrone",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/pedro-petrone/20884"
+                }
+              }
+            },
+            "2384": {
+              "color": "E5E4E2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2384_imgbank_1688140929.png",
+              "name": "Bella Vista",
+              "count": "3",
+              "players": {
+                "20868": {
+                  "name": "Pablo Dorado",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/pablo-dorado/20868"
+                },
+                "20873": {
+                  "name": "\u00c1ngel Melogno",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/angel-melogno/20873"
+                },
+                "20883": {
+                  "name": "Jos\u00e9 Nasazzi",
+                  "posicao": "Defesa",
+                  "link": "/jogador/jose-nasazzi/20883"
+                }
+              }
+            },
+            "2395": {
+              "color": "FBB82E",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2395_imgbank_1688026854.png",
+              "name": "Pe\u00f1arol",
+              "count": "5",
+              "players": {
+                "20869": {
+                  "name": "Carlos Riolfo",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/carlos-riolfo/20869"
+                },
+                "20872": {
+                  "name": "Miguel Cappuccini",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/miguel-cappuccini/20872"
+                },
+                "20876": {
+                  "name": "Lorenzo Fern\u00e1ndez",
+                  "posicao": "Defesa",
+                  "link": "/jogador/lorenzo-fernandez/20876"
+                },
+                "20877": {
+                  "name": "\u00c1lvaro Gestido",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/alvaro-gestido/20877"
+                },
+                "20881": {
+                  "name": "Peregrino Anselmo",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/peregrino-anselmo/20881"
+                }
+              }
+            },
+            "2390": {
+              "color": "E5E4E2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2390_imgbank_1688027246.png",
+              "name": "Montevideo Wanderers",
+              "count": "2",
+              "players": {
+                "20870": {
+                  "name": "Zoilo Saldombide",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/zoilo-saldombide/20870"
+                },
+                "20885": {
+                  "name": "Domingo Tejera",
+                  "posicao": "Defesa",
+                  "link": "/jogador/domingo-tejera/20885"
+                }
+              }
+            },
+            "2396": {
+              "color": "00703C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2396_imgbank_1688026770.png",
+              "name": "Racing",
+              "count": "1",
+              "players": {
+                "20874": {
+                  "name": "Victoriano Santos Iriarte",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/victoriano-santos-iriarte/20874"
+                }
+              }
+            },
+            "67135": {
+              "color": "",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/35/67135_logo_20190606101409_olimpia_montevideo.png",
+              "name": "Olimpia Montevideo",
+              "count": "1",
+              "players": {
+                "20875": {
+                  "name": "Ernesto Mascheroni",
+                  "posicao": "Defesa",
+                  "link": "/jogador/ernesto-mascheroni/20875"
+                }
+              }
+            },
+            "5788": {
+              "color": "005000",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/5788_imgbank_1688141884.png",
+              "name": "Rampla Juniors",
+              "count": "1",
+              "players": {
+                "20879": {
+                  "name": "Enrique Ballesteros",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/enrique-ballesteros/20879"
+                }
+              }
+            },
+            "5787": {
+              "color": "101010",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/5787_imgbank_1688141796.png",
+              "name": "Miramar Misiones",
+              "count": "1",
+              "players": {
+                "20880": {
+                  "name": "Juan Carlos Calvo",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/juan-carlos-calvo/20880"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "814",
+          "img": "https://www.zerozero.pt/img/logos/equipas/814_imgbank_flag.png",
+          "fk_continente": "4",
+          "name": "Argentina",
+          "teams": {
+            "2217": {
+              "color": "4682B4",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2217_imgbank_1686734471.png",
+              "name": "Racing Club",
+              "count": "3",
+              "players": {
+                "20747": {
+                  "name": "Fernando Paternoster",
+                  "posicao": "Defesa",
+                  "link": "/jogador/fernando-paternoster/20747"
+                },
+                "20759": {
+                  "name": "Jos\u00e9 Della Torre",
+                  "posicao": "Defesa",
+                  "link": "/jogador/jose-della-torre/20759"
+                },
+                "20760": {
+                  "name": "Natalio Perinetti",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/natalio-perinetti/20760"
+                }
+              }
+            },
+            "2220": {
+              "color": "990012",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2220_imgbank_1686734424.png",
+              "name": "San Lorenzo",
+              "count": "2",
+              "players": {
+                "21136": {
+                  "name": "Luis Monti",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/luis-monti/21136"
+                },
+                "20749": {
+                  "name": "Alberto Chividini",
+                  "posicao": "Defesa",
+                  "link": "/jogador/alberto-chividini/20749"
+                }
+              }
+            },
+            "1179": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/1179_imgbank_1686668524.png",
+              "name": "Boca Juniors",
+              "count": "4",
+              "players": {
+                "20750": {
+                  "name": "Roberto Cherro",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/roberto-cherro/20750"
+                },
+                "20754": {
+                  "name": "Ramon Mutis",
+                  "posicao": "Defesa",
+                  "link": "/jogador/ramon-mutis/20754"
+                },
+                "20757": {
+                  "name": "Pedro Su\u00e1rez",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/pedro-suarez/20757"
+                },
+                "20763": {
+                  "name": "Mario Evaristo",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/mario-evaristo/20763"
+                }
+              }
+            },
+            "2212": {
+              "color": "660000",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2212_imgbank_1686734497.png",
+              "name": "Lan\u00fas",
+              "count": "1",
+              "players": {
+                "20751": {
+                  "name": "Edmundo Piaggio",
+                  "posicao": "Defesa",
+                  "link": "/jogador/edmundo-piaggio/20751"
+                }
+              }
+            },
+            "72437": {
+              "color": "2D4C97",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/37/72437_logo_sportivo_palermo.png",
+              "name": "Sportivo Palermo",
+              "count": "2",
+              "players": {
+                "20752": {
+                  "name": "Juan Evaristo",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/juan-evaristo/20752"
+                },
+                "20753": {
+                  "name": "Adolfo Zumelz\u00fa",
+                  "posicao": "Defesa",
+                  "link": "/jogador/adolfo-zumelzu/20753"
+                }
+              }
+            },
+            "68045": {
+              "color": "800020",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/45/68045_logo_20210707165451_estudiantil_porteno.png",
+              "name": "Estudiantil Porte\u00f1o",
+              "count": "3",
+              "players": {
+                "20755": {
+                  "name": "Carlos Spadaro",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/carlos-spadaro/20755"
+                },
+                "21134": {
+                  "name": "Attilio Demar\u00eda",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/attilio-demaria/21134"
+                },
+                "20768": {
+                  "name": "Rodolfo Orlandini",
+                  "posicao": "M\u00e9dio",
+                  "link": "/jogador/rodolfo-orlandini/20768"
+                }
+              }
+            },
+            "9532": {
+              "color": "71A6D2",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/32/9532_logo_argentino_quilmes.jpg",
+              "name": "Argentino de Quilmes",
+              "count": "1",
+              "players": {
+                "20756": {
+                  "name": "Juan Botasso",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/juan-botasso/20756"
+                }
+              }
+            },
+            "31952": {
+              "color": "273E7C",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/52/31952_logo_sportivo_barracas.png",
+              "name": "Sportivo Barracas",
+              "count": "1",
+              "players": {
+                "20758": {
+                  "name": "Carlos Peucelle",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/carlos-peucelle/20758"
+                }
+              }
+            },
+            "2210": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2210_imgbank_1686734512.png",
+              "name": "Hurac\u00e1n",
+              "count": "1",
+              "players": {
+                "20762": {
+                  "name": "Guillermo St\u00e1bile",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/guillermo-stabile"
+                }
+              }
+            },
+            "45581": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/81/45581_logo_talleres_r_e_.gif",
+              "name": "Talleres-RdE",
+              "count": "1",
+              "players": {
+                "20764": {
+                  "name": "Angel Bossio",
+                  "posicao": "Guarda Redes",
+                  "link": "/jogador/angel-bossio/20764"
+                }
+              }
+            },
+            "2209": {
+              "color": "2B3856",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2209_imgbank_1686734525.png",
+              "name": "Gimnasia",
+              "count": "1",
+              "players": {
+                "20765": {
+                  "name": "Pancho Varallo",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/pancho-varallo/20765"
+                }
+              }
+            },
+            "2208": {
+              "color": "AD1814",
+              "logo": "https://www.zerozero.pt//img/logos/equipas/2208_imgbank_1683207248.png",
+              "name": "Estudiantes",
+              "count": "2",
+              "players": {
+                "20766": {
+                  "name": "Manuel Ferreira",
+                  "posicao": "Avan\u00e7ado",
+                  "link": "/jogador/manuel-ferreira/20766"
+                },
+                "20767": {
+                  "name": "Alejandro Scopelli",
+                  "posicao": "Jogador de Campo",
+                  "link": "/jogador/alejandro-scopelli/20767"
+                }
+              }
+            }
+          }
         }
       ]
     }
   },
-  "timestamp": "1711107834"
+  "timestamp": "1711384838"
 }

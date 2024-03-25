@@ -83,7 +83,7 @@
     });
 
   function initInfoVis(raw) {
-    const data = dataPath ? accessObjectByString(raw, dataPath) : raw;
+    const data = dataPath ? filterByURLParams(accessObjectByString(raw, dataPath)) : filterByURLParams(raw);
     let graph = new TemporalGraph(data, graphConfigs);
     
     const outerPrefix = outerGroup.replace(' ', '-');
@@ -119,6 +119,47 @@
       });
       document.getElementById("controls-search").append(searchPlayers.render());
     }
+  }
+
+  function filterByURLParams(data) {
+    // Get the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const clusterIds = urlParams.get('cluster')?.split(',');
+    const detailIds = urlParams.get('detail')?.split(',');
+
+    if (!clusterIds && !detailIds) {
+      return data;
+    }
+
+    // Filter the data based on the ids received by url
+    const filteredData = {};
+    Object.entries(data).forEach(([time, timeslice]) => {
+      
+      const filteredOuters = [];
+      timeslice.forEach((outer) => {
+
+        const filteredClusters = {};
+        Object.entries(outer[clusterGroup]).forEach(([clusterId, cluster]) => {
+          if (clusterIds && !clusterIds.includes(clusterId)) return;
+          
+          const filteredDetails = {};
+          Object.entries(cluster[detailGroup]).forEach(([detailId, detail]) => {
+            if (detailIds && !detailIds.includes(detailId)) return;
+            filteredDetails[detailId] = detail;
+          });
+
+          if (Object.keys(filteredDetails).length > 0) {
+            filteredClusters[clusterId] = {...cluster, [detailGroup]: filteredDetails};
+          }
+        });
+
+        filteredOuters.push({...outer, [clusterGroup]: filteredClusters});
+      });
+
+      filteredData[time] = filteredOuters;
+    });
+
+    return filteredData;
   }
 </script>
 

@@ -66,6 +66,7 @@
   const graphConfigs = <?php echo $graphConfigs ?>;
   graphConfigs.graphClickCallback = () => {
     document.getElementById("controls-exchange").style.visibility = "visible";
+    if (window.innerWidth < 768) exchangeGraphs(true);
   }
 
   // Fetch the data
@@ -122,13 +123,14 @@
 </script>
 
 <script>
-  function exchangeGraphs() {
+  function exchangeGraphs(focusDetails = false) {
     const clusterGraph = document.getElementById("graph-container");
     const detailsGraph = document.getElementById("details-container");
+    
     if (clusterGraph && clusterGraph.classList.contains("vis-main-graph")) {
       clusterGraph.classList.remove("vis-main-graph");
       detailsGraph.classList.add("vis-main-graph");
-    } else if (detailsGraph && detailsGraph.classList.contains("vis-main-graph")) {
+    } else if (detailsGraph && detailsGraph.classList.contains("vis-main-graph") && !focusDetails) {
       detailsGraph.classList.remove("vis-main-graph");
       clusterGraph.classList.add("vis-main-graph");
     }

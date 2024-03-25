@@ -120,8 +120,8 @@ export class Graph {
     });
 
     simulation.force("text", d3.bboxCollide(d => {
-      const dx = this.backupInfo[d.id].width / 2;
-      const dy = this.backupInfo[d.id].height / 2;
+      const dx = this.backupInfo[d.id].width / 2 + 2;
+      const dy = this.backupInfo[d.id].height / 2 + 2;
       return [[-dx, -dy], [dx, dy]];
     }).strength(0.1).iterations(1));
 

@@ -66,7 +66,7 @@
   const graphConfigs = <?php echo $graphConfigs ?>;
   graphConfigs.graphClickCallback = () => {
     document.getElementById("controls-exchange").style.visibility = "visible";
-    if (window.innerWidth < 768) exchangeGraphs(true);
+    if (window.matchMedia("(max-width: 768px)").matches) exchangeGraphs(true);
   }
 
   // Fetch the data

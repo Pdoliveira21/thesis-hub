@@ -33,9 +33,8 @@ export const dictionary = {
         6: { label: "Oceânia", color: "#da0012" },
       },
     },
-    posicao: {
-      label: "Posição",
-      options: {},
-    },
+    posicao: { label: "Posição", options: {} },
+    continente: { label: "Continente", options: {} },
+    country: { label: "País", options: {} },
   },
 };

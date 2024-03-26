@@ -286,11 +286,11 @@ export class DetailGraph extends Graph {
       .on("click", (event, d) => this.clicked(event, d, focus))
       .on("mouseenter", (_, d) => {
         this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
-        this.mouseEnter(d, focus);
+        this.displayNodeCluster(d, focus);
       })
       .on("mouseleave", () => {
         this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
-        this.mouseLeave();
+        this.removeNodeCluster();
       });
     
     this.link = this.link
@@ -362,15 +362,30 @@ export class DetailGraph extends Graph {
   }
 
   // Update the cluster corner image and text to match the node being hovered.
-  mouseEnter(d, focus) {
-    if (focus.group !== this.outerGroup || this.dragging === true) return;
-    this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
-    this.cluster.select("text").text(d.clusterInfo?.name || "");
+  displayNodeCluster(d, focus) {
+    if (this.dragging === true) return;
+
+    if (focus.group === this.outerGroup && d.group === this.innerGroup) {
+      this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
+      this.cluster.select("text").text(d.clusterInfo?.name || "");
+      this.cluster.attr("display", "inherit");
+    }
+
+    if (focus.group !== this.outerGroup && d.group === this.outerGroup) {
+      const count = this.link.data().filter(l => l.source === d || l.target === d).length;
+      if (count <= 0) return;
+
+      this.cluster.select("image").attr("href", "");
+      this.cluster.select("text").text(`receives ${count} players`);
+      this.cluster.attr("display", "inherit");
+    }
   }
 
   // Reset the cluster corner image and text when the mouse leaves the node.
-  mouseLeave() {
+  removeNodeCluster() {
     if (this.dragging === true) return;
+    
+    this.cluster.attr("display", "none");
     this.cluster.select("image").attr("href", "");
     this.cluster.select("text").text("");
   }

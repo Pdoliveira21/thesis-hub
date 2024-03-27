@@ -12,7 +12,7 @@
 
     $title = "Percurso de Jogadores em Seleções e Equipas ao Longo do Tempo";
     $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30";
-    $cacheFile = "./data/world-cups.json";
+    // $endpoint = "data/asd.json";
     $dataPath = "data.seasons";
 
     $defaultSort = "fk_continente";

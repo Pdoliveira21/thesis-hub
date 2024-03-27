@@ -52,8 +52,23 @@
   import { accessObjectByString } from "<?php echo $includePath.'/utils/Utils.js'; ?>";
   import { dictionary } from "<?php echo $includePath.'/utils/Dictionary.js'; ?>";
 
+  <?php 
+    // Cache the data in a json file
+    if (!isset($cacheFile)) {
+      $cacheFile = $endpoint;
+    } else {
+      $forceUpdate = isset($_GET['clean']) && $_GET['clean'] == 1;
+      $fileExpires = 60 * 60 * 24;
+
+      if (!file_exists($cacheFile) || (time() - filemtime($cacheFile)) > $fileExpires || $forceUpdate) {
+        $response = file_get_contents($endpoint);
+        file_put_contents($cacheFile, $response);
+      }
+    }
+  ?>
+
   // Passes PHP variables to JavaScript
-  const endpoint = "<?php echo $endpoint ?>";
+  const cacheFile = "<?php echo $cacheFile ?>";
   const dataPath = "<?php echo $dataPath ?>";
 
   const outerGroup = "<?php echo $outerGroup ?>";
@@ -71,7 +86,7 @@
 
   // Fetch the data
   document.querySelector("#controls-loading p").textContent = dictionary.loading_data;
-  fetch(endpoint)
+  fetch(cacheFile)
     .then(response => response.json())
     .then(data => {
       initInfoVis(data);

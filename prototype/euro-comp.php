@@ -12,6 +12,7 @@
 
     $title = "Campeonatos da Europa";
     $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/29";
+    $cacheFile = "./data/euro-comp.json";
     $dataPath = "data.seasons";
 
     $defaultSort = "fk_continente";

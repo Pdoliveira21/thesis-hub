@@ -1,4 +1,4 @@
-import { circunferencePosition } from "./../utils/Utils.js";
+import { circunferencePosition, isTouchDevice } from "./../utils/Utils.js";
 
 /**
  * @class Graph
@@ -16,6 +16,7 @@ export class Graph {
     this.nodeSize = nodeSize;
     this.nodeSpace = nodeSpace;
 
+    this.isTouchDevice = isTouchDevice();
     this.dragging = false;
     this.separating = false;
     this.nodeOpacity = 1.0;

@@ -281,17 +281,15 @@ export class DetailGraph extends Graph {
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation, this.outerRadius));
 
-    this.node
-      .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))
-      .on("click", (event, d) => this.clicked(event, d, focus))
-      // .on("mouseenter", (_, d) => {
-      //   this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
-      //   this.mouseEnter(d, focus);
-      // })
-      // .on("mouseleave", () => {
-      //   this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
-      //   this.mouseLeave();
-      // });
+    if (this.isTouchDevice) {
+      this.node.on("click", (event, d) => this.#touchClick(event, d, focus));
+    } else {
+      this.node
+        .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))      
+        .on("click", (event, d) => this.#clickNode(event, d, focus))
+        .on("mouseenter", (_, d) => this.#highlighNode(d, focus))
+        .on("mouseleave", () => this.#unhighlightNode());
+    }
     
     this.link = this.link
       .data(links, d => d.id)
@@ -345,11 +343,35 @@ export class DetailGraph extends Graph {
 
   // Call the clickNodeCallback function with the node data when an outer node is clicked.
   // Open the link of the node in a new browser tab when an inner node is clicked.
-  clicked(event, d, focus) {
+  #clickNode(event, d, focus) {
     if (!event || !event.isTrusted) return;
 
-    // (TODO): only use this solution where there is only touch events,
+    if (d.group === this.outerGroup && "function" === typeof this.clickNodeCallback) {
+      if (d.id === focus?.id) return;
 
+      const clickedNode = this.node.filter(n => n.id === d.id).node();
+      if (clickedNode !== null) {
+        clickedNode.dispatchEvent(new MouseEvent("mouseleave")); // TODO: check this in firefox.
+        this.clickNodeCallback(d);
+      }
+    } else if (d.group === this.innerGroup && d.link !== "") {
+      window.open(`https://www.zerozero.pt${d.link}`, "_blank");
+    }
+  }
+
+  // Highlight the node and its links when focusing on the node.
+  #highlighNode(d, focus) {
+    this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
+    this.mouseEnter(d, focus);
+  }
+
+  // Unhighlight the node and its links when the focus is removed from the node.
+  #unhighlightNode() {
+    this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+    this.mouseLeave();
+  }
+  
+  #touchClick(event, d, focus) {
     // Remove the timeout that assigns null to the previous click.
     if (this.previousTimeout) {
       clearTimeout(this.previousTimeout);
@@ -359,29 +381,15 @@ export class DetailGraph extends Graph {
     const isConnected = this.connected(d, this.link.data());
     if ((this.previousClick && this.previousClick === d.id) || (!isConnected)) {
       this.previousClick = null;
-
-      if (d.group === this.outerGroup && "function" === typeof this.clickNodeCallback) {
-        if (d.id === focus?.id) return;
-  
-        const clickedNode = this.node.filter(n => n.id === d.id).node();
-        if (clickedNode !== null) {
-          clickedNode.dispatchEvent(new MouseEvent("mouseleave")); // TODO: check this in firefox.
-          this.clickNodeCallback(d);
-        }
-      } else if (d.group === this.innerGroup && d.link !== "") {
-        window.open(`https://www.zerozero.pt${d.link}`, "_blank");
-      }
-
+      this.#clickNode(event, d, focus);
     } else {
       this.previousClick = d.id;
-      this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
-      this.mouseEnter(d, focus);
+      this.#highlighNode(d, focus);
 
       // Remove the highlight on user next click (before any other handler).
       document.addEventListener("click", () => {
         this.previousTimeout = setTimeout(() => this.previousClick = null, 100);
-        this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
-        this.mouseLeave();
+        this.#unhighlightNode();
       }, { capture: true, once: true });
     }
   }

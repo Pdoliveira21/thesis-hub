@@ -287,7 +287,10 @@ export class DetailGraph extends Graph {
       this.node
         .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))      
         .on("click", (event, d) => this.#clickNode(event, d, focus))
-        .on("mouseenter", (_, d) => this.#highlighNode(d, focus))
+        .on("mouseenter", (event, d) => {
+          if (!event || !event.relatedTarget || event.relatedTarget.tagName !== "svg") return; // To avoid misleading mouseenter events (primarily in Firefox).
+          this.#highlighNode(d, focus);
+        })
         .on("mouseleave", () => this.#unhighlightNode());
     }
     
@@ -351,7 +354,7 @@ export class DetailGraph extends Graph {
 
       const clickedNode = this.node.filter(n => n.id === d.id).node();
       if (clickedNode !== null) {
-        clickedNode.dispatchEvent(new MouseEvent("mouseleave")); // TODO: check this in firefox.
+        if (!this.isTouchDevice) clickedNode.dispatchEvent(new MouseEvent("mouseleave"));
         this.clickNodeCallback(d);
       }
     } else if (d.group === this.innerGroup && d.link !== "") {
@@ -362,13 +365,13 @@ export class DetailGraph extends Graph {
   // Highlight the node and its links when focusing on the node.
   #highlighNode(d, focus) {
     this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
-    this.mouseEnter(d, focus);
+    this.displayCluster(d, focus);
   }
 
   // Unhighlight the node and its links when the focus is removed from the node.
   #unhighlightNode() {
     this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
-    this.mouseLeave();
+    this.hideCluster();
   }
   
   #touchClick(event, d, focus) {
@@ -395,15 +398,17 @@ export class DetailGraph extends Graph {
   }
 
   // Update the cluster corner image and text to match the node being hovered.
-  mouseEnter(d, focus) {
+  displayCluster(d, focus) {
     if (focus.group !== this.outerGroup || this.dragging === true) return;
     this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
     this.cluster.select("text").text(d.clusterInfo?.name || "");
+    this.cluster.attr("display", "inherit");
   }
 
   // Reset the cluster corner image and text when the mouse leaves the node.
-  mouseLeave() {
+  hideCluster() {
     if (this.dragging === true) return;
+    this.cluster.attr("display", "none");
     this.cluster.select("image").attr("href", "");
     this.cluster.select("text").text("");
   }

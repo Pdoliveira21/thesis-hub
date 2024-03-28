@@ -59,8 +59,10 @@ export class Graph {
       if (distance > maxDistance) {
         // Manually trigger mouseup event to stop dragging and mouseleave to unhighlight nodes.
         const node = d3.select(this).node();
-        node.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, view: window }));
-        node.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true, view: window }));
+        if (!self.isTouchDevice) {
+          node.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, view: window }));
+          node.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true, view: window }));
+        }
       } else {
         d.fx = event.x;
         d.fy = event.y;

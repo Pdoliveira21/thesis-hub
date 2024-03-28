@@ -284,14 +284,14 @@ export class DetailGraph extends Graph {
     this.node
       .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))
       .on("click", (event, d) => this.clicked(event, d, focus))
-      .on("mouseenter", (_, d) => {
-        this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
-        this.mouseEnter(d, focus);
-      })
-      .on("mouseleave", () => {
-        this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
-        this.mouseLeave();
-      });
+      // .on("mouseenter", (_, d) => {
+      //   this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
+      //   this.mouseEnter(d, focus);
+      // })
+      // .on("mouseleave", () => {
+      //   this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+      //   this.mouseLeave();
+      // });
     
     this.link = this.link
       .data(links, d => d.id)
@@ -348,16 +348,41 @@ export class DetailGraph extends Graph {
   clicked(event, d, focus) {
     if (!event || !event.isTrusted) return;
 
-    if (d.group === this.outerGroup && "function" === typeof this.clickNodeCallback) {
-      if (d.id === focus?.id) return;
+    // (TODO): only use this solution where there is only touch events,
 
-      const clickedNode = this.node.filter(n => n.id === d.id).node();
-      if (clickedNode !== null) {
-        clickedNode.dispatchEvent(new MouseEvent("mouseleave"));
-        this.clickNodeCallback(d);
+    // Remove the timeout that assigns null to the previous click.
+    if (this.previousTimeout) {
+      clearTimeout(this.previousTimeout);
+      this.previousTimeout = null;
+    }
+
+    const isConnected = this.connected(d, this.link.data());
+    if ((this.previousClick && this.previousClick === d.id) || (!isConnected)) {
+      this.previousClick = null;
+
+      if (d.group === this.outerGroup && "function" === typeof this.clickNodeCallback) {
+        if (d.id === focus?.id) return;
+  
+        const clickedNode = this.node.filter(n => n.id === d.id).node();
+        if (clickedNode !== null) {
+          clickedNode.dispatchEvent(new MouseEvent("mouseleave")); // TODO: check this in firefox.
+          this.clickNodeCallback(d);
+        }
+      } else if (d.group === this.innerGroup && d.link !== "") {
+        window.open(`https://www.zerozero.pt${d.link}`, "_blank");
       }
-    } else if (d.group === this.innerGroup && d.link !== "") {
-      window.open(`https://www.zerozero.pt${d.link}`, "_blank");
+
+    } else {
+      this.previousClick = d.id;
+      this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
+      this.mouseEnter(d, focus);
+
+      // Remove the highlight on user next click (before any other handler).
+      document.addEventListener("click", () => {
+        this.previousTimeout = setTimeout(() => this.previousClick = null, 100);
+        this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+        this.mouseLeave();
+      }, { capture: true, once: true });
     }
   }
 

@@ -107,7 +107,7 @@ export class TemporalGraph {
           
           if (!groupsSet.has(groupId)) {
             groupsSet.add(groupId);
-            nodes.cluster.push({id: `C-${groupId}`, name: groupName, img: groupLogo, color: groupColor, ...this.#parseObject(group, ["name", "logo", "img", "color", this.detailGroup]), group: this.clusterGroup, supergroups: [`O-${supergroup.id}`], elements: elementsId});
+            nodes.cluster.push({id: `C-${groupId}`, name: groupName, img: groupLogo, color: groupColor, ...this.#parseObject(group, ["id", "name", "logo", "img", "color", this.detailGroup]), group: this.clusterGroup, supergroups: [`O-${supergroup.id}`], elements: elementsId});
           } else {
             const index = nodes.cluster.findIndex(d => d.id === `C-${groupId}`);
             nodes.cluster[index].supergroups.push(`O-${supergroup.id}`);
@@ -124,7 +124,7 @@ export class TemporalGraph {
             }
 
             elementsSet.add(elementId);
-            nodes.detail.push({id: `E-${elementId}`, ...this.#parseObject(element), color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, clusterInfo: {name: groupName, img: groupLogo}, supergroup: `O-${supergroup.id}`});
+            nodes.detail.push({id: `E-${elementId}`, ...this.#parseObject(element, ["id"]), color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, clusterInfo: {name: groupName, img: groupLogo}, supergroup: `O-${supergroup.id}`});
             links.detail.push({id: `E-${elementId}-O-${supergroup.id}`, source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
           });
         });

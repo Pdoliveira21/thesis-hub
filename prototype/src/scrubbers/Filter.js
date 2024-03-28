@@ -50,6 +50,7 @@ export class Filter {
       const select = document.createElement("select");
       select.id = fieldId;
       select.name = field;
+      select.autocomplete = "off";
       select.classList.add("control-dropdown");
       select.addEventListener("change", this.onChange.bind(this));
 

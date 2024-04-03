@@ -288,7 +288,7 @@ export class DetailGraph extends Graph {
         .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))      
         .on("click", (event, d) => this.#clickNode(event, d, focus))
         .on("mouseenter", (event, d) => {
-          if (!event || !event.relatedTarget || event.relatedTarget.tagName !== "svg") return; // To avoid misleading mouseenter events (primarily in Firefox).
+          if (!event || !event.relatedTarget || event.relatedTarget.tagName === "SPAN") return; // To avoid misleading mouseenter events (primarily in Firefox).
           this.#highlighNode(d, focus);
         })
         .on("mouseleave", () => this.#unhighlightNode());

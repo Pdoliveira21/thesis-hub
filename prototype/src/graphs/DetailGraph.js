@@ -412,7 +412,7 @@ export class DetailGraph extends Graph {
       if (count <= 0) return;
 
       this.cluster.select("image").attr("href", "");
-      this.cluster.select("text").text(`receives ${count} players`);
+      this.cluster.select("text").text(`${count} \u2192 ${d.name}`);
       this.cluster.attr("display", "inherit");
     }
   }

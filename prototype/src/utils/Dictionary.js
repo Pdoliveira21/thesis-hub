@@ -19,6 +19,13 @@ export const dictionary = {
   error_loading_data: "Erro ao carregar informações.",
   discarding_filters: "sem considerar os filtros",
 
+  // Groups (translate dataset groups to human readable labels)
+  dataset_groups: {
+    "players": "Jogadores",
+    "teams": "Equipas",
+    "national teams": "Seleções",
+  },
+
   // Fields (translate dataset fields to human readable labels and options)
   dataset_fields: {
     name: "Nome",

@@ -402,18 +402,28 @@ export class ClusterGraph extends Graph {
     }
   }
 
+  #infocardContent(d, neighbors) {
+    const total = neighbors.reduce((acc, l) => acc + l.value, 0);
+    const direction = d.group === this.innerGroup ? "\u2192" : "\u2190";
+    const entity = dictionary.dataset_groups[d.group === this.innerGroup ? this.outerGroup : this.innerGroup];
+    
+    return [
+      `${d.name}`,
+      `${total} ${direction} ${neighbors.length} ${entity}`,
+    ];
+  }
+
+  // Update the infocard with the information of the node.
   displayInfocard(d) {
     if (this.dragging === true) return;
     
     const neighbors = this.link.data().filter(l => l.source === d || l.target === d);
     if (neighbors.lengt <= 0) return;
-    const phrases = [
-      `${d.group === this.innerGroup ? "gives" : "receives"} ${neighbors.reduce((acc, l) => acc + l.value, 0)} players`,
-      `${d.group === this.innerGroup ? "to" : "from"} ${neighbors.length} ${d.group === this.innerGroup ? this.outerGroup : this.innerGroup}`,
-    ];
-    
+
+    const phrases = this.#infocardContent(d, neighbors);
     const text = this.infocard.select("text");
     text.attr("y", (phrases.length - 1) * -1.4 + "em");
+
     phrases.forEach((phrase) => {
       text.append("tspan")
         .attr("x", -5)
@@ -422,6 +432,7 @@ export class ClusterGraph extends Graph {
     });
   }
 
+  // Reset the infocard content.
   removeInfocard() {
     if (this.dragging === true) return;
     this.infocard.select("text").selectAll("tspan").remove();

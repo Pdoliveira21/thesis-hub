@@ -310,12 +310,16 @@ export class ClusterGraph extends Graph {
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation, this.outerRadius));
 
-    this.node
-      .classed("node-clickable", true)
-      .on("click", (event, d) => this.clicked(event, d))
-      .on("mouseenter", (_, d) => this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup))
-      .on("mouseleave", () => this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this)));
-
+    if (this.isTouchDevice) {
+      this.node.on("click", (event, d) => this.#touchClick(event, d));
+    } else {
+      this.node
+        .classed("node-clickable", true)
+        .on("click", (event, d) => this.#clickNode(event, d))
+        .on("mouseenter", (_, d) => this.#highlighNode(d))
+        .on("mouseleave", () => this.#unhighlightNode());
+    }
+      
     this.link = this.link
       .data(links, d => d.id)
       .join(
@@ -342,15 +346,48 @@ export class ClusterGraph extends Graph {
       }
     });
   }
-  
-  // Click event handler for the nodes.
-  clicked(event, d) {
+
+  // Call the click node callback when a node is clicked.
+  #clickNode(event, d) {
     if (!event || "function" !== typeof this.clickNodeCallback) return;
-    
+
     this.clickNodeCallback(d);
     // Trigger the tick event of nodes not draggable when simulation is already stoped.
     if (d.group === this.outerGroup && this.simulation.alpha() < 0.05) {
       this.simulation.alpha(0.05).restart();
+    }
+  }
+
+  // Highlight the node and its links when focusing on the node.
+  #highlighNode(d) {
+    this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
+  }
+
+  // Unhighlight the node and its links when the focus is removed from the node.
+  #unhighlightNode() {
+    this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+  }
+  
+  // Click event handler for the nodes on touch devices.
+  #touchClick(event, d) {
+    // Remove the timeout that assigns null to the previous click.
+    if (this.previousTimeout) {
+      clearTimeout(this.previousTimeout);
+      this.previousTimeout = null;
+    }
+
+    if ((this.previousClick && this.previousClick === d.id) || (!event.isTrusted)) {
+      this.previousClick = null;
+      this.#clickNode(event, d);
+    } else {
+      this.previousClick = d.id;
+      this.#highlighNode(d);
+
+      // Remove the highlight on user next click (before any other handler).
+      document.addEventListener("click", () => {
+        this.previousTimeout = setTimeout(() => this.previousClick = null, 100);
+        this.#unhighlightNode();
+      }, { capture: true, once: true });
     }
   }
 

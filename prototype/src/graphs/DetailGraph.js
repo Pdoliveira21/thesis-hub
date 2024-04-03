@@ -399,10 +399,22 @@ export class DetailGraph extends Graph {
 
   // Update the cluster corner image and text to match the node being hovered.
   displayCluster(d, focus) {
-    if (focus.group !== this.outerGroup || this.dragging === true) return;
-    this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
-    this.cluster.select("text").text(d.clusterInfo?.name || "");
-    this.cluster.attr("display", "inherit");
+    if (this.dragging === true) return;
+
+    if (focus.group === this.outerGroup && d.group === this.innerGroup) {
+      this.cluster.select("image").attr("href", d.clusterInfo?.img || "");
+      this.cluster.select("text").text(d.clusterInfo?.name || "");
+      this.cluster.attr("display", "inherit");
+    }
+
+    if (focus.group !== this.outerGroup && d.group === this.outerGroup) {
+      const count = this.link.data().filter(l => l.source === d || l.target === d).length;
+      if (count <= 0) return;
+
+      this.cluster.select("image").attr("href", "");
+      this.cluster.select("text").text(`${count} \u2192 ${d.name}`);
+      this.cluster.attr("display", "inherit");
+    }
   }
 
   // Reset the cluster corner image and text when the mouse leaves the node.

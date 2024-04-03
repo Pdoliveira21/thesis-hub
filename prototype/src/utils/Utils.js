@@ -76,3 +76,11 @@ export function decodeWindows1252(str) {
 
   return new TextDecoder('windows-1252').decode(buffer);
 }
+
+/**
+ * Detect whether the device is a touch device.
+ * @returns {boolean} True if the device is a touch device, false otherwise.
+ */
+export function isTouchDevice() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints;
+}

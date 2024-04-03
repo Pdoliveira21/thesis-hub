@@ -1,4 +1,4 @@
-import { circunferencePosition } from "./../utils/Utils.js";
+import { circunferencePosition, isTouchDevice } from "./../utils/Utils.js";
 
 /**
  * @class Graph
@@ -16,6 +16,7 @@ export class Graph {
     this.nodeSize = nodeSize;
     this.nodeSpace = nodeSpace;
 
+    this.isTouchDevice = isTouchDevice();
     this.dragging = false;
     this.separating = false;
     this.nodeOpacity = 1.0;
@@ -58,8 +59,10 @@ export class Graph {
       if (distance > maxDistance) {
         // Manually trigger mouseup event to stop dragging and mouseleave to unhighlight nodes.
         const node = d3.select(this).node();
-        node.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, view: window }));
-        node.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true, view: window }));
+        if (!self.isTouchDevice) {
+          node.dispatchEvent(new MouseEvent("mouseup", { bubbles: true, view: window }));
+          node.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true, view: window }));
+        }
       } else {
         d.fx = event.x;
         d.fy = event.y;

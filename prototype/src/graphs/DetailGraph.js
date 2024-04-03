@@ -281,17 +281,18 @@ export class DetailGraph extends Graph {
     this.node.filter(d => d.group === this.innerGroup)
       .call(this.drag(this.simulation, this.outerRadius));
 
-    this.node
-      .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))
-      .on("click", (event, d) => this.clicked(event, d, focus))
-      .on("mouseenter", (_, d) => {
-        this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
-        this.displayNodeCluster(d, focus);
-      })
-      .on("mouseleave", () => {
-        this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
-        this.removeNodeCluster();
-      });
+    if (this.isTouchDevice) {
+      this.node.on("click", (event, d) => this.#touchClick(event, d, focus));
+    } else {
+      this.node
+        .classed("node-clickable", d => (d.group === this.outerGroup && d.id !== focus.id) || (d.link !== undefined && d.link !== ""))      
+        .on("click", (event, d) => this.#clickNode(event, d, focus))
+        .on("mouseenter", (event, d) => {
+          if (!event || !event.relatedTarget || event.relatedTarget.tagName === "SPAN") return; // To avoid misleading mouseenter events (primarily in Firefox).
+          this.#highlighNode(d, focus);
+        })
+        .on("mouseleave", () => this.#unhighlightNode());
+    }
     
     this.link = this.link
       .data(links, d => d.id)
@@ -345,7 +346,7 @@ export class DetailGraph extends Graph {
 
   // Call the clickNodeCallback function with the node data when an outer node is clicked.
   // Open the link of the node in a new browser tab when an inner node is clicked.
-  clicked(event, d, focus) {
+  #clickNode(event, d, focus) {
     if (!event || !event.isTrusted) return;
 
     if (d.group === this.outerGroup && "function" === typeof this.clickNodeCallback) {
@@ -353,7 +354,7 @@ export class DetailGraph extends Graph {
 
       const clickedNode = this.node.filter(n => n.id === d.id).node();
       if (clickedNode !== null) {
-        clickedNode.dispatchEvent(new MouseEvent("mouseleave"));
+        if (!this.isTouchDevice) clickedNode.dispatchEvent(new MouseEvent("mouseleave"));
         this.clickNodeCallback(d);
       }
     } else if (d.group === this.innerGroup && d.link !== "") {
@@ -361,8 +362,43 @@ export class DetailGraph extends Graph {
     }
   }
 
+  // Highlight the node and its links when focusing on the node.
+  #highlighNode(d, focus) {
+    this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
+    this.displayCluster(d, focus);
+  }
+
+  // Unhighlight the node and its links when the focus is removed from the node.
+  #unhighlightNode() {
+    this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+    this.hideCluster();
+  }
+  
+  #touchClick(event, d, focus) {
+    // Remove the timeout that assigns null to the previous click.
+    if (this.previousTimeout) {
+      clearTimeout(this.previousTimeout);
+      this.previousTimeout = null;
+    }
+
+    const isConnected = this.connected(d, this.link.data());
+    if ((this.previousClick && this.previousClick === d.id) || (!isConnected)) {
+      this.previousClick = null;
+      this.#clickNode(event, d, focus);
+    } else {
+      this.previousClick = d.id;
+      this.#highlighNode(d, focus);
+
+      // Remove the highlight on user next click (before any other handler).
+      document.addEventListener("click", () => {
+        this.previousTimeout = setTimeout(() => this.previousClick = null, 100);
+        this.#unhighlightNode();
+      }, { capture: true, once: true });
+    }
+  }
+
   // Update the cluster corner image and text to match the node being hovered.
-  displayNodeCluster(d, focus) {
+  displayCluster(d, focus) {
     if (this.dragging === true) return;
 
     if (focus.group === this.outerGroup && d.group === this.innerGroup) {
@@ -382,9 +418,8 @@ export class DetailGraph extends Graph {
   }
 
   // Reset the cluster corner image and text when the mouse leaves the node.
-  removeNodeCluster() {
+  hideCluster() {
     if (this.dragging === true) return;
-    
     this.cluster.attr("display", "none");
     this.cluster.select("image").attr("href", "");
     this.cluster.select("text").text("");

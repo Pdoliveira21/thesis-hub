@@ -68,6 +68,15 @@ export class ClusterGraph extends Graph {
         .attr("stroke", "#fff")
         .attr("stroke-width", 3)
         .attr("stroke-opacity", 0.3);
+
+    this.infocard = this.svg.append("g")
+        .attr("transform", `translate(${this.width / 2 - 20}, ${this.height / 2 - 40})`);
+    
+    this.infocard.append("text")
+        .attr("x", -5)
+        .attr("y", 0)
+        .attr("dy", 0)
+        .attr("text-anchor", "end");
     
     this.section = this.svg.append("g")
       .selectAll("path");
@@ -361,11 +370,13 @@ export class ClusterGraph extends Graph {
   // Highlight the node and its links when focusing on the node.
   #highlighNode(d) {
     this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
+    this.displayInfocard(d);
   }
 
   // Unhighlight the node and its links when the focus is removed from the node.
   #unhighlightNode() {
     this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
+    this.removeInfocard();
   }
   
   // Click event handler for the nodes on touch devices.
@@ -389,6 +400,42 @@ export class ClusterGraph extends Graph {
         this.#unhighlightNode();
       }, { capture: true, once: true });
     }
+  }
+
+  #infocardContent(d, neighbors) {
+    const total = neighbors.reduce((acc, l) => acc + l.value, 0);
+    const direction = d.group === this.innerGroup ? "\u2192" : "\u2190";
+    const entity = dictionary.dataset_groups[d.group === this.innerGroup ? this.outerGroup : this.innerGroup];
+    
+    return [
+      `${d.name}`,
+      `${total} ${direction} ${neighbors.length} ${entity}`,
+    ];
+  }
+
+  // Update the infocard with the information of the node.
+  displayInfocard(d) {
+    if (this.dragging === true) return;
+    
+    const neighbors = this.link.data().filter(l => l.source === d || l.target === d);
+    if (neighbors.lengt <= 0) return;
+
+    const phrases = this.#infocardContent(d, neighbors);
+    const text = this.infocard.select("text");
+    text.attr("y", (phrases.length - 1) * -1.4 + "em");
+
+    phrases.forEach((phrase) => {
+      text.append("tspan")
+        .attr("x", -5)
+        .attr("dy", "1.4em")
+        .text(phrase);
+    });
+  }
+
+  // Reset the infocard content.
+  removeInfocard() {
+    if (this.dragging === true) return;
+    this.infocard.select("text").selectAll("tspan").remove();
   }
 
   // Reveal the nodes and links with the given ids in the graph.

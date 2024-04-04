@@ -78,9 +78,9 @@ export function decodeWindows1252(str) {
 }
 
 /**
- * Detect whether the device is a touch device.
+ * Detect whether the device is a touch device only (does not allow mouse hover).
  * @returns {boolean} True if the device is a touch device, false otherwise.
  */
 export function isTouchDevice() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints;
+  return !window.matchMedia('(hover: hover)').matches;
 }

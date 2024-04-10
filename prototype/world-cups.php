@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World Cups</title>
+  <title>Campeonatos do Mundo</title>
 
   <!-- Hotjar Tracking Code for https://clubs-in-nations.zerozero.pt/ -->
   <script>
@@ -17,6 +17,16 @@
         r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
         a.appendChild(r);
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CR1VR1VL6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-5CR1VR1VL6');
   </script>
 </head>
 

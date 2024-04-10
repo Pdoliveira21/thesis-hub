@@ -1,52 +1,5 @@
-<style>
-  #session-uuid {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    color: #cacaca;
-    font-family: Monospace;
-    font-size: 12px;
-  }
-
-  #form-notice {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 250;
-    font-family: Arial, sans-serif;
-    background-color: #fff0d9;
-  }
-
-  #form-notice-content {
-    display: flex;
-    justify-content: space-around;
-    column-gap: 1rem;
-    padding: 1rem;
-    max-width: 1700px;
-    margin: 0 auto;
-  }
-
-  #form-notice-content button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 0.25rem;
-    background-color: #ff9800;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  #form-notice-content button:hover {
-    background-color: #0d6dbe;
-  }
-
-  #form-notice-close {
-    cursor: pointer;
-    margin-top: 0.85rem;
-    font-size: larger;
-  }
-</style>
+<!-- Include overlays elements to test purposes -->
+<link rel="stylesheet" href="./test/overlays.css" >
 
 <div id="session-uuid"><?php echo session_id(); ?></div>
 
@@ -76,6 +29,7 @@
     window.open(`https://docs.google.com/forms/d/e/1FAIpQLSeviCtsr1F_5sxDZYLAq3Z-mGno-2teQACco0jl3v67ZJtFDg/viewform?usp=pp_url&entry.62397297=${openedAt}&entry.2080807630=${sessionId}&entry.1130219802=${interaction}`, "_blank");
   }
 
+  // Close the notice
   function onNoticeCloseClick() {
     document.getElementById("form-notice").style.display = "none";
   }

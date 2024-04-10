@@ -11,7 +11,7 @@
   <script>
     (function(h,o,t,j,a,r){
         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:3930621,hjsv:6, hjSessionId: "<?php echo session_id(); ?>"};
+        h._hjSettings={hjid:3930621,hjsv:6};
         a=o.getElementsByTagName('head')[0];
         r=o.createElement('script');r.async=1;
         r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
@@ -21,8 +21,6 @@
 </head>
 
 <body>
-  <?php include "./test/notice.php"; ?>
-  
   <?php
     $includePath = "./src";
 
@@ -46,5 +44,7 @@
 
     include "./src/infographic.php"; 
   ?>
+
+  <?php include "./test/overlays.php"; ?>
 </body>
 </html>

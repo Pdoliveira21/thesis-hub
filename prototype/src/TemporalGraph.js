@@ -119,13 +119,15 @@ export class TemporalGraph {
           // Process the elements
           Object.entries(group[this.detailGroup]).forEach(([elementId, element]) => {
             if (elementsSet.has(elementId)) {
-              console.error(`Duplicate element id: ${elementId} in time: ${time}`);
-              return;
+              // console.error(`Duplicate element id: ${elementId} in time: ${time}`);
+              const index = nodes.detail.findIndex(d => d.id === `E-${elementId}`);
+              nodes.detail[index].supergroups.push(`O-${supergroup.id}`); // Add the supergroup to the element if not already there (do the same for the cluster?)
+              links.detail.push({id: `E-${elementId}-O-${supergroup.id}`, source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
+            } else {
+              elementsSet.add(elementId);
+              nodes.detail.push({id: `E-${elementId}`, ...this.#parseObject(element, ["id"]), color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, clusterInfo: {name: groupName, img: groupLogo}, supergroups: [`O-${supergroup.id}`]});
+              links.detail.push({id: `E-${elementId}-O-${supergroup.id}`, source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
             }
-
-            elementsSet.add(elementId);
-            nodes.detail.push({id: `E-${elementId}`, ...this.#parseObject(element, ["id"]), color: groupColor, group: this.detailGroup, cluster: `C-${groupId}`, clusterInfo: {name: groupName, img: groupLogo}, supergroup: `O-${supergroup.id}`});
-            links.detail.push({id: `E-${elementId}-O-${supergroup.id}`, source: `E-${elementId}`, target: `O-${supergroup.id}`, cluster: `C-${groupId}`, value: 1});
           });
         });
       });
@@ -221,7 +223,7 @@ export class TemporalGraph {
   drawClusterGraph(container, time) {
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
     const groups = this.data[time].nodes.cluster.filter(this.clusterFilter).map(d => d.id);
-    const elements = this.data[time].nodes.detail.filter(d => this.detailFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster)).map(d => d.id);
+    const elements = this.data[time].nodes.detail.filter(d => this.detailFilter(d) && d.supergroups.some(s => supergroups.includes(s)) && groups.includes(d.cluster)).map(d => d.id);
     
     const links = this.data[time].links.cluster
       .filter(d => supergroups.includes(d.target) && groups.includes(d.source) && d.elements.some(e => elements.includes(e)))
@@ -270,7 +272,7 @@ export class TemporalGraph {
   // Selecting the nodes and links to be displayed according to the current time value and the filters.
   drawDetailsGraph(container, time, node) {
     const nodeId = node.id;
-    const nodeFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.supergroup === nodeId;
+    const nodeFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.supergroups.includes(nodeId);
     const linkFilter = node.group === this.clusterGroup ? (d) => d.cluster === nodeId : (d) => d.target === nodeId;
 
     const supergroups = this.data[time].nodes.outer.filter(this.outerFilter).map(d => d.id);
@@ -285,7 +287,7 @@ export class TemporalGraph {
       .filter(d => supergroups.includes(d.id)) 
       .concat(
         this.data[time].nodes.detail
-          .filter((d) => nodeFilter(d) && supergroups.includes(d.supergroup) && groups.includes(d.cluster) && elements.includes(d.id)))
+          .filter((d) => nodeFilter(d) && d.supergroups.some(s => supergroups.includes(s)) && groups.includes(d.cluster) && elements.includes(d.id)))
       .map(d => ({...d}));
 
     this.detailsGraph.update(nodes, links, node);

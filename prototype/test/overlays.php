@@ -22,9 +22,9 @@
 <script>
   // Redirect to Google Form with the appropriate parameters
   function onFormLinkClick() {
-    const openedAt = (new Date()).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(/-/g, '/');
+    const openedAt = (new Date()).toISOString().replace(/T/, ' ').replace(/\..+/, "").replace(/-/g, '/');
     const sessionId = "<?php echo session_id(); ?>";
-    const interaction = window.matchMedia('(hover: hover)').matches ? "movimento do rato" : "duplo clique";
+    const interaction = window.matchMedia("(hover: hover)").matches ? "movimento do rato" : "duplo clique";
     
     window.open(`https://docs.google.com/forms/d/e/1FAIpQLSeviCtsr1F_5sxDZYLAq3Z-mGno-2teQACco0jl3v67ZJtFDg/viewform?usp=pp_url&entry.62397297=${openedAt}&entry.2080807630=${sessionId}&entry.1130219802=${interaction}`, "_blank");
   }

@@ -1,5 +1,6 @@
 import { decodeHtmlEntities, decodeWindows1252 } from "./../utils/Utils.js";
 import { dictionary } from "./../utils/Dictionary.js";
+import { Analytics } from "./../utils/Analytics.js";
 
 /**
  * @class Search
@@ -69,6 +70,8 @@ export class Search {
       if (searchValue !== this.previousSearchValue) {
         this.changeCallback(searchValue);
         this.previousSearchValue = searchValue;
+
+        if (searchValue !== null) Analytics.sendSearchEvent(this.prefix, searchValue);
       }
     }
   }

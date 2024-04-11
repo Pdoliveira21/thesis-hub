@@ -1,3 +1,5 @@
+import { Analytics } from "./../utils/Analytics.js";
+
 /**
  * @class Timeline
  * @description A class to create a timeline scrubber component. 
@@ -63,6 +65,7 @@ export class Timeline {
     this.range.value = 0;
     this.range.classList.add("control-range");
     this.range.addEventListener("input", this.onUpdate.bind(this));
+    this.range.addEventListener("change", () => Analytics.sendTimelineEvent("change", this.getValue()));
 
     this.output = document.createElement("output");
     this.output.id = "timeline-output";
@@ -109,17 +112,27 @@ export class Timeline {
   }
 
   onPlay() {
-    if (this.running()) return this.stop();
+    if (this.running()) {
+      Analytics.sendTimelineEvent("pause", this.getValue());
+      this.stop();
+      return;
+    }
+
+    Analytics.sendTimelineEvent("play", this.getValue());
     this.start();
   }
 
   onPrev() {
     if (this.running()) this.stop();
+
+    Analytics.sendTimelineEvent("prev", this.getValue());
     this.step(-1);
   }
 
   onNext() {
     if (this.running()) this.stop();
+
+    Analytics.sendTimelineEvent("next", this.getValue());
     this.step(1);
   }
 

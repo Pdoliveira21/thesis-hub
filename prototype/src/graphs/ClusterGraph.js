@@ -2,6 +2,7 @@ import { Graph } from "./Graph.js";
 
 import { compareStringId } from "./../utils/Utils.js";
 import { dictionary } from "./../utils/Dictionary.js";
+import { Analytics } from "./../utils/Analytics.js";
 
 /**
  * @class ClusterGraph
@@ -360,6 +361,7 @@ export class ClusterGraph extends Graph {
   #clickNode(event, d) {
     if (!event || "function" !== typeof this.clickNodeCallback) return;
 
+    Analytics.sendNodeClickEvent(d.group, d.id, d.name, "cluster");
     this.clickNodeCallback(d);
     // Trigger the tick event of nodes not draggable when simulation is already stoped.
     if (d.group === this.outerGroup && this.simulation.alpha() < 0.05) {
@@ -369,12 +371,14 @@ export class ClusterGraph extends Graph {
 
   // Highlight the node and its links when focusing on the node.
   #highlighNode(d) {
+    this.highlightTimeout = setTimeout(() => Analytics.sendNodeHoverEvent(d.group, d.id, d.name, "cluster"), 500);
     this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
     this.displayInfocard(d);
   }
 
   // Unhighlight the node and its links when the focus is removed from the node.
   #unhighlightNode() {
+    if (this.highlightTimeout) clearTimeout(this.highlightTimeout);
     this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
     this.removeInfocard();
   }

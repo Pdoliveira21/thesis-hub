@@ -1,4 +1,5 @@
 import { dictionary } from "./../utils/Dictionary.js";
+import { Analytics } from "./../utils/Analytics.js";
 
 /**
  * @class Sort
@@ -54,7 +55,10 @@ export class Sort {
 
   onChange(_) {
     if ("function" === typeof this.changeCallback) {
-      this.changeCallback(document.querySelector(`#sort-${this.prefix}`).value);
+      const value = document.querySelector(`#sort-${this.prefix}`).value;
+      this.changeCallback(value);
+      
+      Analytics.sendSortEvent(this.prefix, value);
     }
   }
 

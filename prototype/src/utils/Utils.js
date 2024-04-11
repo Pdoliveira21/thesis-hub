@@ -74,7 +74,7 @@ export function decodeWindows1252(str) {
     buffer[i] = str.charCodeAt(i);
   }
 
-  return new TextDecoder('windows-1252').decode(buffer);
+  return new TextDecoder("windows-1252").decode(buffer);
 }
 
 /**
@@ -82,5 +82,5 @@ export function decodeWindows1252(str) {
  * @returns {boolean} True if the device is a touch device, false otherwise.
  */
 export function isTouchDevice() {
-  return !window.matchMedia('(hover: hover)').matches;
+  return !window.matchMedia("(hover: hover)").matches;
 }

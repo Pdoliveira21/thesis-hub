@@ -1,9 +1,9 @@
-import { ClusterGraph } from './graphs/ClusterGraph.js';
-import { DetailGraph } from './graphs/DetailGraph.js';
-import { Timeline } from './scrubbers/Timeline.js';
+import { ClusterGraph } from "./graphs/ClusterGraph.js";
+import { DetailGraph } from "./graphs/DetailGraph.js";
+import { Timeline } from "./scrubbers/Timeline.js";
 
-import { decodeHtmlEntities, decodeWindows1252 } from './utils/Utils.js';
-import { dictionary } from './utils/Dictionary.js';
+import { decodeHtmlEntities, decodeWindows1252 } from "./utils/Utils.js";
+import { dictionary } from "./utils/Dictionary.js";
 
 /**
  * @class TemporalGraph

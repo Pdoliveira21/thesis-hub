@@ -1,6 +1,7 @@
 import { Graph } from "./Graph.js";
 
 import { compareStringId } from "./../utils/Utils.js";
+import { Analytics } from "./../utils/Analytics.js";
 
 /**
  * @class DetailGraph
@@ -349,6 +350,7 @@ export class DetailGraph extends Graph {
   #clickNode(event, d, focus) {
     if (!event || !event.isTrusted) return;
 
+    Analytics.sendNodeClickEvent(d.group, d.id, d.name, "detail");
     if (d.group === this.outerGroup && "function" === typeof this.clickNodeCallback) {
       if (d.id === focus?.id) return;
 
@@ -364,12 +366,14 @@ export class DetailGraph extends Graph {
 
   // Highlight the node and its links when focusing on the node.
   #highlighNode(d, focus) {
+    this.highlightTimeout = setTimeout(() => Analytics.sendNodeHoverEvent(d.group, d.id, d.name, "detail"), 500);
     this.highlight(d, this.node, this.link, this.simulation, d.group === this.outerGroup);
     this.displayCluster(d, focus);
   }
 
   // Unhighlight the node and its links when the focus is removed from the node.
   #unhighlightNode() {
+    if (this.highlightTimeout) clearTimeout(this.highlightTimeout);
     this.unhighlight(this.node, this.link, this.simulation, this.displayNodeText.bind(this));
     this.hideCluster();
   }

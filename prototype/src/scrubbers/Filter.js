@@ -1,4 +1,5 @@
 import { dictionary } from "./../utils/Dictionary.js";
+import { Analytics } from "./../utils/Analytics.js";
 
 /**
  * @class Filter
@@ -72,7 +73,7 @@ export class Filter {
     }
   }
 
-  onChange(_) {
+  onChange(event) {
     if ("function" === typeof this.changeCallback) {
       this.changeCallback((element) => {
         const selections = this.selectsIds.map((id) => {
@@ -84,6 +85,8 @@ export class Filter {
           return value === "all" || element[field] === value;
         });
       });
+
+      Analytics.sendFilterEvent(this.prefix, event.target.name, event.target.value);
     }
   }
 

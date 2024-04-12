@@ -1,8 +1,6 @@
 <!-- Include overlays elements to test purposes -->
 <link rel="stylesheet" href="./test/overlays.css" >
 
-<div id="session-uuid"><?php echo session_id(); ?></div>
-
 <div id="form-notice">
   <div id="form-notice-content">
     <span>
@@ -18,6 +16,8 @@
     <i id="form-notice-close" class="fas fa-times" onClick="onNoticeCloseClick()" aria-hidden="true"></i>
   </div>
 </div>
+
+<div id="session-uuid"><?php echo session_id(); ?></div>
 
 <script>
   // Redirect to Google Form with the appropriate parameters

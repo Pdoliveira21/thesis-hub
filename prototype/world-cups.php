@@ -32,6 +32,8 @@
 </head>
 
 <body>
+  <?php include "./test/overlays.php"; ?>
+
   <?php
     $includePath = "./src";
 
@@ -55,7 +57,5 @@
 
     include "./src/infographic.php"; 
   ?>
-
-  <?php include "./test/overlays.php"; ?>
 </body>
 </html>

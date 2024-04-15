@@ -26,7 +26,9 @@
     function gtag(){dataLayer.push(arguments);}
     gtag("js", new Date());
 
-    gtag("set", {"php_session_id": "<?php echo session_id(); ?>"});
+    gtag("set", { "user_properties": {
+        "php_session_id": "<?php echo session_id(); ?>"
+    }});
     gtag("config", "G-5CR1VR1VL6");
   </script>
 </head>

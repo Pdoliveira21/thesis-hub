@@ -61,8 +61,12 @@
       $fileExpires = 60 * 60 * 24;
 
       if (!file_exists($cacheFile) || (time() - filemtime($cacheFile)) > $fileExpires || $forceUpdate) {
-        $response = file_get_contents($endpoint);
-        file_put_contents($cacheFile, $response);
+        try {
+          $response = file_get_contents($endpoint);
+          file_put_contents($cacheFile, $response);
+        } catch (Exception $e) {
+          echo "console.error('Error updating cached data: ', $e);";
+        }
       }
     }
   ?>

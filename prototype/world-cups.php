@@ -38,7 +38,7 @@
 <body>
   <?php 
     $h1 = "Percurso de jogadores em seleções e equipas ao longo do tempo";
-    $description = "Visualização interativa que mostra a evolução de jogadores em seleções e equipas ao longo do tempo... Lorem ipsum dolor sit amet, asd";
+    $description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque faucibus aliquet enim, eu dignissim nulla commodo quis. Integer faucibus luctus sapien ut accumsan.";
     
     include "./src/header/header.php"; 
   ?>
@@ -48,7 +48,6 @@
   <?php
     $includePath = "./src/infovis";
 
-    $title = "";
     $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30/order/asc";
     $cacheFile = "./data/world-cups.json";
     $dataPath = "data.seasons";
@@ -69,6 +68,9 @@
     include "./src/infovis/infographic.php"; 
   ?>
 
-  <?php include "./src/footer/footer.php"; ?>
+  <?php
+    $includeEvaluation = true;
+    include "./src/footer/footer.php"; 
+  ?>
 </body>
 </html>

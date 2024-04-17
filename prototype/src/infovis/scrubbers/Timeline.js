@@ -136,6 +136,17 @@ export class Timeline {
     this.step(1);
   }
 
+  onGoTo(value) {
+    if (this.running()) this.stop();
+    
+    const index = this.values.indexOf(value);
+    if (index !== -1) {
+      Analytics.sendTimelineEvent("goto", value);
+      this.range.valueAsNumber = index;
+      this.range.dispatchEvent(new Event("input"));
+    }
+  }
+
   onUpdate(event) {
     if (event && event.isTrusted && this.running()) this.stop();
     this.timeline.value = this.values[this.range.valueAsNumber];

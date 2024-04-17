@@ -4,7 +4,13 @@ body {
 }
 
 .lateral-gap {
-  padding: 0 1.5rem;
+  padding: 0 3rem;
+}
+
+@media screen and (max-width: 768px) {
+  .lateral-gap {
+    padding: 0 1.5rem;
+  }
 }
 
 .vertical-gap {
@@ -60,6 +66,7 @@ body {
   grid-template-columns: 1fr 1fr;
   padding-top: 2rem;
   padding-bottom: 2rem;
+  margin-top: 0.5rem;
 }
 
 #footer-credits > :nth-child(1) {

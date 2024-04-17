@@ -198,8 +198,25 @@ export class TemporalGraph {
     
     const resultElement = document.getElementById(resultContainer);
     if (resultElement) {
-      resultElement.textContent = (detailSearchTimes.size > 0)
-        ? `${Array.from(detailSearchTimes).join(" - ")} (${dictionary.discarding_filters})` : "";
+      resultElement.textContent = "";
+      
+      if (detailSearchTimes.size > 0) {
+        const div = document.createElement("div");
+        div.classList.add("search-result-icon");
+        resultElement.appendChild(div);
+
+        Array.from(detailSearchTimes).forEach((time, index) => {
+          if (index > 0) resultElement.appendChild(document.createTextNode(" - "));
+
+          const span = document.createElement("span");
+          span.textContent = time;
+          span.addEventListener("click", () => this.timeline.onGoTo(time));
+          span.classList.add("search-result-item");
+          resultElement.appendChild(span);
+        });
+
+        resultElement.appendChild(document.createTextNode(` (${dictionary.discarding_filters})`));
+      }
     }
 
     this.spotlightClusterGraph();

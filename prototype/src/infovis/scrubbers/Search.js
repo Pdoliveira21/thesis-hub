@@ -57,7 +57,7 @@ export class Search {
 
     const result = document.createElement("span");
     result.id = `search-${this.prefix}-result`;
-    result.classList.add("control-label", "control-result");
+    result.classList.add("control-label");
 
     this.search.append(title, input, datalist, result);
   }

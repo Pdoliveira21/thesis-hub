@@ -4,8 +4,10 @@
 
 
 <div id="vis-container">
-  <p class="vis-title"><?php echo $title ?></p>
-  
+  <?php if (isset($title) && $title !== "") { ?>
+    <p class="vis-title"><?php echo $title ?></p>
+  <?php } ?>
+
   <div class="vis-content">
     <div class="vis-content-container" style="width: min(100%, 1.5 * <?php echo json_decode($graphConfigs, true)['width'] ?? 800; ?>px + 4 * 1rem">
       <div class="vis-loading" id="controls-loading">
@@ -54,21 +56,21 @@
 
   <?php 
     // Cache the data in a json file
-    if (!isset($cacheFile)) {
-      $cacheFile = $endpoint;
-    } else {
-      $forceUpdate = isset($_GET["clean"]) && $_GET["clean"] == 1;
-      $fileExpires = 60 * 60 * 24;
+    // if (!isset($cacheFile)) {
+    //   $cacheFile = $endpoint;
+    // } else {
+    //   $forceUpdate = isset($_GET["clean"]) && $_GET["clean"] == 1;
+    //   $fileExpires = 60 * 60 * 24;
 
-      if (!file_exists($cacheFile) || (time() - filemtime($cacheFile)) > $fileExpires || $forceUpdate) {
-        try {
-          $response = file_get_contents($endpoint);
-          file_put_contents($cacheFile, $response);
-        } catch (Exception $e) {
-          echo "console.error('Error updating cached data: ', $e);";
-        }
-      }
-    }
+    //   if (!file_exists($cacheFile) || (time() - filemtime($cacheFile)) > $fileExpires || $forceUpdate) {
+    //     try {
+    //       $response = file_get_contents($endpoint);
+    //       file_put_contents($cacheFile, $response);
+    //     } catch (Exception $e) {
+    //       echo "console.error('Error updating cached data: ', $e);";
+    //     }
+    //   }
+    // }
   ?>
 
   // Passes PHP variables to JavaScript

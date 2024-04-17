@@ -1,7 +1,7 @@
 <!-- Include overlays elements to test purposes -->
-<link rel="stylesheet" href="./test/overlays.css" >
+<link rel="stylesheet" type="text/css" href="./src/tester/overlays.css">
 
-<div id="form-notice">
+<div id="form-notice" class="lateral-gap">
   <div id="form-notice-content">
     <span>
       <p>

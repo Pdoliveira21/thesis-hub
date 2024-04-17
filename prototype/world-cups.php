@@ -7,8 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campeonatos do Mundo</title>
 
+  <link rel="stylesheet" href="./src/app.css" >
+
   <!-- Hotjar Tracking Code for https://clubs-in-nations.zerozero.pt/ -->
-  <script>
+  <!-- <script>
     (function(h,o,t,j,a,r){
         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
         h._hjSettings={hjid:3930621,hjsv:6};
@@ -17,10 +19,10 @@
         r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
         a.appendChild(r);
     })(window,document,"https://static.hotjar.com/c/hotjar-",".js?sv=");
-  </script>
+  </script> -->
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CR1VR1VL6"></script>
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CR1VR1VL6"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -30,16 +32,23 @@
         "php_session_id": "<?php echo session_id(); ?>"
     }});
     gtag("config", "G-5CR1VR1VL6");
-  </script>
+  </script> -->
 </head>
 
 <body>
-  <?php include "./test/overlays.php"; ?>
+  <?php 
+    $h1 = "Percurso de jogadores em seleções e equipas ao longo do tempo";
+    $description = "Visualização interativa que mostra a evolução de jogadores em seleções e equipas ao longo do tempo... Lorem ipsum dolor sit amet, asd";
+    
+    include "./src/header/header.php"; 
+  ?>
+
+  <?php include "./src/tester/overlays.php"; ?>
 
   <?php
-    $includePath = "./src";
+    $includePath = "./src/infovis";
 
-    $title = "Percurso de Jogadores em Seleções e Equipas ao Longo do Tempo";
+    $title = "";
     $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30/order/asc";
     $cacheFile = "./data/world-cups.json";
     $dataPath = "data.seasons";
@@ -57,7 +66,9 @@
       "defaultOuterSortField" => "fk_continente",
     ));
 
-    include "./src/infographic.php"; 
+    include "./src/infovis/infographic.php"; 
   ?>
+
+  <?php include "./src/footer/footer.php"; ?>
 </body>
 </html>

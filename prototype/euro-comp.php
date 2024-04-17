@@ -8,7 +8,7 @@
 
 <body>
   <?php
-    $includePath = "./src";
+    $includePath = "./src/infovis";
 
     $title = "Campeonatos da Europa";
     $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/29/order/asc";
@@ -28,6 +28,6 @@
       "defaultOuterSortField" => "fk_continente",
     ));
 
-    include "./src/infographic.php"; 
+    include "./src/infovis/infographic.php"; 
   ?>
 </body>

@@ -62,7 +62,7 @@ export class Timeline {
     this.range.min = 0;
     this.range.max = this.values.length - 1;
     this.range.step = 1;
-    this.range.value = 0;
+    this.range.value = this.values.length - 1;
     this.range.classList.add("control-range");
     this.range.addEventListener("input", this.onUpdate.bind(this));
     this.range.addEventListener("change", () => Analytics.sendTimelineEvent("change", this.getValue()));

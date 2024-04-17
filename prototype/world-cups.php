@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./src/app.css" >
 
   <!-- Hotjar Tracking Code for https://clubs-in-nations.zerozero.pt/ -->
-  <!-- <script>
+  <script>
     (function(h,o,t,j,a,r){
         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
         h._hjSettings={hjid:3930621,hjsv:6};
@@ -19,10 +19,10 @@
         r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
         a.appendChild(r);
     })(window,document,"https://static.hotjar.com/c/hotjar-",".js?sv=");
-  </script> -->
+  </script>
 
   <!-- Google tag (gtag.js) -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CR1VR1VL6"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CR1VR1VL6"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -32,7 +32,7 @@
         "php_session_id": "<?php echo session_id(); ?>"
     }});
     gtag("config", "G-5CR1VR1VL6");
-  </script> -->
+  </script>
 </head>
 
 <body>

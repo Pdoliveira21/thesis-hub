@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campeonatos Europeus</title>
+  <title>Campeonatos Brasileiros</title>
 </head>
 
 <body>
   <?php
-    $includePath = "./src";
+    $includePath = "./src/infovis";
 
-    $title = "Campeonatos da Europa";
+    $title = "Campeonatos Brasileiros";
     $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersCountryCompet/AppKey/tY9Qv2xP/competID/51";
     $cacheFile = "./data/brasil-liga.json";
     $dataPath = "data.seasons";
@@ -19,15 +19,15 @@
     $outerGroup = "national teams";
     $clusterGroup = "teams";
     $detailGroup = "players";
-    $outerLabel = "Seleções";
-    $clusterLabel = "Equipas";
+    $outerLabel = "Equipas";
+    $clusterLabel = "Seleções";
     $detailLabel = "Jogadores";
     $graphConfigs = json_encode(array(
       "clusterGroup" => "teams",
-      "noClusterLegend" => "Sem Equipa",
+      "noClusterLegend" => "---",
       "defaultOuterSortField" => "fk_continente",
     ));
 
-    include "./src/infographic.php"; 
+    include "./src/infovis/infographic.php"; 
   ?>
 </body>

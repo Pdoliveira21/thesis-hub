@@ -38,7 +38,7 @@
 <body>
   <?php 
     $h1 = "Percurso de jogadores em seleções e equipas ao longo do tempo";
-    $description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque faucibus aliquet enim, eu dignissim nulla commodo quis. Integer faucibus luctus sapien ut accumsan.";
+    $description = "Desenvolvido como parte de uma tese de pesquisa, esta nova visualização oferece uma perspectiva única sobre como os jogadores evoluem e contribuem para os campeonatos do mundo do futebol.";
     
     include "./src/header/header.php"; 
   ?>

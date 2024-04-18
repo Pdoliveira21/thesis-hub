@@ -28,9 +28,9 @@
 
     <div class="credit-card-text">
       <p class="text">
-        Published in her About section, this professional bio example shows how you can format it for readability. 
-        Her professional bio shares her accomplishments without feeling like she's bragging. You gain a 
-        better understanding of her professional experience, accomplishments, and other projects she's working on now.
+        Patricia Oliveira é uma estudante de 23 anos a frequentar o segundo ano do mestrado em Engenharia Informática e Computação na FEUP.
+        Atualmente, encontra-se a realizar a sua tese em ambiente empresarial, em colaboração com a empresa ZOS.
+        Ao longo dos últimos dois anos, tem vindo a ganhar experiência através de estágios de verão, onde se tem envolvido em projetos de desenvolvimento web.
       </p>
     </div>
   </div>
@@ -41,7 +41,10 @@
     <img src="./img/icon_attention.png" alt="Call Icon">
     <div id="footer-evaluation-content">
       <p class="title">Avalie a sua experiência</p>
-      <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque faucibus aliquet enim, eu dignissim nulla commodo quis. Integer faucibus luctus sabien ut accumsan.</p>
+      <p class="text">
+        A sua opinião é valiosa para nós! Queremos garantir que a sua experiência seja sempre a melhor possível. 
+        Por favor, tire um momento para nos contar como foi a sua experiência. Agradecemos imensamente pelo seu feedback!
+      </p>
       <button onClick="onFormLinkClick()">Responder ao questionário</button>
     </div>
   </div>

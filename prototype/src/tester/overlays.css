@@ -1,0 +1,46 @@
+#session-uuid {
+  position: absolute;
+  right: 4px;
+  color: #cacaca;
+  font-family: Monospace;
+  font-size: 12px;
+}
+
+#form-notice {
+  font-family: Arial, sans-serif;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+#form-notice-content {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 1rem;
+  padding: 0rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff0d9;
+  border-radius: 10px;
+}
+
+#form-notice-content button {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1em;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #ff9800;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#form-notice-content button:hover {
+  background-color: #0d6dbe;
+}
+
+#form-notice-close {
+  cursor: pointer;
+  margin-top: 0.85rem;
+  font-size: larger;
+  height: fit-content;
+}

@@ -79,6 +79,11 @@ export class Timeline {
   }
 
   start() {
+    if (this.range.valueAsNumber >= this.range.max) {
+      this.range.valueAsNumber = this.range.min;
+      this.step(0);
+    }
+
     this.btnPlay.innerHTML = `<i class="fas fa-pause"></i>`;
     this.interval = setInterval(this.tick.bind(this), this.delay !== null ? this.delay : 1000);
   }

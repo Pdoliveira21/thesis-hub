@@ -11,7 +11,7 @@
         <strong>Feedback</strong>
       </p>
 
-      <p>Ajuda-nos a melhorar a visualização! Por favor, preenche o seguinte questionário de avaliação.</p>
+      <p>Ajude-nos a melhorar a visualização! Por favor, preencha o seguinte questionário de avaliação.</p>
       <button onClick="onFormLinkClick()">Responder ao Questionário</button>
     </span>
     
@@ -22,7 +22,7 @@
 <script>
   // Redirect to Google Form with the appropriate parameters
   function onFormLinkClick() {
-    const openedAt = (new Date()).toISOString().replace(/T/, ' ').replace(/\..+/, "").replace(/-/g, '/');
+    const openedAt = new Date().toLocaleString();
     const sessionId = "<?php echo session_id(); ?>";
     const interaction = window.matchMedia("(hover: hover)").matches ? "movimento do rato" : "duplo clique";
     

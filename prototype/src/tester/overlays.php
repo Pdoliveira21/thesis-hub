@@ -22,7 +22,7 @@
 <script>
   // Redirect to Google Form with the appropriate parameters
   function onFormLinkClick() {
-    const openedAt = (new Date()).toISOString().replace(/T/, ' ').replace(/\..+/, "").replace(/-/g, '/');
+    const openedAt = new Date().toLocaleString();
     const sessionId = "<?php echo session_id(); ?>";
     const interaction = window.matchMedia("(hover: hover)").matches ? "movimento do rato" : "duplo clique";
     

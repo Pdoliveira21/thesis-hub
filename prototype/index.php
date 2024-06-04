@@ -1,16 +1,18 @@
-<!DOCTYPE html>
+<?php session_start(); ?>
 
+<!DOCTYPE html>
+<html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campeonatos Europeus</title>
+  <title>Campeonatos do Mundo</title>
   <link rel="stylesheet" href="./src/app.css" >
 </head>
 
 <body>
   <?php 
     $h1 = "Percurso de jogadores em seleções e equipas ao longo do tempo";
-    $description = "Esta nova visualização oferece uma perspectiva única sobre como os jogadores evoluem e contribuem para os campeonatos europeus do futebol.";
+    $description = "Desenvolvido como parte de uma tese de pesquisa, esta nova visualização oferece uma perspectiva única sobre como os jogadores evoluem e contribuem para os campeonatos do mundo do futebol.";
     
     include "./src/header/header.php"; 
   ?>
@@ -18,8 +20,8 @@
   <?php
     $includePath = "./src/infovis";
 
-    $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/29/order/asc";
-    $cacheFile = "./data/euro-comp.json";
+    $endpoint = "https://www.zerozero.pt/api/v1/getGraphPlayersTeamsCompet/AppKey/tY9Qv2xP/competID/30/order/asc";
+    $cacheFile = "./data/world-cups.json";
     $dataPath = "data.seasons";
 
     $defaultSort = "fk_continente";
@@ -38,5 +40,9 @@
     include "./src/infovis/infographic.php"; 
   ?>
 
-  <?php include "./src/footer/footer.php"; ?>
+  <?php
+    $includeEvaluation = false;
+    include "./src/footer/footer.php"; 
+  ?>
 </body>
+</html>

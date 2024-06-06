@@ -43,7 +43,12 @@
     include "./src/header/header.php"; 
   ?>
 
-  <?php include "./src/tester/overlays.php"; ?>
+  <?php
+    $includeSessionId = true;
+    $prefillMetadata = true;
+    $questionnaireLink = "https://docs.google.com/forms/d/e/1FAIpQLSeviCtsr1F_5sxDZYLAq3Z-mGno-2teQACco0jl3v67ZJtFDg/viewform";
+    include "./src/tester/overlays.php"; 
+  ?>
 
   <?php
     $includePath = "./src/infovis";

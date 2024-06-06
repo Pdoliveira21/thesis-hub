@@ -1,7 +1,9 @@
 <!-- Include overlays elements to test purposes -->
 <link rel="stylesheet" type="text/css" href="./src/tester/overlays.css">
 
-<div id="session-uuid"><?php echo session_id(); ?></div>
+<?php if (isset($includeSessionId) && $includeSessionId == true) { ?>
+  <div id="session-uuid"><?php echo session_id(); ?></div>
+<?php } ?>
 
 <div id="form-notice" class="lateral-gap">
   <div id="form-notice-content">
@@ -22,11 +24,15 @@
 <script>
   // Redirect to Google Form with the appropriate parameters
   function onFormLinkClick() {
-    const openedAt = new Date().toLocaleString();
-    const sessionId = "<?php echo session_id(); ?>";
-    const interaction = window.matchMedia("(hover: hover)").matches ? "movimento do rato" : "duplo clique";
-    
-    window.open(`https://docs.google.com/forms/d/e/1FAIpQLSeviCtsr1F_5sxDZYLAq3Z-mGno-2teQACco0jl3v67ZJtFDg/viewform?usp=pp_url&entry.62397297=${openedAt}&entry.2080807630=${sessionId}&entry.1130219802=${interaction}`, "_blank");
+    <?php if (isset($prefillMetadata) && $prefillMetadata == true) { ?>
+      const openedAt = new Date().toLocaleString();
+      const sessionId = "<?php echo session_id(); ?>";
+      const interaction = window.matchMedia("(hover: hover)").matches ? "movimento do rato" : "duplo clique";
+
+      window.open(`<?php echo $questionnaireLink ?>?usp=pp_url&entry.62397297=${openedAt}&entry.2080807630=${sessionId}&entry.1130219802=${interaction}`, "_blank");
+    <?php } else { ?>
+      window.open("<?php echo $questionnaireLink ?>", "_blank");
+    <?php } ?>
   }
 
   // Close the notice

@@ -77,7 +77,9 @@ export class ClusterGraph extends Graph {
         .attr("x", -5)
         .attr("y", 0)
         .attr("dy", 0)
-        .attr("text-anchor", "end");
+        .attr("text-anchor", "end")
+        .attr("fill", "#fff")
+        .text("."); // Placeholder text to correct visual bug in Firefox.
     
     this.section = this.svg.append("g")
       .selectAll("path");
@@ -432,6 +434,7 @@ export class ClusterGraph extends Graph {
       text.append("tspan")
         .attr("x", -5)
         .attr("dy", "1.4em")
+        .attr("fill", "#000")
         .text(phrase);
     });
   }

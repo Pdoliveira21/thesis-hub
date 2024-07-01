@@ -43,7 +43,7 @@
       <p class="title">Avalie a sua experiência</p>
       <p class="text">
         A sua opinião é valiosa para nós! Queremos garantir que a sua experiência seja sempre a melhor possível. 
-        Por favor, tire um momento para nos contar como foi a sua experiência. Agradecemos imensamente pelo seu feedback!
+        Por favor, tire um momento para avaliar a sua experiência com a visualização. Agradecemos imensamente pelo seu feedback!
       </p>
       <button onClick="onFormLinkClick()">Responder ao questionário</button>
     </div>

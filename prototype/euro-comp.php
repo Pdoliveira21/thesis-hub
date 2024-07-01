@@ -38,7 +38,7 @@
     $cacheFile = "./data/euro-comp.json";
     $dataPath = "data.seasons";
 
-    $defaultSort = "fk_continente";
+    $defaultSort = false;
     $outerGroup = "national teams";
     $clusterGroup = "teams";
     $detailGroup = "players";
@@ -48,7 +48,7 @@
     $graphConfigs = json_encode(array(
       "clusterGroup" => "teams",
       "noClusterLegend" => "Sem Equipa",
-      "defaultOuterSortField" => "fk_continente",
+      "defaultOuterSortField" => "name",
     ));
 
     include "./src/infovis/infographic.php"; 

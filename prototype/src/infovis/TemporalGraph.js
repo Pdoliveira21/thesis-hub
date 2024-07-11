@@ -102,7 +102,7 @@ export class TemporalGraph {
         Object.entries(supergroup[this.clusterGroup]).forEach(([groupId, group]) => {
           const groupName  = group.name && group.name !== "" ? decodeHtmlEntities(decodeWindows1252(group.name)) : this.noClusterLegend;           
           const groupColor = group.color && group.color !== "" ? group.color : undefined;
-          const groupLogo  = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/http://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
+          const groupLogo  = group.logo && group.logo !== "" && group.logo !== "https://www.zerozero.pt/images/dsgn/No_Team_00001.png" ? group.logo : undefined;
           const elementsId = Object.keys(group[this.detailGroup]).map(id => `E-${id}`);
           
           if (!groupsSet.has(groupId)) {
